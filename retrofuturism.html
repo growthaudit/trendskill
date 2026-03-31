@@ -979,6 +979,25 @@ footer {
   color: var(--green);
   text-transform: uppercase;
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 60px 20px; min-height: auto; }
+  .synth-unit { width: 100%; max-width: 100%; }
+  .waveform-section { padding: 48px 20px; }
+  .ws-inner { grid-template-columns: 1fr; gap: 32px; }
+  .knobs-row { grid-template-columns: repeat(3, 1fr); }
+  .features { padding: 48px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .pricing { padding: 48px 20px; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+  .testimonials { padding: 48px 20px; }
+  .testi-grid { grid-template-columns: 1fr; }
+  footer { padding: 48px 20px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>

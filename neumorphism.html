@@ -856,6 +856,25 @@ footer {
   font-size: 0.8rem;
   color: var(--text-light);
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 80px 20px 48px; flex-direction: column; min-height: auto; }
+  .stats-row { grid-template-columns: 1fr 1fr; padding: 32px 20px; }
+  .features { padding: 48px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .progress-section { padding: 48px 20px; }
+  .ps-inner { grid-template-columns: 1fr; gap: 40px; }
+  .meters { grid-template-columns: 1fr 1fr; }
+  .pricing { padding: 48px 20px; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+  .testimonials { padding: 32px 20px 48px; }
+  .testi-grid { grid-template-columns: 1fr; }
+  footer { padding: 48px 20px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>

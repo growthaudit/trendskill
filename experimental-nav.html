@@ -765,6 +765,23 @@ footer {
   font-size: 0.78rem;
   color: rgba(255,255,255,0.2);
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .hero { padding: 0 20px 60px; min-height: 80vh; }
+  .overlay-nav { padding: 60px 20px 40px; }
+  .overlay-inner { grid-template-columns: 1fr; gap: 40px; }
+  .work { padding: 40px 20px; }
+  .work-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .work-item { grid-template-columns: 60px 1fr; }
+  .wi-arrow { display: none; }
+  .about { grid-template-columns: 1fr; gap: 40px; padding: 60px 20px; }
+  .about-right { grid-template-columns: 1fr 1fr; }
+  .services { padding: 60px 20px; }
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .footer-links { flex-wrap: wrap; gap: 16px; }
+}
 </style>
 </head>
 <body>

@@ -790,6 +790,24 @@ footer {
   font-weight: 300;
   color: rgba(255,255,255,0.3);
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .editorial { padding: 48px 20px; }
+  .editorial-header { grid-template-columns: 1fr; gap: 16px; }
+  .mag-grid { grid-template-columns: 1fr; }
+  .mag-cell.tall { grid-row: span 1; min-height: 240px; }
+  .philosophy { padding: 48px 20px; }
+  .phil-inner { grid-template-columns: 1fr; gap: 40px; }
+  .categories { padding: 48px 20px; }
+  .cat-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .cat-row { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 48px 20px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>

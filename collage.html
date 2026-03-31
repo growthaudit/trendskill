@@ -823,6 +823,21 @@ footer::before {
   color: rgba(255,255,255,0.4);
   font-style: italic;
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 48px 20px 60px; min-height: auto; }
+  .community { padding: 48px 20px; }
+  .community-grid { grid-template-columns: 1fr; }
+  .about { padding: 48px 20px; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .pricing { padding: 48px 20px; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+  footer { padding: 40px 20px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>

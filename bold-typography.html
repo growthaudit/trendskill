@@ -674,6 +674,24 @@ footer {
   font-style: italic;
   color: var(--muted);
 }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 20px; }
+  .hero-top { grid-template-columns: 1fr; gap: 32px; }
+  .hero-headline { font-size: clamp(3.5rem, 15vw, 8rem); }
+  .hero-bottom { flex-direction: column; gap: 24px; }
+  .work { padding: 48px 20px; }
+  .work-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .services { padding: 48px 20px; }
+  .service-row { grid-template-columns: 48px 1fr; gap: 16px; }
+  .service-tags, .service-arrow { display: none; }
+  .about { padding: 60px 20px; }
+  .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .footer-links { flex-wrap: wrap; gap: 16px; }
+}
 </style>
 </head>
 <body>

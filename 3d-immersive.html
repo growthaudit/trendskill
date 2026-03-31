@@ -744,6 +744,23 @@ footer {
 }
 
 .footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 80px 20px 60px; min-height: auto; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat-cell { padding: 24px 16px; }
+  .features { padding: 48px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .viewer-section { padding: 48px 20px; }
+  .viewer-inner { grid-template-columns: 1fr; gap: 40px; }
+  .pricing { padding: 60px 20px; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
+  footer { padding: 48px 20px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 </style>
 </head>
 <body>
