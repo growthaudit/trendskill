@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Trends Skill — Brad Fehler × Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #0f0f0f;
+    --ink-secondary: #4a4a4a;
+    --ink-tertiary: #7a7a7a;
+    --surface: #fafaf8;
+    --surface-warm: #f5f3ee;
+    --surface-card: #ffffff;
+    --accent: #1a1a1a;
+    --border: #e2e0db;
+    --border-hover: #c5c2ba;
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-heading: 'Space Grotesk', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem clamp(2rem, 6vw, 6rem);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'DESIGN SYSTEMS';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-heading);
+    font-size: clamp(8rem, 18vw, 22rem);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--border);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0.4;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 8vw, 7rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    max-width: 14ch;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--ink-secondary); }
+
+  .hero-sub {
+    margin-top: 2rem;
+    max-width: 48ch;
+    font-size: 1.15rem;
+    color: var(--ink-secondary);
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    margin-top: 3.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-meta .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .meta-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+  }
+
+  .meta-value {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-tertiary);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: nudge 2.5s ease infinite;
+  }
+
+  .scroll-cue svg { width: 18px; height: 18px; }
+
+  @keyframes nudge {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  .thesis {
+    padding: 6rem clamp(2rem, 6vw, 6rem);
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .thesis-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  .thesis-right { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .thesis-right p {
+    color: var(--ink-secondary);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .thesis-right .highlight {
+    font-family: var(--font-heading);
+    font-weight: 500;
+    color: var(--ink);
+    background: linear-gradient(to right, #fef3c7, #fde68a);
+    padding: 0 0.25em;
+    border-radius: 3px;
+  }
+
+  .system-section {
+    padding: 4rem clamp(2rem, 6vw, 6rem) 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-tertiary);
+    margin-bottom: 1rem;
+  }
+
+  .system-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 3rem 2rem;
+    background: var(--surface-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    flex-wrap: wrap;
+  }
+
+  .sys-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    min-width: 130px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .sys-node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  .sys-node .node-icon { font-size: 1.5rem; }
+  .sys-node .node-label { font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; }
+  .sys-node .node-sub { font-family: var(--font-mono); font-size: 0.6rem; color: var(--ink-tertiary); }
+  .sys-arrow { font-size: 1.5rem; color: var(--ink-tertiary); flex-shrink: 0; }
+
+  .filter-section { padding: 3rem clamp(2rem, 6vw, 6rem) 1.5rem; }
+  .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .filter-btn {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    background: transparent;
+    color: var(--ink-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  .trends-section { padding: 1.5rem clamp(2rem, 6vw, 6rem) 6rem; }
+
+  .trends-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .trend-card {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trend-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+
+  .card-preview {
+    height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .card-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .card-number { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .card-title { font-family: var(--font-heading); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+  .card-vibe { font-size: 0.85rem; line-height: 1.6; flex: 1; }
+  .card-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.5rem; }
+  .card-tag { font-family: var(--font-mono); font-size: 0.6rem; padding: 0.2rem 0.5rem; border-radius: 100px; letter-spacing: 0.03em; }
+
+  .card-arrow {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    font-size: 0.85rem;
+  }
+
+  .trend-card:hover .card-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+  /* ═══════ CARD THEMES ═══════ */
+
+  /* Neo-Brutalism */
+  .card--neo-brutalism { border: 3px solid #1a1a1a; border-radius: 0; }
+  .card--neo-brutalism:hover { box-shadow: 8px 8px 0 #1a1a1a; transform: translate(-3px, -3px); }
+  .card--neo-brutalism .card-preview { background: #ffe566; }
+  .card--neo-brutalism .card-preview::after { content: 'Aa'; font-family: 'Space Grotesk', sans-serif; font-size: 5rem; font-weight: 700; color: #1a1a1a; border: 4px solid #1a1a1a; padding: 0.5rem 1.5rem; box-shadow: 6px 6px 0 #ff8a9b; }
+  .card--neo-brutalism .card-body { background: #fff; }
+  .card--neo-brutalism .card-number { color: #1a1a1a; }
+  .card--neo-brutalism .card-vibe { color: #555; }
+  .card--neo-brutalism .card-tag { background: #ffe566; color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 0; }
+  .card--neo-brutalism .card-arrow { background: #ff8a9b; color: #1a1a1a; border: 2px solid #1a1a1a; border-radius: 0; opacity: 1; }
+
+  /* Retrofuturism */
+  .card--retrofuturism { border: 1px solid #1a1a4a; }
+  .card--retrofuturism .card-preview { background: #06060c; background-image: linear-gradient(rgba(0,229,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.06) 1px, transparent 1px); background-size: 30px 30px; }
+  .card--retrofuturism .card-preview::after { content: 'RETRO//FUTURE'; font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: #00e5ff; text-shadow: 0 0 20px rgba(0,229,255,0.5), 0 0 60px rgba(0,229,255,0.2); letter-spacing: 0.15em; text-transform: uppercase; }
+  .card--retrofuturism .card-body { background: #0a0a18; }
+  .card--retrofuturism .card-number { color: #00e5ff; }
+  .card--retrofuturism .card-title { color: #e8e8f0; }
+  .card--retrofuturism .card-vibe { color: #8888aa; }
+  .card--retrofuturism .card-tag { background: rgba(0,229,255,0.1); color: #00e5ff; border: 1px solid rgba(0,229,255,0.25); }
+  .card--retrofuturism .card-arrow { background: rgba(0,229,255,0.15); color: #00e5ff; }
+
+  /* Dark Mode */
+  .card--dark-mode { border: 1px solid #2a2a2e; }
+  .card--dark-mode .card-preview { background: linear-gradient(135deg, #111114, #1a1a22); }
+  .card--dark-mode .card-preview::after { content: ''; width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,0.5), transparent 70%); box-shadow: 0 0 60px 30px rgba(139,92,246,0.15); }
+  .card--dark-mode .card-body { background: #141418; }
+  .card--dark-mode .card-number { color: #8b5cf6; }
+  .card--dark-mode .card-title { color: #eee; }
+  .card--dark-mode .card-vibe { color: #888; }
+  .card--dark-mode .card-tag { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.2); }
+  .card--dark-mode .card-arrow { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+  /* 3D Immersive */
+  .card--3d-immersive { border: 1px solid var(--border); perspective: 800px; }
+  .card--3d-immersive .card-preview { background: linear-gradient(135deg, #0f172a, #1e293b); }
+  .card--3d-immersive .card-preview::after { content: ''; width: 70px; height: 70px; background: linear-gradient(135deg, #38bdf8, #818cf8); border-radius: 14px; transform: rotateX(15deg) rotateY(-15deg); box-shadow: 0 20px 40px rgba(56,189,248,0.25), 0 0 80px rgba(56,189,248,0.08); }
+  .card--3d-immersive .card-body { background: #0f172a; }
+  .card--3d-immersive .card-number { color: #38bdf8; }
+  .card--3d-immersive .card-title { color: #e2e8f0; }
+  .card--3d-immersive .card-vibe { color: #94a3b8; }
+  .card--3d-immersive .card-tag { background: rgba(56,189,248,0.1); color: #38bdf8; border: 1px solid rgba(56,189,248,0.2); }
+  .card--3d-immersive .card-arrow { background: rgba(56,189,248,0.15); color: #38bdf8; }
+
+  /* Gamified */
+  .card--gamified { border: 2px solid #e0dff5; }
+  .card--gamified .card-preview { background: linear-gradient(135deg, #f8f7ff, #eee8ff); }
+  .card--gamified .card-preview::after { content: '\1F3C6  +250 XP'; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: #6c3fd4; background: #fff; padding: 0.75rem 1.5rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(108,63,212,0.15); }
+  .card--gamified .card-body { background: #fff; }
+  .card--gamified .card-number { color: #6c3fd4; }
+  .card--gamified .card-vibe { color: var(--ink-secondary); }
+  .card--gamified .card-tag { background: #f0ebff; color: #6c3fd4; }
+  .card--gamified .card-arrow { background: #6c3fd4; color: #fff; }
+
+  /* Neumorphism */
+  .card--neumorphism { border: none; background: #e0e5ec; box-shadow: 8px 8px 16px #b8bcc4, -8px -8px 16px #ffffff; border-radius: 24px; }
+  .card--neumorphism:hover { box-shadow: 12px 12px 24px #b8bcc4, -12px -12px 24px #ffffff; transform: translateY(-2px); }
+  .card--neumorphism .card-preview { background: #e0e5ec; }
+  .card--neumorphism .card-preview::after { content: '\25C9'; font-size: 4rem; color: #6b7a8d; width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: inset 4px 4px 8px #b8bcc4, inset -4px -4px 8px #ffffff; }
+  .card--neumorphism .card-body { background: #e0e5ec; }
+  .card--neumorphism .card-number { color: #6b7a8d; }
+  .card--neumorphism .card-vibe { color: #6b7a8d; }
+  .card--neumorphism .card-tag { background: #e0e5ec; color: #6b7a8d; box-shadow: 2px 2px 5px #b8bcc4, -2px -2px 5px #ffffff; }
+  .card--neumorphism .card-arrow { background: #e0e5ec; color: #6b7a8d; box-shadow: 3px 3px 6px #b8bcc4, -3px -3px 6px #ffffff; opacity: 1; }
+
+  /* Bold Typography */
+  .card--bold-typography { border: 1px solid var(--border); }
+  .card--bold-typography .card-preview { background: #fafaf8; }
+  .card--bold-typography .card-preview::after { content: 'Ty'; font-family: 'Instrument Serif', serif; font-size: 8rem; font-weight: 400; color: #1a1a1a; line-height: 1; letter-spacing: -0.06em; }
+  .card--bold-typography .card-body { background: #fff; }
+  .card--bold-typography .card-number { color: var(--ink-tertiary); }
+  .card--bold-typography .card-vibe { color: var(--ink-secondary); }
+  .card--bold-typography .card-tag { background: #f5f5f5; color: #1a1a1a; }
+  .card--bold-typography .card-arrow { background: #1a1a1a; color: #fff; }
+
+  /* Maximalism */
+  .card--maximalism { border: 2px solid #1a1a1a; }
+  .card--maximalism .card-preview { background: #ff3366; background-image: radial-gradient(circle at 20% 80%, #ffe14d 0%, transparent 50%), radial-gradient(circle at 80% 20%, #3d5afe 0%, transparent 50%); }
+  .card--maximalism .card-preview::before { content: 'MORE IS MORE'; position: absolute; font-family: 'Instrument Serif', serif; font-size: 6rem; font-weight: 400; color: rgba(255,255,255,0.08); white-space: nowrap; transform: rotate(-8deg); }
+  .card--maximalism .card-preview::after { content: 'MAX'; font-family: 'Space Grotesk', sans-serif; font-size: 3.5rem; font-weight: 700; color: #fff; text-shadow: 3px 3px 0 #1a1a1a; transform: rotate(-3deg); }
+  .card--maximalism .card-body { background: #fffbe6; }
+  .card--maximalism .card-number { color: #ff3366; }
+  .card--maximalism .card-vibe { color: #555; }
+  .card--maximalism .card-tag { background: #ff3366; color: #fff; }
+  .card--maximalism .card-arrow { background: #ffe14d; color: #1a1a1a; }
+
+  /* Vibrant Color */
+  .card--vibrant-color { border: 2px solid #e879f9; }
+  .card--vibrant-color .card-preview { background: linear-gradient(135deg, #ff6b9d, #c084fc, #22d3ee); }
+  .card--vibrant-color .card-preview::after { content: '\25C6  \25C6  \25C6'; font-size: 2.5rem; color: #fff; letter-spacing: 1rem; text-shadow: 0 0 30px rgba(255,255,255,0.5); }
+  .card--vibrant-color .card-body { background: #fdf4ff; }
+  .card--vibrant-color .card-number { color: #c026d3; }
+  .card--vibrant-color .card-vibe { color: #86198f; }
+  .card--vibrant-color .card-tag { background: linear-gradient(135deg, #fae8ff, #e0f2fe); color: #9333ea; }
+  .card--vibrant-color .card-arrow { background: linear-gradient(135deg, #e879f9, #22d3ee); color: #fff; }
+
+  /* Motion Design */
+  .card--motion-design { border: 1px solid var(--border); }
+  .card--motion-design .card-preview { background: #fafaf8; overflow: hidden; }
+  .card--motion-design .card-preview::after { content: ''; width: 60px; height: 60px; border: 3px solid #f97316; border-radius: 50%; animation: motion-bounce 2.5s cubic-bezier(0.34, 1.56, 0.64, 1) infinite; }
+  @keyframes motion-bounce { 0%, 100% { transform: translateY(0) scale(1); } 30% { transform: translateY(-30px) scale(0.9); } 50% { transform: translateY(0) scale(1.05); } 70% { transform: translateY(-12px) scale(0.97); } }
+  .card--motion-design .card-body { background: #fff; }
+  .card--motion-design .card-number { color: #f97316; }
+  .card--motion-design .card-vibe { color: var(--ink-secondary); }
+  .card--motion-design .card-tag { background: #fff7ed; color: #ea580c; }
+  .card--motion-design .card-arrow { background: #f97316; color: #fff; }
+
+  /* Collage */
+  .card--collage { border: 2px solid #d4a574; border-radius: 4px; transform: rotate(-0.5deg); }
+  .card--collage:hover { transform: rotate(0deg) translateY(-4px); }
+  .card--collage .card-preview { background: #faf3e8; background-image: repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(180,140,100,0.07) 20px, rgba(180,140,100,0.07) 21px); }
+  .card--collage .card-preview::after { content: '\1F4CE \2702\FE0F \1F4CC'; font-size: 2.5rem; letter-spacing: 0.8rem; transform: rotate(3deg); }
+  .card--collage .card-body { background: #fdf8f0; }
+  .card--collage .card-number { color: #b45309; }
+  .card--collage .card-vibe { color: #78350f; }
+  .card--collage .card-tag { background: #fef3c7; color: #92400e; border: 1px dashed #d97706; }
+  .card--collage .card-arrow { background: #fbbf24; color: #78350f; }
+
+  /* Sustainable */
+  .card--sustainable { border: 1px solid #c8d5c3; }
+  .card--sustainable .card-preview { background: #f0f4ec; }
+  .card--sustainable .card-preview::after { content: '0.2s'; font-family: 'JetBrains Mono', monospace; font-size: 2.5rem; font-weight: 500; color: #4a6741; }
+  .card--sustainable .card-preview::before { content: 'LOAD TIME'; position: absolute; bottom: 25%; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: #7a9a70; text-transform: uppercase; }
+  .card--sustainable .card-body { background: #fafcf8; }
+  .card--sustainable .card-number { color: #4a6741; }
+  .card--sustainable .card-vibe { color: #5c7054; }
+  .card--sustainable .card-tag { background: #ecf2e8; color: #4a6741; }
+  .card--sustainable .card-arrow { background: #4a6741; color: #f0f4ec; }
+
+  /* Experimental Nav */
+  .card--experimental-nav { border: 1px solid var(--border); }
+  .card--experimental-nav .card-preview { background: #0a0a0a; }
+  .card--experimental-nav .card-preview::after { content: '\2630 \2192 \2726'; font-size: 2rem; color: #e5e5e5; letter-spacing: 1rem; }
+  .card--experimental-nav .card-body { background: #0a0a0a; }
+  .card--experimental-nav .card-number { color: #888; }
+  .card--experimental-nav .card-title { color: #eee; }
+  .card--experimental-nav .card-vibe { color: #777; }
+  .card--experimental-nav .card-tag { background: #1a1a1a; color: #aaa; border: 1px solid #333; }
+  .card--experimental-nav .card-arrow { background: #fff; color: #0a0a0a; }
+
+  /* Chatbot UI */
+  .card--chatbot-ui { border: 1px solid #e2e8f0; border-radius: 24px; }
+  .card--chatbot-ui .card-preview { background: #f8fafc; }
+  .card--chatbot-ui .bubbles { display: flex; flex-direction: column; gap: 8px; padding: 0 2rem; width: 100%; }
+  .card--chatbot-ui .bubble { padding: 0.6rem 1rem; border-radius: 16px; font-size: 0.75rem; font-family: var(--font-body); max-width: 70%; line-height: 1.4; }
+  .card--chatbot-ui .bubble.user { background: #1e293b; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .card--chatbot-ui .bubble.ai { background: #e2e8f0; color: #334155; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .card--chatbot-ui .card-body { background: #fff; }
+  .card--chatbot-ui .card-number { color: #6366f1; }
+  .card--chatbot-ui .card-vibe { color: #64748b; }
+  .card--chatbot-ui .card-tag { background: #eef2ff; color: #4f46e5; }
+  .card--chatbot-ui .card-arrow { background: #4f46e5; color: #fff; }
+
+  /* Voice Interface */
+  .card--voice-interface { border: 1px solid #1e293b; }
+  .card--voice-interface .card-preview { background: #0f172a; }
+  .card--voice-interface .card-preview::after { content: ''; width: 60px; height: 60px; border-radius: 50%; background: radial-gradient(circle, #6366f1, #4f46e5); box-shadow: 0 0 0 12px rgba(99,102,241,0.15), 0 0 0 28px rgba(99,102,241,0.06); animation: voice-pulse 2s ease infinite; }
+  @keyframes voice-pulse { 0%, 100% { box-shadow: 0 0 0 12px rgba(99,102,241,0.15), 0 0 0 28px rgba(99,102,241,0.06); } 50% { box-shadow: 0 0 0 18px rgba(99,102,241,0.2), 0 0 0 40px rgba(99,102,241,0.08); } }
+  .card--voice-interface .card-body { background: #0f172a; }
+  .card--voice-interface .card-number { color: #818cf8; }
+  .card--voice-interface .card-title { color: #e2e8f0; }
+  .card--voice-interface .card-vibe { color: #94a3b8; }
+  .card--voice-interface .card-tag { background: rgba(99,102,241,0.1); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+  .card--voice-interface .card-arrow { background: rgba(99,102,241,0.2); color: #818cf8; }
+
+  /* Progressive Nurture */
+  .card--progressive-nurture { border: 1px solid #d1d5db; border-radius: 16px; }
+  .card--progressive-nurture .card-preview { background: #f9fafb; }
+  .card--progressive-nurture .progress-demo { display: flex; flex-direction: column; gap: 10px; width: 60%; }
+  .card--progressive-nurture .step-bar { height: 8px; border-radius: 4px; background: #e5e7eb; position: relative; overflow: hidden; }
+  .card--progressive-nurture .step-bar::after { content: ''; position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; background: linear-gradient(90deg, #10b981, #34d399); }
+  .card--progressive-nurture .step-bar:nth-child(1)::after { width: 100%; }
+  .card--progressive-nurture .step-bar:nth-child(2)::after { width: 70%; }
+  .card--progressive-nurture .step-bar:nth-child(3)::after { width: 30%; }
+  .card--progressive-nurture .step-bar:nth-child(4)::after { width: 0%; }
+  .card--progressive-nurture .card-body { background: #fff; }
+  .card--progressive-nurture .card-number { color: #10b981; }
+  .card--progressive-nurture .card-vibe { color: #6b7280; }
+  .card--progressive-nurture .card-tag { background: #ecfdf5; color: #059669; }
+  .card--progressive-nurture .card-arrow { background: #10b981; color: #fff; }
+
+  /* AI Native */
+  .card--ai-native { border: 1px solid #1e293b; border-radius: 16px; }
+  .card--ai-native .card-preview { background: #0f172a; }
+  .card--ai-native .ai-status { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .card--ai-native .ai-dots { display: flex; gap: 6px; }
+  .card--ai-native .ai-dot { width: 8px; height: 8px; border-radius: 50%; animation: ai-think 1.4s ease infinite; }
+  .card--ai-native .ai-dot:nth-child(1) { background: #22d3ee; animation-delay: 0s; }
+  .card--ai-native .ai-dot:nth-child(2) { background: #a78bfa; animation-delay: 0.2s; }
+  .card--ai-native .ai-dot:nth-child(3) { background: #fb923c; animation-delay: 0.4s; }
+  @keyframes ai-think { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.4); } }
+  .card--ai-native .ai-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; }
+  .card--ai-native .card-body { background: #0f172a; }
+  .card--ai-native .card-number { color: #22d3ee; }
+  .card--ai-native .card-title { color: #e2e8f0; }
+  .card--ai-native .card-vibe { color: #94a3b8; }
+  .card--ai-native .card-tag { background: rgba(34,211,238,0.1); color: #22d3ee; border: 1px solid rgba(34,211,238,0.2); }
+  .card--ai-native .card-arrow { background: rgba(34,211,238,0.15); color: #22d3ee; }
+
+  /* ═══════ PROCESS ═══════ */
+  .process-section {
+    padding: 6rem clamp(2rem, 6vw, 6rem);
+    border-top: 1px solid var(--border);
+  }
+
+  .process-section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    margin-bottom: 3rem;
+  }
+
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .process-card {
+    padding: 2rem;
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .process-card .step-num { font-family: var(--font-display); font-size: 2.5rem; color: var(--border-hover); line-height: 1; }
+  .process-card h3 { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 600; }
+  .process-card p { font-size: 0.9rem; color: var(--ink-secondary); line-height: 1.6; }
+
+  /* ═══════ FOOTER ═══════ */
+  .site-footer {
+    padding: 4rem clamp(2rem, 6vw, 6rem);
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .footer-left h3 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+  .footer-left p { font-size: 0.85rem; color: var(--ink-secondary); }
+  .footer-right { display: flex; gap: 1.5rem; font-family: var(--font-mono); font-size: 0.75rem; }
+  .footer-right a { color: var(--ink-secondary); text-decoration: none; transition: color 0.2s; }
+  .footer-right a:hover { color: var(--ink); }
+
+  @media (max-width: 768px) {
+    .thesis { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-meta { flex-wrap: wrap; gap: 2rem; }
+    .trends-grid { grid-template-columns: 1fr; }
+    .system-diagram { flex-direction: column; }
+    .sys-arrow { transform: rotate(90deg); }
+  }
+
+  .hero-cta-block {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: opacity 0.2s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-hero-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+  .btn-hero-primary .arrow {
+    transition: transform 0.2s;
+  }
+  .btn-hero-primary:hover .arrow { transform: translateX(3px); }
+
+  .hero-cta-meta {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.06em;
+    line-height: 1.6;
+  }
+  .hero-cta-meta span {
+    display: block;
+  }
+
+  .fade-in { opacity: 0; transform: translateY(20px); animation: fade-up 0.6s ease forwards; }
+  @keyframes fade-up { to { opacity: 1; transform: translateY(0); } }
+  .trend-card { opacity: 0; transform: translateY(24px); }
+  .trend-card.visible { animation: fade-up 0.5s ease forwards; }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-badge"><span></span>Skill Portfolio — 2026</div>
+  <h1>Seventeen design systems. <em>One skill file.</em></h1>
+  <p class="hero-sub">A packaged Claude skill that transforms any prompt into a fully-realised design system — complete with CSS variables, layout philosophy, typography rules, and motion principles. Each trend is a complete, opinionated language, not a theme toggle.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><span class="meta-label">Trends</span><span class="meta-value">17</span></div>
+    <div class="meta-item"><span class="meta-label">Avg. depth</span><span class="meta-value">300+ lines</span></div>
+    <div class="meta-item"><span class="meta-label">Built with</span><span class="meta-value">Claude</span></div>
+  </div>
+  <div class="hero-cta-block">
+    <a href="#" class="btn-hero-primary js-open-modal">Give Claude a design brain <span class="arrow">→</span></a>
+    <div class="hero-cta-meta">
+      <span>17 design systems · one skill file</span>
+      <span>installs in under 30 seconds</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m0 0l-6-6m6 6l6-6"/></svg>
+    Explore trends
+  </div>
+</section>
+
+<section class="thesis">
+  <div class="thesis-left">
+    <h2>Most AI-generated pages look the same. These shouldn't.</h2>
+  </div>
+  <div class="thesis-right">
+    <p>The default Claude artifact is a purple gradient on a white page with Inter font and evenly-rounded corners. That's fine for prototyping. It's not design.</p>
+    <p>This skill is a <span class="highlight">design system compiler</span>. Each of the 17 trend files encodes a complete aesthetic philosophy — not just colours, but spatial composition, motion curves, typography hierarchy, and explicit anti-patterns. When Claude reads a trend file, it doesn't apply a skin. It <em>thinks</em> in that design language.</p>
+    <p>The result: artifacts that feel authored, not generated. Every page linked from this showcase was produced by Claude, guided by these skill files, in a single prompt.</p>
+  </div>
+</section>
+
+<section class="system-section">
+  <div class="section-label">How It Works</div>
+  <div class="system-diagram">
+    <div class="sys-node"><div class="node-icon">&gt;_</div><div class="node-label">Prompt</div><div class="node-sub">"Build a landing page, neo-brutalist"</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-node"><div class="node-icon">.md</div><div class="node-label">Skill File</div><div class="node-sub">trends/neo-brutalism.md</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-node"><div class="node-icon">{ }</div><div class="node-label">Claude</div><div class="node-sub">Reads design system spec</div></div>
+    <div class="sys-arrow">→</div>
+    <div class="sys-node"><div class="node-icon">&#9670;</div><div class="node-label">Artifact</div><div class="node-sub">Production-grade output</div></div>
+  </div>
+</section>
+
+<section class="filter-section">
+  <div class="section-label">Browse by Category</div>
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="all">All 17</button>
+    <button class="filter-btn" data-filter="core">Core Design (13)</button>
+    <button class="filter-btn" data-filter="ai">AI Trends (4)</button>
+  </div>
+</section>
+
+<section class="trends-section">
+  <div class="trends-grid" id="trendsGrid">
+    <a href="neo-brutalism.html" class="trend-card card--neo-brutalism" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">01 / 17 — Core</div><div class="card-title">Neo-Brutalism</div><div class="card-vibe">Thick borders, hard shadows, colour blocks, visible structure. Design that refuses to hide its skeleton.</div><div class="card-tags"><span class="card-tag">anti-polish</span><span class="card-tag">structural</span><span class="card-tag">playful</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="retrofuturism.html" class="trend-card card--retrofuturism" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">02 / 17 — Core</div><div class="card-title">Retrofuturism</div><div class="card-vibe">Neon grids, CRT glow, chrome text, HUD panels. The future as imagined from the past.</div><div class="card-tags"><span class="card-tag">synthwave</span><span class="card-tag">neon</span><span class="card-tag">cyberpunk</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="dark-mode.html" class="trend-card card--dark-mode" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">03 / 17 — Core</div><div class="card-title">Dark Mode</div><div class="card-vibe">Luminance as depth. Coloured glows replace grey shadows. Light becomes precious on a dark canvas.</div><div class="card-tags"><span class="card-tag">OLED</span><span class="card-tag">ambient glow</span><span class="card-tag">premium</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="3d-immersive.html" class="trend-card card--3d-immersive" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">04 / 17 — Core</div><div class="card-title">3D & Immersive</div><div class="card-vibe">The screen becomes a window. CSS 3D transforms, mouse-tracking tilt, floating elements at different depths.</div><div class="card-tags"><span class="card-tag">parallax</span><span class="card-tag">perspective</span><span class="card-tag">spatial</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="gamified.html" class="trend-card card--gamified" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">05 / 17 — Core</div><div class="card-title">Gamified Design</div><div class="card-vibe">Every interaction feels like progress. XP bars, streaks, badges, and reward loops that drive completion.</div><div class="card-tags"><span class="card-tag">XP system</span><span class="card-tag">dopamine</span><span class="card-tag">retention</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="neumorphism.html" class="trend-card card--neumorphism" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">06 / 17 — Core</div><div class="card-title">Neumorphism</div><div class="card-vibe">Pressed or raised from the same material. Dual shadows create tactile, touchable controls carved from soft clay.</div><div class="card-tags"><span class="card-tag">tactile</span><span class="card-tag">soft shadows</span><span class="card-tag">inset</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="bold-typography.html" class="trend-card card--bold-typography" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">07 / 17 — Core</div><div class="card-title">Bold Typography</div><div class="card-vibe">Type IS the design. Massive headlines that fill the viewport. Letters that stretch, overlap, and command.</div><div class="card-tags"><span class="card-tag">editorial</span><span class="card-tag">type-as-hero</span><span class="card-tag">variable fonts</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="maximalism.html" class="trend-card card--maximalism" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">08 / 17 — Core</div><div class="card-title">Maximalism</div><div class="card-vibe">More is more. Dense layers, ghost text, clashing colours, three typefaces per section. Curated excess.</div><div class="card-tags"><span class="card-tag">dense</span><span class="card-tag">textured</span><span class="card-tag">layered</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="vibrant-color.html" class="trend-card card--vibrant-color" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">09 / 17 — Core</div><div class="card-title">Vibrant Colour</div><div class="card-vibe">Saturation at 11. Neon pinks against electric blues. Dopamine-triggering, unapologetically loud.</div><div class="card-tags"><span class="card-tag">Y2K</span><span class="card-tag">dopamine</span><span class="card-tag">neon</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="motion-design.html" class="trend-card card--motion-design" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">10 / 17 — Core</div><div class="card-title">Motion Design</div><div class="card-vibe">Everything moves with purpose. Staggered reveals, scroll-triggered animation, choreographed entrances.</div><div class="card-tags"><span class="card-tag">scroll-driven</span><span class="card-tag">micro-interactions</span><span class="card-tag">easing</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="collage.html" class="trend-card card--collage" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">11 / 17 — Core</div><div class="card-title">Collage</div><div class="card-vibe">Torn paper, masking tape, polaroids, hand-drawn arrows. Digital handmade. Zine culture meets mood board.</div><div class="card-tags"><span class="card-tag">scrapbook</span><span class="card-tag">zine</span><span class="card-tag">handmade</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="experimental-nav.html" class="trend-card card--experimental-nav" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">12 / 17 — Core</div><div class="card-title">Experimental Navigation</div><div class="card-vibe">Navigation IS the experience. Orbital menus, drag-to-explore canvases, scroll-triggered reveals.</div><div class="card-tags"><span class="card-tag">non-linear</span><span class="card-tag">spatial</span><span class="card-tag">theatrical</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="sustainable.html" class="trend-card card--sustainable" data-cat="core"><div class="card-preview"></div><div class="card-body"><div class="card-number">13 / 17 — Core</div><div class="card-title">Sustainable Design</div><div class="card-vibe">Every byte earns its place. System fonts, semantic HTML, restrained palettes from nature. Wabi-sabi for the web.</div><div class="card-tags"><span class="card-tag">accessible</span><span class="card-tag">performance</span><span class="card-tag">ethical</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="chatbot-ui.html" class="trend-card card--chatbot-ui" data-cat="ai"><div class="card-preview"><div class="bubbles"><div class="bubble user">Analyse this dataset</div><div class="bubble ai">Processing 2,400 rows…</div><div class="bubble ai">Found 3 anomalies ↗</div></div></div><div class="card-body"><div class="card-number">14 / 17 — AI Trend</div><div class="card-title">Chatbot UI</div><div class="card-vibe">The interface IS a conversation. Content delivered through bubbles, quick replies, and inline cards.</div><div class="card-tags"><span class="card-tag">conversational</span><span class="card-tag">agentic</span><span class="card-tag">streaming</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="voice-interface.html" class="trend-card card--voice-interface" data-cat="ai"><div class="card-preview"></div><div class="card-body"><div class="card-number">15 / 17 — AI Trend</div><div class="card-title">Voice Interface</div><div class="card-vibe">The screen is secondary. Waveforms dance, an orb pulses, transcripts materialise word-by-word.</div><div class="card-tags"><span class="card-tag">voice-first</span><span class="card-tag">ambient</span><span class="card-tag">accessible</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="progressive-nurture.html" class="trend-card card--progressive-nurture" data-cat="ai"><div class="card-preview"><div class="progress-demo"><div class="step-bar"></div><div class="step-bar"></div><div class="step-bar"></div><div class="step-bar"></div></div></div><div class="card-body"><div class="card-number">16 / 17 — AI Trend</div><div class="card-title">Progressive Nurturing</div><div class="card-vibe">The interface knows when you're ready. Complexity reveals itself based on behaviour, not assumption.</div><div class="card-tags"><span class="card-tag">adaptive</span><span class="card-tag">contextual</span><span class="card-tag">guided</span></div></div><div class="card-arrow">↗</div></a>
+
+    <a href="ai-native.html" class="trend-card card--ai-native" data-cat="ai"><div class="card-preview"><div class="ai-status"><div class="ai-dots"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div><div class="ai-label">Reasoning…</div></div></div><div class="card-body"><div class="card-number">17 / 17 — AI Trend</div><div class="card-title">AI-Native Layout</div><div class="card-vibe">AI is a first-class citizen. Streaming content, confidence indicators, agentic status. Mission control for intelligence.</div><div class="card-tags"><span class="card-tag">agentic</span><span class="card-tag">streaming</span><span class="card-tag">multi-panel</span></div></div><div class="card-arrow">↗</div></a>
+  </div>
+</section>
+
+<section class="process-section">
+  <div class="section-label">The Design Thinking Behind This</div>
+  <h2>Why skills, not prompts</h2>
+  <div class="process-grid">
+    <div class="process-card"><div class="step-num">01</div><h3>Prompts are ephemeral</h3><p>A good prompt gets a good result once. A skill file encodes the knowledge so that every future prompt benefits. It's the difference between catching a fish and building a fishery.</p></div>
+    <div class="process-card"><div class="step-num">02</div><h3>Design systems, not themes</h3><p>Each trend file doesn't just set colours — it defines layout philosophy, motion principles, typography rules, anti-patterns, and explicit do/don't guidance. Claude thinks differently after reading each one.</p></div>
+    <div class="process-card"><div class="step-num">03</div><h3>Composable by design</h3><p>Trends layer naturally. Dark Mode + Neumorphism. Retrofuturism + Bold Typography. The skill file documents which combinations work and which conflict — Claude inherits that judgement.</p></div>
+    <div class="process-card"><div class="step-num">04</div><h3>Anti-slop engineering</h3><p>Every trend file includes explicit anti-patterns: no centred everything, no purple gradients, no uniform border-radius, no Inter. The skill actively prevents the generic AI aesthetic.</p></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-left">
+    <h3>Brad Fehler × Claude</h3>
+    <p>AI-native operator. Skill builder. Design systems thinker.</p>
+  </div>
+  <div class="footer-right">
+    <a href="https://bradfehler.com" target="_blank">bradfehler.com</a>
+    <a href="https://linkedin.com/in/bradfehler" target="_blank">LinkedIn</a>
+  </div>
+</footer>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.trend-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.cat === filter) ? '' : 'none';
+      });
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const card = entry.target;
+        const allVisible = [...cards].filter(c => c.style.display !== 'none');
+        const idx = allVisible.indexOf(card);
+        card.style.animationDelay = `${idx * 0.06}s`;
+        card.classList.add('visible');
+        observer.unobserve(card);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(card => observer.observe(card));
+
+  // ── Modal ──────────────────────────────────────────────
+  function openModal() {
+    document.getElementById('skillModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('skillModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Wire hero CTA + banner CTA
+  document.querySelectorAll('.js-open-modal').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); openModal(); });
+  });
+
+  // Close on backdrop click
+  document.getElementById('skillModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Email form placeholder
+  document.getElementById('notifyForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.innerHTML = '<p class="notify-success">✓ &nbsp;You\'re on the list — we\'ll email you when it drops.</p>';
+  });
+</script>
+
+<style>
+/* ── Backdrop ── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(15,15,15,0.6);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 40px 20px 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+  overflow-y: auto;
+}
+.modal-backdrop.open { opacity: 1; pointer-events: all; }
+.modal-backdrop.open .modal-card { transform: scale(1) translateY(0); opacity: 1; }
+
+/* ── Card ── */
+.modal-card {
+  background: #fff;
+  border: 1px solid #e2e0db;
+  border-radius: 20px;
+  width: 100%; max-width: 720px;
+  transform: scale(0.97) translateY(8px); opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.14), 0 4px 16px rgba(0,0,0,0.06);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── Top bar: title + close ── */
+.mc-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; gap: 12px;
+  border-bottom: 1px solid #e2e0db;
+}
+.mc-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.12em; color: #7a7a7a; margin-bottom: 4px;
+}
+.mc-title {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.55rem; font-weight: 400; color: #0f0f0f; line-height: 1.15;
+}
+.mc-close {
+  background: none; border: none; cursor: pointer; color: #7a7a7a;
+  font-size: 1.1rem; line-height: 1; padding: 4px; flex-shrink: 0;
+  transition: color 0.2s; margin-top: 2px;
+}
+.mc-close:hover { color: #0f0f0f; }
+
+/* ── Two-column body ── */
+.mc-body {
+  display: grid; grid-template-columns: 1fr 1px 1fr; width: 100%;
+}
+.mc-left, .mc-right { min-width: 0; }
+
+/* ── Left col: what's included ── */
+.mc-left {
+  padding: 14px 16px 14px 20px;
+}
+.mc-col-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.12em; color: #7a7a7a; margin-bottom: 12px;
+}
+.mc-group-hd {
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #0f0f0f; margin-bottom: 5px;
+}
+.mc-skills {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
+}
+.mc-skill {
+  font-family: 'DM Sans', system-ui, sans-serif; font-size: 0.72rem; color: #4a4a4a;
+  background: #f5f3ee; border: 1px solid #e2e0db; border-radius: 4px;
+  padding: 2px 7px; line-height: 1.5; white-space: nowrap;
+}
+.mc-drops-note {
+  margin-top: 8px;
+  background: #f5f3ee; border: 1px solid #e2e0db; border-radius: 8px;
+  padding: 8px 10px;
+  display: flex; align-items: flex-start; gap: 6px;
+}
+.mc-drops-icon { font-size: 0.8rem; flex-shrink: 0; margin-top: 1px; }
+.mc-drops-text {
+  font-family: 'DM Sans', system-ui, sans-serif; font-size: 0.76rem;
+  color: #4a4a4a; line-height: 1.5;
+}
+.mc-drops-text strong { color: #0f0f0f; font-weight: 600; }
+
+/* ── Divider ── */
+.mc-divider { background: #e2e0db; }
+
+/* ── Right col: get access ── */
+.mc-right {
+  padding: 14px 20px 14px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* GitHub option */
+.mc-access-block {
+  border: 1px solid #e2e0db; border-radius: 10px; overflow: hidden;
+}
+.mc-access-hd {
+  padding: 10px 14px; background: #fafaf8;
+  border-bottom: 1px solid #e2e0db;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.mc-access-hd-label {
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem;
+  font-weight: 700; color: #0f0f0f; display: flex; align-items: center; gap: 6px;
+}
+.mc-coming-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #fff; border: 1px solid #e2e0db; border-radius: 999px;
+  padding: 3px 9px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.58rem;
+  text-transform: uppercase; letter-spacing: 0.08em; color: #7a7a7a;
+}
+.mc-soon-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: #f59e0b;
+  animation: pulse-dot 2s ease infinite;
+}
+.mc-code-block {
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+  color: #7a7a7a; opacity: 0.55;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* Or divider */
+.mc-or {
+  display: flex; align-items: center; gap: 10px;
+}
+.mc-or-line { flex: 1; height: 1px; background: #e2e0db; }
+.mc-or-text {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
+  text-transform: uppercase; letter-spacing: 0.1em; color: #c5c2ba;
+}
+
+/* Social option */
+.mc-social-block {
+  border: 1px solid #e2e0db; border-radius: 10px; overflow: hidden;
+}
+.mc-social-hd {
+  padding: 10px 14px; background: #fafaf8; border-bottom: 1px solid #e2e0db;
+}
+.mc-social-hd-label {
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem;
+  font-weight: 700; color: #0f0f0f;
+}
+.mc-social-body {
+  padding: 10px 14px;
+}
+.mc-social-desc {
+  font-family: 'DM Sans', system-ui, sans-serif; font-size: 0.78rem;
+  color: #4a4a4a; line-height: 1.55; margin-bottom: 10px;
+}
+.mc-social-desc strong { color: #0f0f0f; }
+.mc-tweet-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #0f0f0f; color: #fff; text-decoration: none;
+  padding: 8px 14px; border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.mc-tweet-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+.mc-tweet-icon { font-size: 0.85rem; }
+
+/* ── Footer ── */
+.mc-footer {
+  padding: 12px 24px; border-top: 1px solid #e2e0db;
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+}
+.mc-footer-note {
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.1em; color: #7a7a7a;
+}
+.mc-footer-sep { color: #e2e0db; font-size: 0.7rem; }
+
+@media(max-width:600px) {
+  .mc-body { grid-template-columns: 1fr; }
+  .mc-divider { height: 1px; width: auto; }
+  .mc-left, .mc-right { padding: 16px 20px; }
+  .mc-skills { grid-template-columns: 1fr 1fr; }
+}
+</style>
+
+<!-- ── Skills pack modal ── -->
+<div class="modal-backdrop" id="skillModal">
+  <div class="modal-card">
+
+    <div class="mc-top">
+      <div>
+        <div class="mc-eyebrow">Design Trends · Skills Pack</div>
+        <div class="mc-title">Give Claude a design brain</div>
+      </div>
+      <button class="mc-close" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="mc-body">
+
+      <!-- Left: what's included -->
+      <div class="mc-left">
+        <div class="mc-col-label">What's included</div>
+
+        <div class="mc-group-hd">Core Design · 13</div>
+        <div class="mc-skills">
+          <span class="mc-skill">Neo-Brutalism</span>
+          <span class="mc-skill">Retrofuturism</span>
+          <span class="mc-skill">Dark Mode</span>
+          <span class="mc-skill">3D &amp; Immersive</span>
+          <span class="mc-skill">Gamified Design</span>
+          <span class="mc-skill">Neumorphism</span>
+          <span class="mc-skill">Bold Typography</span>
+          <span class="mc-skill">Maximalism</span>
+          <span class="mc-skill">Vibrant Colour</span>
+          <span class="mc-skill">Motion Design</span>
+          <span class="mc-skill">Collage</span>
+          <span class="mc-skill">Experimental Nav</span>
+          <span class="mc-skill">Sustainable Design</span>
+        </div>
+
+        <div class="mc-group-hd">AI Trends · 4</div>
+        <div class="mc-skills">
+          <span class="mc-skill">Chatbot UI</span>
+          <span class="mc-skill">Voice Interface</span>
+          <span class="mc-skill">Progressive Nurture</span>
+          <span class="mc-skill">AI-Native Layout</span>
+        </div>
+
+        <div class="mc-drops-note">
+          <span class="mc-drops-icon">⚡</span>
+          <span class="mc-drops-text"><strong>New systems drop regularly.</strong> Watch the repo or subscribe to catch every release as it lands.</span>
+        </div>
+      </div>
+
+      <div class="mc-divider"></div>
+
+      <!-- Right: get access -->
+      <div class="mc-right">
+        <div class="mc-col-label">Get access</div>
+
+        <!-- GitHub -->
+        <div class="mc-access-block">
+          <div class="mc-access-hd">
+            <span class="mc-access-hd-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              Via GitHub
+            </span>
+            <span class="mc-coming-pill"><span class="mc-soon-dot"></span>Dropping soon</span>
+          </div>
+          <div class="mc-code-block">git clone https://github.com/bradfehler/design-trends ~/.claude/skills/</div>
+        </div>
+
+        <div class="mc-or">
+          <div class="mc-or-line"></div>
+          <span class="mc-or-text">or</span>
+          <div class="mc-or-line"></div>
+        </div>
+
+        <!-- Social unlock -->
+        <div class="mc-social-block">
+          <div class="mc-social-hd">
+            <div class="mc-social-hd-label">No GitHub? Share to unlock.</div>
+          </div>
+          <div class="mc-social-body">
+            <p class="mc-social-desc">Post about this pack and tag <strong>@bradfehler</strong> on 𝕏 or LinkedIn — then DM me. I'll send you the files directly. Your post helps others find it.</p>
+            <a class="mc-tweet-btn" href="https://twitter.com/intent/tweet?text=Just%20discovered%20%40bradfehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20This%20is%20proper%20%F0%9F%94%A5&url=https%3A%2F%2Fbradfehler.com" target="_blank" rel="noopener">
+              <span class="mc-tweet-icon">𝕏</span> Post &amp; tag @bradfehler →
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="mc-footer">
+      <span class="mc-footer-note">Free</span>
+      <span class="mc-footer-sep">·</span>
+      <span class="mc-footer-note">Open source</span>
+      <span class="mc-footer-sep">·</span>
+      <span class="mc-footer-note">No account required</span>
+    </div>
+
+  </div>
+</div>
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skills</span>
+    <span class="skill-banner-text"><strong>17 complete design systems</strong> built as Claude Code skills</span>
+  </div>
+  <a href="#" class="skill-banner-cta js-open-modal">Get the entire skills pack →</a>
+</div>
+</body>
+</html>

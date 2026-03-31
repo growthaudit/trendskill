@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONBOARD — Guided SaaS Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #fafbfc;
+  --bg-surface: #ffffff;
+  --bg-highlight: #f0f7ff;
+  --bg-success: #f0fdf4;
+  --bg-skeleton: #e2e8f0;
+  --bg-tooltip: #1a1a2e;
+  --accent-primary: #3b82f6;
+  --accent-success: #22c55e;
+  --accent-warning: #f59e0b;
+  --accent-neutral: #94a3b8;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  --border-default: #e2e8f0;
+  --border-focus: #3b82f6;
+  --border-success: #22c55e;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.08);
+  --shadow-tooltip: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-focus: 0 0 0 3px rgba(59,130,246,0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+  --transition-reveal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ─── NAV ─── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--border-default);
+  background: var(--bg-surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.logo span { color: var(--accent-primary); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.btn-nav {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-nav:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(59,130,246,0.25); }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 80px 48px 100px;
+  text-align: center;
+  background: linear-gradient(180deg, #f0f7ff 0%, var(--bg-primary) 100%);
+  border-bottom: 1px solid var(--border-default);
+  position: relative;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(59,130,246,0.08);
+  color: var(--accent-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(59,130,246,0.2);
+  margin-bottom: 28px;
+  letter-spacing: 0.02em;
+}
+.hero-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.15;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  letter-spacing: -0.02em;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--accent-primary);
+  position: relative;
+}
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  font-weight: 400;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+.btn-primary {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover { background: #2563eb; box-shadow: 0 8px 24px rgba(59,130,246,0.25); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  padding: 14px 28px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--accent-primary); color: var(--accent-primary); }
+
+/* ─── WIZARD DEMO ─── */
+.wizard-demo {
+  max-width: 540px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-default);
+  overflow: hidden;
+}
+.wizard-header {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wh-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+.wh-dot:nth-child(1) { background: #ff5f57; }
+.wh-dot:nth-child(2) { background: #febc2e; }
+.wh-dot:nth-child(3) { background: #28c840; }
+.wh-title { margin-left: auto; margin-right: auto; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+
+.wizard-progress {
+  padding: 24px 28px 0;
+}
+.progress-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.progress-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+.progress-count { font-size: 0.75rem; color: var(--accent-primary); font-weight: 600; }
+.progress-bar {
+  height: 6px;
+  background: var(--bg-skeleton);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.progress-fill {
+  height: 100%;
+  width: 40%;
+  background: var(--accent-primary);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wizard-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 28px;
+}
+.wiz-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.wiz-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+.wiz-dot.done { background: var(--accent-success); color: white; }
+.wiz-dot.active { background: var(--accent-primary); color: white; box-shadow: var(--shadow-focus); }
+.wiz-dot.upcoming { background: var(--bg-skeleton); color: var(--text-tertiary); }
+.wiz-line {
+  width: 36px; height: 2px;
+  background: var(--border-default);
+  flex-shrink: 0;
+}
+.wiz-line.done { background: var(--accent-success); }
+
+.wizard-body {
+  padding: 0 28px 28px;
+  text-align: center;
+}
+.wiz-step-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-primary);
+  margin-bottom: 12px;
+}
+.wiz-question {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+.wiz-helper {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.55;
+}
+.wiz-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  margin-bottom: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.wiz-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+.wiz-input.filled {
+  border-color: var(--border-focus);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+.wiz-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+.wiz-btn:hover { background: #2563eb; }
+.wiz-skip {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.wiz-skip:hover { color: var(--text-secondary); }
+
+/* ─── HOW IT WORKS ─── */
+.how-section {
+  padding: 100px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.section-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 64px;
+}
+.steps-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.step-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.step-row:last-child { border-bottom: none; }
+.step-num-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.step-num {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--bg-highlight);
+  border: 2px solid var(--accent-primary);
+  color: var(--accent-primary);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-num.done { background: var(--bg-success); border-color: var(--accent-success); color: var(--accent-success); }
+.step-connector { width: 2px; height: 32px; background: var(--border-default); }
+.step-connector.done { background: var(--accent-success); }
+.step-content {}
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-skeleton);
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.step-badge.active { background: var(--bg-highlight); color: var(--accent-primary); }
+.step-badge.done { background: var(--bg-success); color: var(--accent-success); }
+.step-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.step-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+.step-visual {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+}
+/* Skeleton screens */
+.skeleton {
+  background: var(--bg-skeleton);
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.5; }
+}
+.sk-title { height: 18px; width: 55%; margin-bottom: 14px; }
+.sk-text { height: 12px; width: 90%; margin-bottom: 8px; }
+.sk-text.short { width: 65%; }
+.sk-card { height: 80px; width: 100%; margin-bottom: 10px; border-radius: var(--radius-md); }
+.sk-btn { height: 36px; width: 45%; border-radius: var(--radius-pill); }
+
+/* Filled step visual — question UI */
+.q-box {
+  text-align: center;
+  padding: 8px 0;
+}
+.q-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.q-opt {
+  padding: 10px 16px;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  background: var(--bg-surface);
+}
+.q-opt.selected { border-color: var(--accent-primary); background: var(--bg-highlight); color: var(--text-primary); font-weight: 500; }
+.q-opt:not(.selected):hover { border-color: var(--accent-neutral); }
+
+/* Completed check visual */
+.check-visual {
+  text-align: center;
+  padding: 12px 0;
+}
+.check-icon {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--bg-success);
+  border: 2px solid var(--accent-success);
+  color: var(--accent-success);
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.check-text {
+  font-size: 0.875rem;
+  color: var(--accent-success);
+  font-weight: 600;
+}
+.check-sub { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+
+/* ─── FEATURES SECTION ─── */
+.features-section {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  padding: 80px 48px;
+}
+.features-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.feature-card {
+  padding: 28px;
+}
+.fc-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--bg-highlight);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+.fc-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.fc-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ─── COLLAPSIBLE DEMO ─── */
+.collapsible-section {
+  padding: 80px 48px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.collapsible-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 48px;
+}
+.collapsible {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+.collapsible:hover { box-shadow: var(--shadow-md); }
+.collapsible-header {
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: var(--bg-surface);
+  transition: background 0.2s;
+}
+.collapsible-header:hover { background: var(--bg-highlight); }
+.ch-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ch-icon { font-size: 1.1rem; }
+.ch-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+.ch-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.ch-chevron {
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  transition: transform 0.3s;
+}
+.collapsible.open .ch-chevron { transform: rotate(180deg); }
+.collapsible-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-default);
+}
+.collapsible.open .collapsible-body { max-height: 300px; }
+.cb-inner {
+  padding: 20px 20px 20px 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cb-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cb-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.cb-input {
+  padding: 10px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cb-input:focus { outline: none; border-color: var(--border-focus); box-shadow: var(--shadow-focus); }
+
+/* ─── EMPTY STATE DEMO ─── */
+.empty-state-section {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
+  border-bottom: 1px solid var(--border-default);
+  padding: 80px 48px;
+}
+.ess-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.empty-state-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 56px 40px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.es-emoji { font-size: 3.5rem; margin-bottom: 20px; opacity: 0.8; display: block; }
+.es-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.es-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.es-btn {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.es-btn:hover { background: #2563eb; box-shadow: 0 4px 12px rgba(59,130,246,0.25); }
+.ess-copy {}
+
+/* ─── SOCIAL PROOF ─── */
+.social-section {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.testi-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.testi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.testi-stars { font-size: 0.85rem; color: var(--accent-warning); margin-bottom: 14px; letter-spacing: 2px; }
+.testi-quote {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testi-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.av1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+.av2 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+.av3 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.testi-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.testi-role { font-size: 0.78rem; color: var(--text-secondary); }
+
+/* ─── CTA ─── */
+.cta-section {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+  padding: 80px 48px;
+  text-align: center;
+}
+.cta-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+.cta-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.8);
+  max-width: 440px;
+  margin: 0 auto 36px;
+  line-height: 1.65;
+}
+.btn-cta-white {
+  background: white;
+  color: var(--accent-primary);
+  border: none;
+  padding: 16px 40px;
+  border-radius: var(--radius-pill);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.btn-cta-white:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.cta-note {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.65);
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--text-primary);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+}
+.footer-logo span { color: #60a5fa; }
+.footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+.footer-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 20px 80px; }
+  .how-section, .features-section, .collapsible-section, .social-section { padding: 60px 20px; }
+  .features-inner { padding: 60px 20px; }
+  .step-row { grid-template-columns: 60px 1fr; }
+  .step-visual { display: none; }
+  .features-grid { grid-template-columns: 1fr; }
+  .ess-inner { grid-template-columns: 1fr; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">ON<span>BOARD</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Product</a></li>
+    <li><a href="#">How it works</a></li>
+    <li><a href="#">Customers</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <button class="btn-nav">Start for free</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">✦ The onboarding platform for SaaS</div>
+  <h1 class="hero-title">Guide users to their <em>aha moment</em> — one step at a time</h1>
+  <p class="hero-sub">ONBOARD replaces overwhelming feature dumps with guided, progressive flows that reveal complexity only when users are ready for it. Higher activation, lower churn.</p>
+  <div class="hero-actions">
+    <button class="btn-primary">Start for free — no credit card</button>
+    <button class="btn-ghost">See live demo</button>
+  </div>
+
+  <div class="wizard-demo">
+    <div class="wizard-header">
+      <div class="wh-dot"></div>
+      <div class="wh-dot"></div>
+      <div class="wh-dot"></div>
+      <span class="wh-title">ONBOARD · Setup wizard</span>
+    </div>
+    <div class="wizard-progress">
+      <div class="progress-label-row">
+        <span class="progress-label">Setup progress</span>
+        <span class="progress-count">Step 2 of 5</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+
+      <div class="wizard-steps">
+        <div class="wiz-step">
+          <div class="wiz-dot done">✓</div>
+          <div class="wiz-line done"></div>
+        </div>
+        <div class="wiz-step">
+          <div class="wiz-dot active">2</div>
+          <div class="wiz-line"></div>
+        </div>
+        <div class="wiz-step">
+          <div class="wiz-dot upcoming">3</div>
+          <div class="wiz-line"></div>
+        </div>
+        <div class="wiz-step">
+          <div class="wiz-dot upcoming">4</div>
+          <div class="wiz-line"></div>
+        </div>
+        <div class="wiz-step">
+          <div class="wiz-dot upcoming">5</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-body">
+      <div class="wiz-step-label">Step 2 · Team context</div>
+      <div class="wiz-question">What best describes your team?</div>
+      <p class="wiz-helper">We'll personalise your setup based on how you work.</p>
+      <div class="q-options" style="margin-bottom:20px;">
+        <div class="q-opt selected">🏢 &nbsp; We're a product team building software</div>
+        <div class="q-opt">🎯 &nbsp; We're in marketing or growth</div>
+        <div class="q-opt">🤝 &nbsp; We're in customer success or support</div>
+        <div class="q-opt">⚡ &nbsp; Just me — solo founder</div>
+      </div>
+      <button class="wiz-btn">Continue →</button>
+      <span class="wiz-skip">Skip this step</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <p class="section-label">How it works</p>
+  <h2 class="section-title">Reveal complexity progressively</h2>
+  <p class="section-sub">Instead of overwhelming new users, ONBOARD starts minimal and unlocks power as users demonstrate readiness.</p>
+
+  <div class="steps-flow">
+    <!-- Step 1 -->
+    <div class="step-row">
+      <div class="step-num-col">
+        <div class="step-num done">✓</div>
+        <div class="step-connector done"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-badge done">✓ Complete</span>
+        <div class="step-title">User lands — skeleton first</div>
+        <p class="step-desc">Instead of a blank screen or a wall of empty charts, users see skeleton screens that set expectations. The interface feels ready, even before data exists.</p>
+      </div>
+      <div class="step-visual">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-text"></div>
+        <div class="skeleton sk-text short"></div>
+        <div class="skeleton sk-card"></div>
+        <div class="skeleton sk-btn"></div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-row">
+      <div class="step-num-col">
+        <div class="step-num active">2</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-badge active">In progress</span>
+        <div class="step-title">One question at a time</div>
+        <p class="step-desc">Forms never show more than one question at a time. Each step feels like a conversation turn, not a form to fill. Completion rates jump 3× compared to multi-field forms.</p>
+      </div>
+      <div class="step-visual">
+        <div class="q-box">
+          <div class="q-text">What's your team size?</div>
+          <div class="q-options">
+            <div class="q-opt">1–5 people</div>
+            <div class="q-opt selected">6–20 people</div>
+            <div class="q-opt">21–100 people</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-row">
+      <div class="step-num-col">
+        <div class="step-num upcoming">3</div>
+        <div class="step-connector"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-badge">Upcoming</span>
+        <div class="step-title">Celebrate each milestone</div>
+        <p class="step-desc">Every completed step gets a micro-celebration — a checkmark animation, green flash, or congratulatory message. Progress feels rewarding, not bureaucratic.</p>
+      </div>
+      <div class="step-visual">
+        <div class="check-visual">
+          <div class="check-icon">✓</div>
+          <div class="check-text">Profile complete!</div>
+          <div class="check-sub">You've unlocked team invitations</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-row">
+      <div class="step-num-col">
+        <div class="step-num upcoming">4</div>
+      </div>
+      <div class="step-content">
+        <span class="step-badge">Upcoming</span>
+        <div class="step-title">Unlock depth on demand</div>
+        <p class="step-desc">Advanced settings hide behind a friendly toggle. Power users get what they need. New users don't feel intimidated. Both groups succeed.</p>
+      </div>
+      <div class="step-visual">
+        <div style="padding:4px 0;">
+          <div style="font-size:0.875rem; font-weight:600; color:var(--text-primary); margin-bottom:12px;">Notification settings</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-secondary);background:var(--bg-primary);padding:10px 12px;border-radius:var(--radius-sm);">Email digests <span style="color:var(--accent-success);font-weight:600;">On</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-secondary);background:var(--bg-primary);padding:10px 12px;border-radius:var(--radius-sm);">Slack alerts <span style="color:var(--accent-success);font-weight:600;">On</span></div>
+          </div>
+          <div style="font-size:0.78rem;color:var(--accent-primary);cursor:pointer;font-weight:600;">+ More options ↓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-inner">
+    <p class="section-label">Platform features</p>
+    <h2 class="section-title" style="margin-bottom:8px;">Every tool for progressive UX</h2>
+    <p class="section-sub" style="margin-bottom:48px;">Built for SaaS teams who care about activation and retention, not just acquisition.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="fc-icon">🧩</div>
+        <div class="fc-title">Multi-step wizard builder</div>
+        <p class="fc-desc">Drag-and-drop builder for creating branching onboarding flows. Conditional logic routes users based on their answers.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">👻</div>
+        <div class="fc-title">Skeleton screen templates</div>
+        <p class="fc-desc">Pre-built skeleton screens for dashboards, lists, cards, and tables. Eliminates blank-screen anxiety during data loading.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">💬</div>
+        <div class="fc-title">Contextual help panels</div>
+        <p class="fc-desc">Trigger help content based on where users pause, hover, or appear to struggle. Shows once per user, then remembers.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">📊</div>
+        <div class="fc-title">Step completion analytics</div>
+        <p class="fc-desc">See exactly where users drop off in your onboarding flow. Identify friction points with funnel visualisation and session replays.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🎯</div>
+        <div class="fc-title">Empty state designer</div>
+        <p class="fc-desc">Design empty states that guide and teach — not just inform. Every blank screen becomes an opportunity to drive the next action.</p>
+      </div>
+      <div class="feature-card">
+        <div class="fc-icon">🔓</div>
+        <div class="fc-title">Feature unlock gates</div>
+        <p class="fc-desc">Progressive feature reveal based on user behaviour, usage milestones, or plan tier. Complexity earns its place on screen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLAPSIBLE DEMO -->
+<section class="collapsible-section">
+  <p class="section-label">Advanced settings pattern</p>
+  <h2 class="section-title">Hide complexity. Don't remove it.</h2>
+  <p class="section-sub">Essential options stay visible. Advanced controls hide behind friendly toggles. Tap to explore how collapsed sections feel in practice.</p>
+
+  <div class="collapsible-demo">
+    <div class="collapsible open" onclick="this.classList.toggle('open')">
+      <div class="collapsible-header">
+        <div class="ch-left">
+          <span class="ch-icon">🔔</span>
+          <div>
+            <div class="ch-title">Notification preferences</div>
+            <div class="ch-sub">Configure how and when you hear from us</div>
+          </div>
+        </div>
+        <span class="ch-chevron">▾</span>
+      </div>
+      <div class="collapsible-body">
+        <div class="cb-inner">
+          <div class="cb-field">
+            <label class="cb-label">Email frequency</label>
+            <select class="cb-input"><option>Daily digest</option><option>Instant</option><option>Weekly summary</option></select>
+          </div>
+          <div class="cb-field">
+            <label class="cb-label">Slack channel (optional)</label>
+            <input class="cb-input" type="text" placeholder="#product-updates">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapsible" onclick="this.classList.toggle('open')">
+      <div class="collapsible-header">
+        <div class="ch-left">
+          <span class="ch-icon">⚙️</span>
+          <div>
+            <div class="ch-title">Advanced options</div>
+            <div class="ch-sub">Webhooks, API limits, and developer settings</div>
+          </div>
+        </div>
+        <span class="ch-chevron">▾</span>
+      </div>
+      <div class="collapsible-body">
+        <div class="cb-inner">
+          <div class="cb-field">
+            <label class="cb-label">Webhook URL</label>
+            <input class="cb-input" type="text" placeholder="https://your-app.com/webhook">
+          </div>
+          <div class="cb-field">
+            <label class="cb-label">API rate limit</label>
+            <select class="cb-input"><option>100 req/min</option><option>500 req/min</option><option>Unlimited</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapsible" onclick="this.classList.toggle('open')">
+      <div class="collapsible-header">
+        <div class="ch-left">
+          <span class="ch-icon">🔐</span>
+          <div>
+            <div class="ch-title">Security & compliance</div>
+            <div class="ch-sub">SSO, audit logs, data residency</div>
+          </div>
+        </div>
+        <span class="ch-chevron">▾</span>
+      </div>
+      <div class="collapsible-body">
+        <div class="cb-inner">
+          <div class="cb-field">
+            <label class="cb-label">SSO provider</label>
+            <select class="cb-input"><option>Okta</option><option>Auth0</option><option>Azure AD</option></select>
+          </div>
+          <div class="cb-field">
+            <label class="cb-label">Data region</label>
+            <select class="cb-input"><option>EU (Frankfurt)</option><option>US (Virginia)</option><option>APAC (Singapore)</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPTY STATE DEMO -->
+<section class="empty-state-section">
+  <div class="ess-inner">
+    <div class="empty-state-card">
+      <span class="es-emoji">📋</span>
+      <div class="es-title">Create your first onboarding flow</div>
+      <p class="es-desc">Flows guide new users from signup to their first win. Start with a template or build from scratch.</p>
+      <button class="es-btn">+ Create a flow</button>
+    </div>
+    <div class="ess-copy">
+      <p class="section-label">Empty states that teach</p>
+      <h2 class="section-title" style="margin-bottom:12px;">A blank screen is never an answer</h2>
+      <p style="font-size:1rem; color:var(--text-secondary); line-height:1.7; margin-bottom:24px;">When users have no data yet, the interface should guide them to the next action — not leave them stranded. ONBOARD's empty state designer ensures every blank screen has a clear path forward.</p>
+      <p style="font-size:0.875rem; color:var(--text-secondary); line-height:1.7;">Research shows that users who see a helpful empty state are <strong style="color:var(--text-primary);">2.8× more likely</strong> to complete their first setup action compared to those who see a blank dashboard.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="social-section">
+  <p class="section-label">Customer stories</p>
+  <h2 class="section-title">Teams who ship better onboarding</h2>
+
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"We cut our time-to-value from 14 days to 3 days. The step-by-step wizard ONBOARD helped us build transformed how new users experience our product."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av1">JM</div>
+        <div>
+          <div class="testi-name">Jamie Morales</div>
+          <div class="testi-role">Head of Growth · Clarift</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"The skeleton screens alone were worth it. New users no longer churn on the dashboard because it 'looked broken'. Completion went up 40%."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av2">SK</div>
+        <div>
+          <div class="testi-name">Sunita Kapoor</div>
+          <div class="testi-role">Product Manager · Fenix Analytics</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Progressive disclosure changed everything. Our power users love the advanced settings. Our casual users never even know they exist. Best of both worlds."</p>
+      <div class="testi-author">
+        <div class="testi-avatar av3">TW</div>
+        <div>
+          <div class="testi-name">Tom Whitfield</div>
+          <div class="testi-role">CEO · Stackr</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title">Ready to guide your users properly?</h2>
+  <p class="cta-sub">Join 2,400+ SaaS teams who've improved activation with progressive onboarding flows built on ONBOARD.</p>
+  <button class="btn-cta-white">Start free — 14 day trial</button>
+  <p class="cta-note">No credit card required · Setup in under 10 minutes</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">ON<span>BOARD</span></div>
+  <div class="footer-copy">© 2026 Onboard Labs Inc. All rights reserved.</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Status</a></li>
+  </ul>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Progressive Nurturing</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

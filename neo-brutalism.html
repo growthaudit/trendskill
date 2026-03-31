@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STACKFORM — Build Forms That Bite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #ffffff;
+  --bg-yellow: #ffe566;
+  --bg-pink: #ff8a9b;
+  --bg-blue: #7ec8ff;
+  --bg-green: #8fffba;
+  --bg-lavender: #c9b8ff;
+  --bg-peach: #ffcba4;
+  --ink: #1a1a1a;
+  --ink-mid: #555555;
+  --border: 3px solid #1a1a1a;
+  --border-thin: 2px solid #1a1a1a;
+  --shadow: 5px 5px 0 #1a1a1a;
+  --shadow-lg: 8px 8px 0 #1a1a1a;
+  --shadow-hover: 7px 7px 0 #1a1a1a;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 32px;
+  height: 64px;
+  border-bottom: var(--border);
+  background: var(--bg-yellow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-brand {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.nav-links {
+  display: flex;
+  gap: 0;
+  list-style: none;
+}
+.nav-links li a {
+  display: block;
+  padding: 8px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  color: var(--ink);
+  border-left: var(--border-thin);
+  transition: background 0.1s;
+}
+.nav-links li a:hover { background: var(--ink); color: var(--bg-yellow); }
+.nav-cta {
+  padding: 8px 20px;
+  background: var(--ink);
+  color: var(--bg-yellow) !important;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.nav-cta:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+
+/* HERO */
+.hero {
+  background: var(--bg);
+  border-bottom: var(--border);
+  padding: 80px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: 90vh;
+}
+.hero-left {
+  border-right: var(--border);
+  padding-right: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+.hero-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mid);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.hero h1 span { color: var(--ink); background: var(--bg-pink); padding: 0 8px; }
+.hero-sub {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--ink-mid);
+  max-width: 48ch;
+}
+.hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--ink);
+  color: var(--bg-yellow);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 14px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-primary:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+.btn-primary:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+.btn-secondary {
+  background: var(--bg);
+  color: var(--ink);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 14px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.btn-secondary:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+
+.hero-right {
+  padding-left: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+.hero-form-preview {
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  background: var(--bg);
+  overflow: hidden;
+}
+.form-header {
+  background: var(--bg-lavender);
+  border-bottom: var(--border);
+  padding: 12px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.form-dots { display: flex; gap: 6px; }
+.form-dot { width: 10px; height: 10px; border: var(--border-thin); background: var(--bg); }
+.form-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.form-field { display: flex; flex-direction: column; gap: 6px; }
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+.form-input {
+  border: var(--border);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--bg);
+  color: var(--ink);
+}
+.form-input:focus { box-shadow: var(--shadow); outline: none; }
+.form-input-filled { background: var(--bg-blue); }
+.form-submit {
+  background: var(--bg-green);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.form-submit:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+
+/* METRICS */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: none;
+}
+.metric-cell {
+  border-right: var(--border);
+  border-bottom: var(--border);
+  padding: 32px 24px;
+  text-align: center;
+}
+.metric-cell:last-child { border-right: none; }
+.metric-cell:nth-child(1) { background: var(--bg-yellow); }
+.metric-cell:nth-child(2) { background: var(--bg-pink); }
+.metric-cell:nth-child(3) { background: var(--bg-blue); }
+.metric-cell:nth-child(4) { background: var(--bg-green); }
+.metric-value {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.metric-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mid);
+  margin-top: 8px;
+}
+
+/* FEATURES */
+.features {
+  border-top: var(--border);
+  padding: 0;
+}
+.features-header {
+  background: var(--ink);
+  color: var(--bg-yellow);
+  padding: 24px 48px;
+  border-bottom: var(--border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.features-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.feature-card {
+  border-right: var(--border);
+  border-bottom: var(--border);
+  padding: 36px 32px;
+  position: relative;
+  transition: transform 0.1s;
+}
+.feature-card:nth-child(3n) { border-right: none; }
+.feature-card:nth-child(1) { background: var(--bg); }
+.feature-card:nth-child(2) { background: var(--bg-peach); }
+.feature-card:nth-child(3) { background: var(--bg-lavender); }
+.feature-card:nth-child(4) { background: var(--bg-blue); }
+.feature-card:nth-child(5) { background: var(--bg); }
+.feature-card:nth-child(6) { background: var(--bg-yellow); }
+.feature-card:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow); z-index: 1; }
+.feature-num {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-mid);
+  margin-bottom: 16px;
+}
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+.feature-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ink-mid);
+}
+
+/* PRICING */
+.pricing {
+  background: var(--bg-yellow);
+  border-top: var(--border);
+  padding: 80px 48px;
+}
+.pricing h2 {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  margin-bottom: 48px;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: var(--border);
+}
+.pricing-card {
+  border-right: var(--border);
+  padding: 40px 32px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.pricing-card:last-child { border-right: none; }
+.pricing-card.featured {
+  background: var(--bg-pink);
+  position: relative;
+}
+.pricing-tier {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.pricing-price {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.pricing-price span {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--ink-mid);
+}
+.pricing-features { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.pricing-features li {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pricing-features li::before {
+  content: '→';
+  font-weight: 700;
+}
+.pricing-btn {
+  display: block;
+  background: var(--ink);
+  color: var(--bg-yellow);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  margin-top: auto;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.pricing-btn:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-hover); }
+
+/* MARQUEE */
+.marquee-strip {
+  background: var(--ink);
+  border-top: var(--border);
+  border-bottom: var(--border);
+  padding: 14px 0;
+  overflow: hidden;
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 20s linear infinite;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--bg-yellow);
+  padding: 0 40px;
+}
+.marquee-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--bg-pink);
+  border-radius: 0;
+  margin: 0 16px;
+  vertical-align: middle;
+}
+
+/* FOOTER */
+footer {
+  background: var(--ink);
+  color: var(--bg);
+  padding: 48px;
+  border-top: var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+}
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--bg-yellow);
+  margin-bottom: 12px;
+}
+.footer-copy {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #888;
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-decoration: none;
+  color: var(--bg);
+  transition: color 0.1s;
+}
+.footer-col ul li a:hover { color: var(--bg-yellow); }
+
+@media (max-width: 768px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { border-right: none; border-bottom: var(--border); padding-right: 0; padding-bottom: 40px; }
+  .hero-right { padding-left: 0; padding-top: 40px; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .features-grid { grid-template-columns: 1fr; }
+  .feature-card:nth-child(3n) { border-right: var(--border); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .pricing-card { border-right: none; border-bottom: var(--border); }
+  footer { grid-template-columns: 1fr; }
+  nav { padding: 0 20px; }
+  .hero { padding: 48px 24px; }
+  .pricing { padding: 48px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">STACKFORM</div>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#" class="nav-cta">Start Building →</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">// Form infrastructure for builders</div>
+    <h1>Forms<br>that<br><span>bite.</span></h1>
+    <p class="hero-sub">STACKFORM is the form-building tool that doesn't apologise for looking different. Raw structure, real power. Build survey flows, lead capture, and data pipelines — no soft shadows, no fuss.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Start free — no card →</a>
+      <a href="#" class="btn-secondary">See docs</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-form-preview">
+      <div class="form-header">
+        <span>Lead Capture · Form_001</span>
+        <div class="form-dots">
+          <div class="form-dot" style="background:#ff8a9b"></div>
+          <div class="form-dot" style="background:#ffe566"></div>
+          <div class="form-dot" style="background:#8fffba"></div>
+        </div>
+      </div>
+      <div class="form-body">
+        <div class="form-field">
+          <label class="form-label">Full name *</label>
+          <input class="form-input form-input-filled" value="Jordan Mwangi" readonly>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Company email *</label>
+          <input class="form-input" placeholder="you@company.com" readonly>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Team size</label>
+          <select class="form-input" style="cursor:pointer">
+            <option>1–10 people</option>
+            <option>11–50</option>
+            <option selected>51–200</option>
+          </select>
+        </div>
+        <button class="form-submit">Submit & claim access →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="metrics">
+  <div class="metric-cell">
+    <div class="metric-value">2.4M</div>
+    <div class="metric-label">Forms submitted</div>
+  </div>
+  <div class="metric-cell">
+    <div class="metric-value">89%</div>
+    <div class="metric-label">Avg. completion rate</div>
+  </div>
+  <div class="metric-cell">
+    <div class="metric-value">3.2s</div>
+    <div class="metric-label">Avg. load time</div>
+  </div>
+  <div class="metric-cell">
+    <div class="metric-value">14K</div>
+    <div class="metric-label">Active builders</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="features-header">
+    <h2>What you get</h2>
+    <span style="font-family:var(--font-mono);font-size:0.65rem;color:#888;letter-spacing:0.1em">→ 6 FEATURES THAT MATTER</span>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-num">01 /</div>
+      <h3>Drag & Drop Builder</h3>
+      <p>Assemble forms from blocks. Text, select, file upload, logic branches. Every block has a border. Every border means something.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">02 /</div>
+      <h3>Logic Branching</h3>
+      <p>Show different questions based on previous answers. Boolean, conditional, multi-path. No visual programming required.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">03 /</div>
+      <h3>Webhooks & APIs</h3>
+      <p>Every form submission fires a webhook. Pipe data to Slack, Airtable, Notion, or your own endpoint. Zero configuration middleware.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">04 /</div>
+      <h3>Custom Domains</h3>
+      <p>Host on stackform.io or your own domain. SSL included. No branding unless you want it. Your form, your face.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">05 /</div>
+      <h3>Analytics Dashboard</h3>
+      <p>Drop-off rates, time-per-field, completion funnels. You'll know exactly where your form breaks — and fix it in seconds.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">06 /</div>
+      <h3>Team Collaboration</h3>
+      <p>Share edit access, leave comments, track version history. Build forms with your team without stepping on each other.</p>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span class="marquee-item">No-code friendly</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Developer-first API</span><span class="marquee-dot"></span>
+    <span class="marquee-item">GDPR compliant</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Unlimited responses</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Custom CSS injection</span><span class="marquee-dot"></span>
+    <span class="marquee-item">File uploads up to 50MB</span><span class="marquee-dot"></span>
+    <span class="marquee-item">99.9% uptime SLA</span><span class="marquee-dot"></span>
+    <span class="marquee-item">No-code friendly</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Developer-first API</span><span class="marquee-dot"></span>
+    <span class="marquee-item">GDPR compliant</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Unlimited responses</span><span class="marquee-dot"></span>
+    <span class="marquee-item">Custom CSS injection</span><span class="marquee-dot"></span>
+    <span class="marquee-item">File uploads up to 50MB</span><span class="marquee-dot"></span>
+    <span class="marquee-item">99.9% uptime SLA</span><span class="marquee-dot"></span>
+  </div>
+</div>
+
+<section class="pricing">
+  <h2>Simple pricing.<br>No surprises.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Hobbyist</div>
+      <div class="pricing-price">$0<span>/mo</span></div>
+      <ul class="pricing-features">
+        <li>3 active forms</li>
+        <li>100 submissions/mo</li>
+        <li>Basic webhooks</li>
+        <li>Stackform subdomain</li>
+      </ul>
+      <a href="#" class="pricing-btn">Start free →</a>
+    </div>
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Builder ★ Most popular</div>
+      <div class="pricing-price">$24<span>/mo</span></div>
+      <ul class="pricing-features">
+        <li>Unlimited forms</li>
+        <li>10,000 submissions/mo</li>
+        <li>Logic branching</li>
+        <li>Custom domain</li>
+        <li>Full analytics</li>
+      </ul>
+      <a href="#" class="pricing-btn">Get started →</a>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Studio</div>
+      <div class="pricing-price">$89<span>/mo</span></div>
+      <ul class="pricing-features">
+        <li>Everything in Builder</li>
+        <li>Unlimited submissions</li>
+        <li>Team access (5 seats)</li>
+        <li>Priority support</li>
+        <li>White-label embed</li>
+      </ul>
+      <a href="#" class="pricing-btn">Start Studio →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">STACKFORM</div>
+    <div class="footer-copy">© 2026 Stackform Inc.<br>Built with rage and restraint.</div>
+  </div>
+  <div class="footer-col">
+    <h4>Product</h4>
+    <ul>
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Templates</a></li>
+      <li><a href="#">Integrations</a></li>
+      <li><a href="#">API docs</a></li>
+      <li><a href="#">Changelog</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Company</h4>
+    <ul>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Blog</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Neo-Brutalism</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

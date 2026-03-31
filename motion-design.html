@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KINETIC — Web Animation Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Neue+Montreal:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f6f0;
+  --ink: #0f0f0f;
+  --surface: #ffffff;
+  --border: #e5e1d8;
+  --accent: #e84040;
+  --accent-2: #2255f4;
+  --accent-3: #f5a800;
+  --text-secondary: #6b6560;
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(248,246,240,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.nav-logo .dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: dotBounce 1.5s var(--ease-spring) infinite;
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+
+.nav-cta {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: white;
+  padding: 9px 20px;
+  background: var(--ink);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+}
+
+.nav-cta:hover {
+  background: var(--accent);
+  transform: scale(1.04);
+}
+
+/* HERO */
+.hero {
+  padding: 80px 60px 80px;
+  position: relative;
+  overflow: hidden;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Animated background elements */
+.hero-bg-el {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.bg-el-1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(232,64,64,0.12), transparent);
+  top: -100px; right: -100px;
+  animation: floatEl1 6s ease-in-out infinite;
+}
+
+.bg-el-2 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(34,85,244,0.1), transparent);
+  bottom: -50px; left: -50px;
+  animation: floatEl1 8s ease-in-out infinite reverse;
+}
+
+@keyframes floatEl1 {
+  0%, 100% { transform: translate(0, 0); }
+  33% { transform: translate(20px, -20px); }
+  66% { transform: translate(-15px, 10px); }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 6px 14px;
+  border: 1px solid rgba(232,64,64,0.25);
+  border-radius: 100px;
+  background: rgba(232,64,64,0.06);
+  margin-bottom: 24px;
+  width: fit-content;
+  animation: slideInUp 0.6s var(--ease-out) both;
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-headline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(4rem, 8vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+  animation: slideInUp 0.6s var(--ease-out) 0.1s both;
+}
+
+.word-animate {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.word-inner {
+  display: inline-block;
+  animation: wordReveal 0.8s var(--ease-out) both;
+}
+
+.word-1 .word-inner { animation-delay: 0.2s; }
+.word-2 .word-inner { animation-delay: 0.35s; }
+.word-3 .word-inner { animation-delay: 0.5s; }
+
+@keyframes wordReveal {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.headline-accent { color: var(--accent); }
+.headline-stroke {
+  -webkit-text-stroke: 2px var(--ink);
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 36px;
+  animation: slideInUp 0.6s var(--ease-out) 0.5s both;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  animation: slideInUp 0.6s var(--ease-out) 0.6s both;
+  margin-bottom: 64px;
+}
+
+.btn-primary {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  padding: 14px 32px;
+  background: var(--ink);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  transform: scale(1.04) translateY(-1px);
+}
+
+.btn-ghost {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 14px 24px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-ghost:hover { border-color: var(--ink); }
+
+/* Animated metrics row */
+.metrics-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  width: fit-content;
+  animation: slideInUp 0.6s var(--ease-out) 0.7s both;
+}
+
+.metric-pill {
+  padding: 16px 28px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric-pill:last-child { border-right: none; }
+
+.metric-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+/* Floating animation demo elements */
+.hero-demos {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.demo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  width: 280px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  animation: slideInRight 0.6s var(--ease-out) both;
+}
+
+.demo-card-1 { animation-delay: 0.8s; }
+.demo-card-2 { animation-delay: 1s; }
+.demo-card-3 { animation-delay: 1.2s; }
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.demo-card-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+/* Easing curve demo */
+.easing-demo {
+  height: 40px;
+  position: relative;
+}
+
+.easing-track {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+}
+
+.easing-ball {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -7px;
+  animation: easingAnim 2s var(--ease-spring) infinite;
+}
+
+.ball-red { background: var(--accent); animation-delay: 0s; }
+.ball-blue { background: var(--accent-2); animation-delay: 0.4s; }
+.ball-gold { background: var(--accent-3); animation-delay: 0.8s; }
+
+@keyframes easingAnim {
+  0%, 100% { left: 0; }
+  50% { left: calc(100% - 16px); }
+}
+
+/* Stagger bars */
+.stagger-bars {
+  display: flex;
+  gap: 6px;
+  align-items: flex-end;
+  height: 40px;
+}
+
+.stagger-bar {
+  flex: 1;
+  background: var(--accent-2);
+  border-radius: 3px 3px 0 0;
+  opacity: 0.8;
+  animation: staggerGrow 1.5s var(--ease-spring) infinite;
+}
+
+.stagger-bar:nth-child(1) { animation-delay: 0s; }
+.stagger-bar:nth-child(2) { animation-delay: 0.1s; }
+.stagger-bar:nth-child(3) { animation-delay: 0.2s; }
+.stagger-bar:nth-child(4) { animation-delay: 0.3s; }
+.stagger-bar:nth-child(5) { animation-delay: 0.4s; }
+.stagger-bar:nth-child(6) { animation-delay: 0.5s; }
+
+@keyframes staggerGrow {
+  0%, 100% { height: 8px; }
+  50% { height: 100%; }
+}
+
+/* Scroll counter */
+.counter-demo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.counter-num {
+  display: inline-block;
+  animation: counterTick 0.1s steps(1, end) infinite;
+  color: var(--accent-3);
+  min-width: 80px;
+}
+
+@keyframes counterTick {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* FEATURES */
+.features {
+  padding: 100px 60px;
+  position: relative;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 56px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.feat-cell {
+  background: var(--surface);
+  padding: 36px 32px;
+  transition: background 0.2s;
+}
+
+.feat-cell:hover { background: var(--bg); }
+
+.feat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.feat-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.feat-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* DEMO SECTION */
+.demo-section {
+  padding: 80px 60px;
+  background: var(--ink);
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(232,64,64,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.demo-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.demo-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.demo-title .red { color: var(--accent); }
+
+.demo-text {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+.code-block {
+  background: #0a0a0a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.code-bar {
+  background: #141414;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.c-dot { width: 10px; height: 10px; border-radius: 50%; }
+.c-red { background: #ff5f57; }
+.c-yellow { background: #febc2e; }
+.c-green { background: #28c840; }
+
+.code-body {
+  padding: 20px;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.82rem;
+  line-height: 1.75;
+}
+
+.c-kw { color: #f48fb1; }
+.c-fn { color: #82aaff; }
+.c-str { color: #c3e88d; }
+.c-num { color: #f78c6c; }
+.c-obj { color: #89ddff; }
+.c-cmt { color: #546e7a; }
+
+/* PRICING */
+.pricing {
+  padding: 100px 60px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 56px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.2s var(--ease-spring);
+}
+
+.pricing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+
+.pricing-card.featured {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
+}
+
+.plan-tier {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.pricing-card.featured .plan-tier { color: rgba(255,255,255,0.5); }
+
+.plan-price {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.plan-period {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.pricing-card.featured .plan-period { color: rgba(255,255,255,0.5); }
+
+.plan-feats {
+  list-style: none;
+  margin-bottom: 28px;
+}
+
+.plan-feats li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-card.featured .plan-feats li {
+  color: rgba(255,255,255,0.7);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.plan-feats li .check { color: var(--accent); font-size: 0.75rem; }
+
+.plan-btn {
+  width: 100%;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+}
+
+.plan-btn:hover { transform: scale(1.02); }
+
+.btn-light {
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.btn-light:hover { background: white; border-color: var(--ink); }
+
+.btn-accent {
+  color: white;
+  background: var(--accent);
+  border: none;
+}
+
+.btn-accent:hover { background: #f05050; }
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.footer-tagline { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.65; max-width: 260px; }
+
+.footer-col h4 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a { font-size: 0.875rem; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--ink); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-copy { font-size: 0.8rem; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">KINETIC<span class="dot"></span></div>
+  <ul class="nav-links">
+    <li><a href="#">Studio</a></li>
+    <li><a href="#">Components</a></li>
+    <li><a href="#">Docs</a></li>
+    <li><a href="#">Showcase</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <button class="nav-cta">Start animating</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-el bg-el-1"></div>
+  <div class="hero-bg-el bg-el-2"></div>
+
+  <div class="hero-badge">✦ The motion design toolkit for the web</div>
+
+  <h1 class="hero-headline">
+    <div class="word-animate word-1"><span class="word-inner">Make</span></div>&nbsp;
+    <div class="word-animate word-2"><span class="word-inner headline-accent">anything</span></div><br>
+    <div class="word-animate word-3"><span class="word-inner headline-stroke">move.</span></div>
+  </h1>
+
+  <p class="hero-sub">KINETIC is the complete motion design platform for web. Visual timeline editor, physics-based easing, scroll-triggered animations, and a component library that ships ready to use.</p>
+
+  <div class="hero-ctas">
+    <button class="btn-primary">Build for free</button>
+    <button class="btn-ghost">Watch 3-min demo →</button>
+  </div>
+
+  <div class="metrics-row">
+    <div class="metric-pill">
+      <div class="metric-num">240+</div>
+      <div class="metric-label">Easing presets</div>
+    </div>
+    <div class="metric-pill">
+      <div class="metric-num">98K</div>
+      <div class="metric-label">Active studios</div>
+    </div>
+    <div class="metric-pill">
+      <div class="metric-num">16ms</div>
+      <div class="metric-label">Frame budget</div>
+    </div>
+    <div class="metric-pill">
+      <div class="metric-num">4.9★</div>
+      <div class="metric-label">Developer rating</div>
+    </div>
+  </div>
+
+  <div class="hero-demos">
+    <div class="demo-card demo-card-1">
+      <div class="demo-card-label">Easing visualiser</div>
+      <div class="easing-demo">
+        <div class="easing-track"></div>
+        <div class="easing-ball ball-red"></div>
+        <div class="easing-ball ball-blue" style="bottom:-7px;animation-delay:0.4s;"></div>
+        <div class="easing-ball ball-gold" style="bottom:-7px;animation-delay:0.8s;"></div>
+      </div>
+    </div>
+    <div class="demo-card demo-card-2">
+      <div class="demo-card-label">Stagger animation</div>
+      <div class="stagger-bars">
+        <div class="stagger-bar"></div>
+        <div class="stagger-bar"></div>
+        <div class="stagger-bar"></div>
+        <div class="stagger-bar"></div>
+        <div class="stagger-bar"></div>
+        <div class="stagger-bar"></div>
+      </div>
+    </div>
+    <div class="demo-card demo-card-3">
+      <div class="demo-card-label">Scroll counter</div>
+      <div class="counter-demo">
+        <div id="counter" class="counter-num">48,291</div>
+        <span style="font-size:1rem;color:var(--text-secondary)">visits</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Every animation primitive, one platform.</h2>
+  <div class="features-grid">
+    <div class="feat-cell">
+      <div class="feat-num">01</div>
+      <div class="feat-title">Visual Timeline</div>
+      <p class="feat-desc">Drag-and-drop animation timeline with keyframe editing, curve editor, and live preview. No code required for the first pass.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">02</div>
+      <div class="feat-title">Scroll-Triggered</div>
+      <p class="feat-desc">Pin sections, scrub animations to scroll position, and reveal elements as they enter the viewport. Built on the Intersection Observer API — no dependencies.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">03</div>
+      <div class="feat-title">Physics Engine</div>
+      <p class="feat-desc">Spring, gravity, and momentum simulations with configurable stiffness and damping. Animations that feel physically real, not mathematically precise.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">04</div>
+      <div class="feat-title">Micro-interactions</div>
+      <p class="feat-desc">Pre-built hover states, click feedback, focus animations, and loading indicators. Import with one line, customise with CSS variables.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">05</div>
+      <div class="feat-title">Text Animation</div>
+      <p class="feat-desc">Character-by-character, word-by-word, and line-by-line reveals. Kinetic typography with full control over stagger timing and easing curves.</p>
+    </div>
+    <div class="feat-cell">
+      <div class="feat-num">06</div>
+      <div class="feat-title">Export to Code</div>
+      <p class="feat-desc">Export any animation as GSAP, Framer Motion, or vanilla CSS. Every visual edit generates clean, production-ready code.</p>
+    </div>
+  </div>
+</section>
+
+<section class="demo-section">
+  <div class="demo-inner">
+    <div>
+      <h2 class="demo-title">Code that moves<br>like you <span class="red">mean it.</span></h2>
+      <p class="demo-text">KINETIC's API is designed for developers who care about the craft. Declarative syntax, tree-shakeable, and less than 14kb gzipped.</p>
+      <button class="btn-primary" style="background:var(--accent); border:none; color:white; padding:13px 28px; border-radius:100px; font-family:'Space Grotesk',sans-serif; font-size:0.88rem; font-weight:700; cursor:pointer;">Read the docs →</button>
+    </div>
+    <div class="code-block">
+      <div class="code-bar">
+        <div class="c-dot c-red"></div>
+        <div class="c-dot c-yellow"></div>
+        <div class="c-dot c-green"></div>
+      </div>
+      <div class="code-body">
+        <div><span class="c-kw">import</span> { <span class="c-obj">animate</span>, <span class="c-obj">scroll</span>, <span class="c-obj">spring</span> } <span class="c-kw">from</span> <span class="c-str">'kinetic'</span></div>
+        <br>
+        <div><span class="c-cmt">// Scroll-triggered counter with spring easing</span></div>
+        <div><span class="c-fn">scroll</span>(<span class="c-str">'#stats-section'</span>, {</div>
+        <div>&nbsp;&nbsp;onEnter: () <span class="c-kw">=></span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-fn">animate</span>(<span class="c-str">'[data-counter]'</span>, {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from: <span class="c-num">0</span>,</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;to: <span class="c-str">attr('data-value')</span>,</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;duration: <span class="c-num">1400</span>,</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;easing: <span class="c-fn">spring</span>({ stiffness: <span class="c-num">80</span>, damping: <span class="c-num">14</span> }),</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;stagger: <span class="c-num">120</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;})</div>
+        <div>&nbsp;&nbsp;}</div>
+        <div>})</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-label">Pricing</div>
+  <h2 class="section-title">Start free. Scale as you grow.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-tier">Indie</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">free forever</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> Visual timeline editor</li>
+        <li><span class="check">✓</span> 60 easing presets</li>
+        <li><span class="check">✓</span> Scroll triggers</li>
+        <li><span class="check">✓</span> CSS export</li>
+      </ul>
+      <button class="plan-btn btn-light">Start for free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-tier">Pro</div>
+      <div class="plan-price">$29</div>
+      <div class="plan-period">per month, billed annually</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> All 240+ easing presets</li>
+        <li><span class="check">✓</span> Physics engine</li>
+        <li><span class="check">✓</span> GSAP + Framer export</li>
+        <li><span class="check">✓</span> Micro-interaction kit</li>
+        <li><span class="check">✓</span> Text animation system</li>
+        <li><span class="check">✓</span> Priority support</li>
+      </ul>
+      <button class="plan-btn btn-accent">Start Pro trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-tier">Team</div>
+      <div class="plan-price">$79</div>
+      <div class="plan-period">per month, up to 8 seats</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> Everything in Pro</li>
+        <li><span class="check">✓</span> Shared animation library</li>
+        <li><span class="check">✓</span> Design token sync</li>
+        <li><span class="check">✓</span> Figma plugin</li>
+        <li><span class="check">✓</span> Custom easing curves</li>
+      </ul>
+      <button class="plan-btn btn-light">Start Team trial</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">KINETIC</div>
+      <p class="footer-tagline">The motion design platform that turns static interfaces into experiences people remember. Used by 98,000+ studios worldwide.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Studio</a></li>
+        <li><a href="#">Components</a></li>
+        <li><a href="#">Templates</a></li>
+        <li><a href="#">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">GitHub</a></li>
+        <li><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Kinetic Studio. All rights reserved.</span>
+    <span class="footer-copy">Make anything move.</span>
+  </div>
+</footer>
+
+<script>
+// Animate the counter number realistically
+let count = 48291;
+const el = document.getElementById('counter');
+if (el) {
+  setInterval(() => {
+    count += Math.floor(Math.random() * 3);
+    el.textContent = count.toLocaleString();
+  }, 800);
+}
+</script>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Motion Design</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

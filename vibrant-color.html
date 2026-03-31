@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PULSE — Social Fitness Tracking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --electric-lime: #c8ff00;
+  --hot-pink: #ff3cac;
+  --cyber-blue: #00d4ff;
+  --deep-purple: #6b1fff;
+  --neon-orange: #ff6b35;
+  --acid-yellow: #ffec00;
+  --void: #0a0a0f;
+  --near-black: #12121a;
+  --surface: #1a1a28;
+
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255,255,255,0.65);
+
+  --mesh-1: radial-gradient(ellipse at 20% 50%, rgba(107,31,255,0.4) 0%, transparent 60%),
+             radial-gradient(ellipse at 80% 20%, rgba(255,60,172,0.3) 0%, transparent 55%),
+             radial-gradient(ellipse at 60% 80%, rgba(0,212,255,0.25) 0%, transparent 50%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--void);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10,10,15,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.nav-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: var(--electric-lime);
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(200,255,0,0.5);
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 100px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover {
+  color: white;
+  background: rgba(255,255,255,0.08);
+}
+
+.nav-btn {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--void);
+  padding: 10px 22px;
+  background: var(--electric-lime);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgba(200,255,0,0.3);
+}
+
+.nav-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 32px rgba(200,255,0,0.5);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 90px 40px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-mesh {
+  position: absolute;
+  inset: 0;
+  background: var(--mesh-1);
+  pointer-events: none;
+}
+
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--electric-lime);
+  padding: 6px 16px;
+  border: 1px solid rgba(200,255,0,0.3);
+  border-radius: 100px;
+  background: rgba(200,255,0,0.08);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--electric-lime);
+  box-shadow: 0 0 8px var(--electric-lime);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero-headline {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 24px;
+}
+
+.line-lime { color: var(--electric-lime); text-shadow: 0 0 40px rgba(200,255,0,0.4); }
+.line-pink { color: var(--hot-pink); text-shadow: 0 0 40px rgba(255,60,172,0.4); }
+.line-blue { color: var(--cyber-blue); text-shadow: 0 0 40px rgba(0,212,255,0.4); }
+.line-white { color: white; }
+
+.hero-sub {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 64px;
+}
+
+.btn-primary {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--void);
+  padding: 14px 32px;
+  background: var(--electric-lime);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(200,255,0,0.4);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(200,255,0,0.6);
+}
+
+.btn-ghost {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  padding: 14px 28px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
+}
+
+/* Activity cards row */
+.activity-row {
+  display: flex;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.activity-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 20px;
+  min-width: 160px;
+  text-align: center;
+}
+
+.activity-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.activity-val {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.activity-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.card-lime .activity-val { color: var(--electric-lime); text-shadow: 0 0 16px rgba(200,255,0,0.5); }
+.card-pink .activity-val { color: var(--hot-pink); text-shadow: 0 0 16px rgba(255,60,172,0.5); }
+.card-blue .activity-val { color: var(--cyber-blue); text-shadow: 0 0 16px rgba(0,212,255,0.5); }
+.card-orange .activity-val { color: var(--neon-orange); text-shadow: 0 0 16px rgba(255,107,53,0.5); }
+.card-purple .activity-val { color: #a78bfa; text-shadow: 0 0 16px rgba(107,31,255,0.5); }
+
+/* STATS */
+.stats {
+  padding: 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: rgba(255,255,255,0.04);
+}
+
+.stat-cell {
+  padding: 40px 32px;
+  text-align: center;
+  background: var(--near-black);
+}
+
+.stat-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* FEATURES */
+.features {
+  padding: 100px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(107,31,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.section-tag {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--hot-pink);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 56px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.feat-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+}
+
+.feat-card:hover {
+  border-color: rgba(255,255,255,0.15);
+  transform: translateY(-4px);
+}
+
+.feat-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.badge-lime { background: rgba(200,255,0,0.15); color: var(--electric-lime); }
+.badge-pink { background: rgba(255,60,172,0.15); color: var(--hot-pink); }
+.badge-blue { background: rgba(0,212,255,0.15); color: var(--cyber-blue); }
+.badge-orange { background: rgba(255,107,53,0.15); color: var(--neon-orange); }
+.badge-purple { background: rgba(107,31,255,0.2); color: #a78bfa; }
+.badge-yellow { background: rgba(255,236,0,0.15); color: var(--acid-yellow); }
+
+.feat-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.feat-desc {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* SOCIAL PROOF / FEED */
+.social-section {
+  padding: 80px 60px;
+  background: var(--near-black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.social-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.social-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.social-title .accent-lime { color: var(--electric-lime); }
+
+.social-text {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* Activity feed mockup */
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feed-item {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feed-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.fa-lime { background: rgba(200,255,0,0.15); }
+.fa-pink { background: rgba(255,60,172,0.15); }
+.fa-blue { background: rgba(0,212,255,0.15); }
+
+.feed-content { flex: 1; }
+
+.feed-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.feed-activity {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.feed-xp {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.xp-lime { color: var(--electric-lime); }
+.xp-pink { color: var(--hot-pink); }
+.xp-blue { color: var(--cyber-blue); }
+
+/* PRICING */
+.pricing {
+  padding: 100px 60px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 56px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  padding: 36px 28px;
+  transition: all 0.3s;
+}
+
+.pricing-card:hover { border-color: rgba(255,255,255,0.15); }
+
+.pricing-card.featured {
+  border-color: rgba(200,255,0,0.4);
+  box-shadow: 0 0 40px rgba(200,255,0,0.1);
+}
+
+.plan-pill {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.plan-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.plan-period {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.plan-features {
+  list-style: none;
+  margin-bottom: 28px;
+}
+
+.plan-features li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-features li .check { font-size: 0.7rem; }
+
+.plan-btn {
+  width: 100%;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 13px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline {
+  color: white;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-outline:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.btn-lime {
+  color: var(--void);
+  background: var(--electric-lime);
+  border: none;
+  box-shadow: 0 0 24px rgba(200,255,0,0.3);
+}
+
+.btn-lime:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 36px rgba(200,255,0,0.5);
+}
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  background: #050508;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--electric-lime);
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  text-shadow: 0 0 20px rgba(200,255,0,0.4);
+}
+
+.footer-tagline {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: white; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.3);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PULSE</div>
+  <ul class="nav-links">
+    <li><a href="#">Discover</a></li>
+    <li><a href="#">Training</a></li>
+    <li><a href="#">Social</a></li>
+    <li><a href="#">Challenges</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <button class="nav-btn">Join Free</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-mesh"></div>
+  <div class="hero-noise"></div>
+
+  <div class="hero-pill">🔥 2.8M+ athletes worldwide</div>
+
+  <h1 class="hero-headline">
+    <span class="line-lime">MOVE.</span><br>
+    <span class="line-pink">COMPETE.</span><br>
+    <span class="line-blue">WIN.</span>
+  </h1>
+
+  <p class="hero-sub">PULSE turns your workouts into social events. Track every rep, race your friends, climb leaderboards, and celebrate every PR — together.</p>
+
+  <div class="hero-ctas">
+    <button class="btn-primary">Start Training Free</button>
+    <button class="btn-ghost">See the app →</button>
+  </div>
+
+  <div class="activity-row">
+    <div class="activity-card card-lime">
+      <div class="activity-icon">🏃</div>
+      <div class="activity-val">8.4km</div>
+      <div class="activity-label">Morning run</div>
+    </div>
+    <div class="activity-card card-pink">
+      <div class="activity-icon">🔥</div>
+      <div class="activity-val">642</div>
+      <div class="activity-label">Calories</div>
+    </div>
+    <div class="activity-card card-blue">
+      <div class="activity-icon">💓</div>
+      <div class="activity-val">162</div>
+      <div class="activity-label">Avg HR</div>
+    </div>
+    <div class="activity-card card-orange">
+      <div class="activity-icon">⚡</div>
+      <div class="activity-val">5:48</div>
+      <div class="activity-label">Pace / km</div>
+    </div>
+    <div class="activity-card card-purple">
+      <div class="activity-icon">🏆</div>
+      <div class="activity-val">#3</div>
+      <div class="activity-label">In your city</div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--electric-lime); text-shadow: 0 0 30px rgba(200,255,0,0.4)">2.8M</div>
+    <div class="stat-label">Active athletes</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--hot-pink); text-shadow: 0 0 30px rgba(255,60,172,0.4)">48M</div>
+    <div class="stat-label">Workouts logged</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:var(--cyber-blue); text-shadow: 0 0 30px rgba(0,212,255,0.4)">92%</div>
+    <div class="stat-label">Stick to their goals</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num" style="color:#a78bfa; text-shadow: 0 0 30px rgba(167,139,250,0.4)">4.9★</div>
+    <div class="stat-label">App Store rating</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-tag">Features</div>
+  <h2 class="section-title">Train smarter.<br>Compete harder.</h2>
+  <div class="features-grid">
+    <div class="feat-card">
+      <span class="feat-badge badge-lime">AI</span>
+      <div class="feat-title">Smart Training Plans</div>
+      <p class="feat-desc">PULSE builds you a personalised plan based on your goals, fitness level, and schedule. It adapts weekly based on how you're performing.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-badge badge-pink">Social</span>
+      <div class="feat-title">Live Challenges</div>
+      <p class="feat-desc">Enter weekly city-wide challenges. Run a 5K against 400 athletes in your area. The leaderboard updates in real-time as everyone finishes.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-badge badge-blue">Tracking</span>
+      <div class="feat-title">Full-Spectrum Analytics</div>
+      <p class="feat-desc">Heart rate zones, power output, VO₂ max trends, sleep recovery scores. Everything your coach wants to know, automatically visualised.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-badge badge-orange">Social</span>
+      <div class="feat-title">Team & Club Mode</div>
+      <p class="feat-desc">Create a crew, set team goals, and compete together. Clubs can host private challenges with their own leaderboards and prizes.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-badge badge-purple">Hardware</span>
+      <div class="feat-title">Universal Device Sync</div>
+      <p class="feat-desc">Works with every fitness tracker, GPS watch, and cycling computer. Apple Watch, Garmin, Polar, COROS, Wahoo — if it moves data, PULSE reads it.</p>
+    </div>
+    <div class="feat-card">
+      <span class="feat-badge badge-yellow">Rewards</span>
+      <div class="feat-title">Brand Rewards & Discounts</div>
+      <p class="feat-desc">Hit your monthly milestones and unlock real rewards from Nike, Maurten, On Running, and 50+ partner brands. Your consistency earns you gear.</p>
+    </div>
+  </div>
+</section>
+
+<section class="social-section">
+  <div class="social-inner">
+    <div>
+      <div class="section-tag" style="text-align:left;margin-bottom:12px">Community</div>
+      <h2 class="social-title">Fitness is more<br>fun with <span class="accent-lime">friends.</span></h2>
+      <p class="social-text">Follow athletes you admire, cheer on your crew's workouts, and get hyped when you hit a PR. PULSE is the fitness social network that actually motivates you.</p>
+      <button class="btn-primary" style="font-size:0.78rem; padding:12px 28px">Find your crew</button>
+    </div>
+    <div class="feed">
+      <div class="feed-item">
+        <div class="feed-avatar fa-lime">🏃</div>
+        <div class="feed-content">
+          <div class="feed-name">Sofia Chen</div>
+          <div class="feed-activity">Crushed a 10K PR — 44:22 🏆</div>
+        </div>
+        <div class="feed-xp xp-lime">+450 XP</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-avatar fa-pink">🚴</div>
+        <div class="feed-content">
+          <div class="feed-name">Marco Vitale</div>
+          <div class="feed-activity">120km Sunday ride · Zone 3 locked in</div>
+        </div>
+        <div class="feed-xp xp-pink">+380 XP</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-avatar fa-blue">🏋️</div>
+        <div class="feed-content">
+          <div class="feed-name">Amber Wu</div>
+          <div class="feed-activity">Deadlift 140kg — new 1RM! 💪</div>
+        </div>
+        <div class="feed-xp xp-blue">+290 XP</div>
+      </div>
+      <div class="feed-item" style="border-color:rgba(200,255,0,0.2)">
+        <div class="feed-avatar fa-lime">🔥</div>
+        <div class="feed-content">
+          <div class="feed-name">Citywide Sprint Challenge</div>
+          <div class="feed-activity">Ends in 2h · You're ranked #47 of 892</div>
+        </div>
+        <div class="feed-xp" style="color:var(--neon-orange)">LIVE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-tag">Pricing</div>
+  <h2 class="section-title">No excuses.<br>Just results.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <span class="plan-pill badge-lime">Free</span>
+      <div class="plan-name">Starter</div>
+      <div class="plan-price" style="color:var(--electric-lime)">$0</div>
+      <div class="plan-period">forever free</div>
+      <ul class="plan-features">
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Activity tracking</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Social feed</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Weekly challenges</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Basic analytics</li>
+      </ul>
+      <button class="plan-btn btn-outline">Start Free</button>
+    </div>
+    <div class="pricing-card featured">
+      <span class="plan-pill badge-lime">Most Popular</span>
+      <div class="plan-name">Athlete</div>
+      <div class="plan-price" style="color:var(--electric-lime)">$12</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> AI training plans</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Full analytics suite</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> All challenges + prizes</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Club + team features</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Brand rewards</li>
+        <li><span class="check" style="color:var(--electric-lime)">✓</span> Unlimited device sync</li>
+      </ul>
+      <button class="plan-btn btn-lime">Go Athlete</button>
+    </div>
+    <div class="pricing-card">
+      <span class="plan-pill badge-purple">Team</span>
+      <div class="plan-name">Club Pro</div>
+      <div class="plan-price" style="color:#a78bfa">$49</div>
+      <div class="plan-period">per month, up to 25 members</div>
+      <ul class="plan-features">
+        <li><span class="check" style="color:#a78bfa">✓</span> Everything in Athlete</li>
+        <li><span class="check" style="color:#a78bfa">✓</span> Private club leaderboard</li>
+        <li><span class="check" style="color:#a78bfa">✓</span> Custom club branding</li>
+        <li><span class="check" style="color:#a78bfa">✓</span> Coach dashboard</li>
+        <li><span class="check" style="color:#a78bfa">✓</span> Bulk member invites</li>
+      </ul>
+      <button class="plan-btn btn-outline">Start Club</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">PULSE</div>
+      <p class="footer-tagline">The social fitness platform for athletes who want more than a step count. 2.8M and growing.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Features</h4>
+      <ul>
+        <li><a href="#">Training Plans</a></li>
+        <li><a href="#">Challenges</a></li>
+        <li><a href="#">Clubs</a></li>
+        <li><a href="#">Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Partners</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Pulse Athletics, Inc. All rights reserved.</span>
+    <span class="footer-copy">Move. Compete. Win. 🔥</span>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Vibrant Colour</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

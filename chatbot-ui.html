@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — AI Business Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --sidebar: #0f1117;
+  --border: #e8eaf0;
+  --text: #0f1117;
+  --muted: #6b7280;
+  --accent: #5b48f5;
+  --accent-2: #10b981;
+  --accent-3: #f59e0b;
+  --bot-bg: #f0eeff;
+  --user-bg: var(--accent);
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 0 40px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.nav-links a:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-ghost {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text);
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-ghost:hover { background: var(--bg); }
+
+.btn-primary {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  padding: 8px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover { background: #4a38e0; }
+
+/* HERO */
+.hero {
+  padding: 90px 60px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  min-height: 90vh;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 5px 12px;
+  background: rgba(91,72,245,0.08);
+  border: 1px solid rgba(91,72,245,0.2);
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.hero-headline {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.hero-headline .accent { color: var(--accent); }
+
+.hero-sub {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 440px;
+  margin-bottom: 32px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.hero-social {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hs-text {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.hs-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.stars { color: #f59e0b; }
+
+/* CHAT WINDOW */
+.chat-window {
+  background: var(--surface);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md), 0 0 0 1px var(--border);
+  overflow: hidden;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+}
+
+.chat-agent {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.agent-avatar {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.agent-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1px;
+}
+
+.agent-status {
+  font-size: 0.72rem;
+  color: var(--accent-2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.chat-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-action-btn {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+
+.chat-action-btn:hover { background: var(--bg); }
+
+/* Messages area */
+.messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.msg {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.msg.user { flex-direction: row-reverse; }
+
+.msg-avatar {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.bot-av { background: var(--accent); color: white; }
+.user-av { background: var(--bg); border: 1px solid var(--border); }
+
+.msg-bubble {
+  max-width: 75%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.bot-bubble {
+  background: var(--bot-bg);
+  color: var(--text);
+  border-radius: 4px 14px 14px 14px;
+}
+
+.user-bubble {
+  background: var(--accent);
+  color: white;
+  border-radius: 14px 4px 14px 14px;
+}
+
+.msg-time {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.msg.user .msg-time { text-align: right; }
+
+/* Typing indicator */
+.typing-indicator {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.typing-dots {
+  background: var(--bot-bg);
+  padding: 12px 16px;
+  border-radius: 4px 14px 14px 14px;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.typing-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* Quick replies */
+.quick-replies {
+  padding: 12px 20px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-top: 1px solid var(--border);
+}
+
+.quick-reply {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent);
+  padding: 6px 14px;
+  background: rgba(91,72,245,0.07);
+  border: 1px solid rgba(91,72,245,0.2);
+  border-radius: 100px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.quick-reply:hover { background: rgba(91,72,245,0.12); }
+
+/* Input bar */
+.chat-input {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+}
+
+.input-field {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input-field:focus { border-color: var(--accent); }
+.input-field::placeholder { color: var(--muted); }
+
+.input-send {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.input-send:hover { background: #4a38e0; }
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-cell {
+  background: var(--surface);
+  padding: 36px 28px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.sn-purple { color: var(--accent); }
+.sn-green { color: var(--accent-2); }
+.sn-amber { color: var(--accent-3); }
+.sn-dark { color: var(--text); }
+
+.stat-label { font-size: 0.82rem; color: var(--muted); font-weight: 500; }
+
+/* FEATURES */
+.features {
+  padding: 80px 60px;
+}
+
+.section-eye {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 52px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.2s;
+}
+
+.feat-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(91,72,245,0.2);
+}
+
+.feat-icon-bg {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+  background: rgba(91,72,245,0.08);
+}
+
+.feat-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.feat-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+
+/* USE CASES */
+.use-cases {
+  padding: 80px 60px;
+  background: var(--sidebar);
+  color: white;
+}
+
+.uc-inner {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.uc-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.uc-title span { color: var(--accent); }
+
+.uc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.uc-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 22px 20px;
+  transition: all 0.2s;
+}
+
+.uc-card:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(91,72,245,0.3);
+}
+
+.uc-emoji { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+
+.uc-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: white;
+}
+
+.uc-desc {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+}
+
+/* PRICING */
+.pricing {
+  padding: 80px 60px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 52px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.2s;
+}
+
+.pricing-card:hover { box-shadow: var(--shadow-md); }
+
+.pricing-card.featured {
+  border-color: rgba(91,72,245,0.4);
+  box-shadow: 0 0 0 1px rgba(91,72,245,0.15), var(--shadow-md);
+}
+
+.plan-tier {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.plan-price {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.plan-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 24px; }
+
+.plan-list {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.plan-list li {
+  font-size: 0.875rem;
+  color: var(--muted);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plan-list li .check { color: var(--accent); font-size: 0.75rem; }
+
+.plan-btn-outline {
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  padding: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.plan-btn-outline:hover { background: var(--bg); border-color: var(--text); }
+
+.plan-btn-filled {
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  padding: 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.plan-btn-filled:hover { background: #4a38e0; }
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-tagline { font-size: 0.875rem; color: var(--muted); line-height: 1.65; max-width: 260px; }
+
+.footer-col h4 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 7px; }
+.footer-col a { font-size: 0.875rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.footer-col a:hover { color: var(--text); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-copy { font-size: 0.8rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">✦</div>
+    NEXUS
+  </div>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">Integrations</a></li>
+    <li><a href="#">Use Cases</a></li>
+    <li><a href="#">Enterprise</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn-ghost">Sign in</button>
+    <button class="btn-primary">Start free</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">✦ Powered by GPT-4o + Claude</div>
+    <h1 class="hero-headline">Your AI business<br>assistant that<br><span class="accent">actually works.</span></h1>
+    <p class="hero-sub">NEXUS is an AI assistant trained on your business data. Answer customer queries, summarise documents, draft comms, and run multi-step tasks — all through a single conversational interface.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary">Try NEXUS free</button>
+      <button class="btn-ghost">See a live demo →</button>
+    </div>
+    <div class="hero-social">
+      <div class="hs-rating">
+        <span class="stars">★★★★★</span>
+        <span>4.9</span>
+      </div>
+      <span class="hs-text">from 2,400+ business reviews</span>
+    </div>
+  </div>
+
+  <!-- CHAT WINDOW DEMO -->
+  <div class="chat-window">
+    <div class="chat-header">
+      <div class="chat-agent">
+        <div class="agent-avatar">✦</div>
+        <div>
+          <div class="agent-name">Nexus Assistant</div>
+          <div class="agent-status"><span class="status-dot"></span> Online · Ready to help</div>
+        </div>
+      </div>
+      <div class="chat-actions">
+        <button class="chat-action-btn">⋯</button>
+        <button class="chat-action-btn">⤡</button>
+      </div>
+    </div>
+
+    <div class="messages">
+      <!-- Bot opens -->
+      <div class="msg bot">
+        <div class="msg-avatar bot-av">✦</div>
+        <div>
+          <div class="msg-bubble bot-bubble">
+            Hi there! I'm your NEXUS assistant. I'm connected to your CRM, Notion workspace, and email. What would you like to tackle today?
+          </div>
+          <div class="msg-time">9:04 AM</div>
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="msg user">
+        <div class="msg-avatar user-av">👤</div>
+        <div>
+          <div class="msg-bubble user-bubble">
+            Can you summarise the Q1 pipeline and flag any deals that are overdue?
+          </div>
+          <div class="msg-time">9:05 AM</div>
+        </div>
+      </div>
+
+      <!-- Bot response with data -->
+      <div class="msg bot">
+        <div class="msg-avatar bot-av">✦</div>
+        <div>
+          <div class="msg-bubble bot-bubble">
+            <strong>Q1 Pipeline Summary</strong> (pulled from HubSpot):<br><br>
+            📊 <strong>Total pipeline:</strong> £1.24M across 18 open deals<br>
+            ✅ <strong>On track:</strong> 12 deals (£840K)<br>
+            ⚠️ <strong>At risk:</strong> 4 deals — last contact &gt;14 days<br>
+            🔴 <strong>Overdue:</strong> 2 deals — Hartley Group (£120K, 28d) and Solaris Finance (£80K, 21d)<br><br>
+            Want me to draft follow-up emails for the overdue deals?
+          </div>
+          <div class="msg-time">9:05 AM</div>
+        </div>
+      </div>
+
+      <!-- User -->
+      <div class="msg user">
+        <div class="msg-avatar user-av">👤</div>
+        <div>
+          <div class="msg-bubble user-bubble">Yes please, draft one for Hartley Group</div>
+          <div class="msg-time">9:06 AM</div>
+        </div>
+      </div>
+
+      <!-- Typing -->
+      <div class="typing-indicator">
+        <div class="msg-avatar bot-av">✦</div>
+        <div class="typing-dots">
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-replies">
+      <button class="quick-reply">📋 Export pipeline report</button>
+      <button class="quick-reply">📧 Draft follow-ups for all at-risk</button>
+      <button class="quick-reply">📅 Schedule a review call</button>
+      <button class="quick-reply">📊 Show deal history</button>
+    </div>
+
+    <div class="chat-input">
+      <input class="input-field" placeholder="Ask NEXUS anything..." type="text" />
+      <button class="input-send">↑</button>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat-cell">
+    <div class="stat-num sn-purple">12K+</div>
+    <div class="stat-label">Businesses using Nexus</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num sn-green">68%</div>
+    <div class="stat-label">Time saved on comms</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num sn-amber">4.9★</div>
+    <div class="stat-label">Average review rating</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num sn-dark">SOC 2</div>
+    <div class="stat-label">Type II certified</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-eye">Features</div>
+  <h2 class="section-title">Intelligent assistance across your entire stack.</h2>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon-bg">🔗</div>
+      <div class="feat-title">Deep Integrations</div>
+      <p class="feat-desc">Connect to HubSpot, Salesforce, Notion, Slack, Gmail, Jira, and 80+ other tools. NEXUS reads and writes across your stack seamlessly.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-bg">🧠</div>
+      <div class="feat-title">Trained on Your Data</div>
+      <p class="feat-desc">Upload your knowledge base, SOPs, contracts, and product docs. NEXUS answers questions from your actual content — not generic AI responses.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-bg">⚡</div>
+      <div class="feat-title">Multi-Step Agentic Tasks</div>
+      <p class="feat-desc">Ask NEXUS to "find all overdue invoices and draft a reminder email for each" — it plans and executes the steps autonomously, showing its work.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-bg">💬</div>
+      <div class="feat-title">Customer-Facing Copilot</div>
+      <p class="feat-desc">Embed a NEXUS-powered chat widget on your product or website. It handles support queries using your docs, and escalates when human help is needed.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-bg">🔒</div>
+      <div class="feat-title">Enterprise Security</div>
+      <p class="feat-desc">SOC 2 Type II, GDPR compliant, SSO + SCIM, and data residency in EU or US. Your data is never used to train third-party models.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon-bg">📊</div>
+      <div class="feat-title">Usage Analytics</div>
+      <p class="feat-desc">See what questions your team asks most, where NEXUS lacks answers, and how much time is being saved — per team and per workflow.</p>
+    </div>
+  </div>
+</section>
+
+<section class="use-cases">
+  <div class="uc-inner">
+    <div>
+      <h2 class="uc-title">Works for every<br>team at your<br><span>company.</span></h2>
+    </div>
+    <div class="uc-grid">
+      <div class="uc-card">
+        <span class="uc-emoji">📈</span>
+        <div class="uc-name">Sales</div>
+        <p class="uc-desc">Pipeline summaries, follow-up drafts, deal research, CRM data entry, and objection handling scripts — all instant.</p>
+      </div>
+      <div class="uc-card">
+        <span class="uc-emoji">🎧</span>
+        <div class="uc-name">Customer Success</div>
+        <p class="uc-desc">Ticket triage, resolution drafts from your knowledge base, churn risk flags, and renewal reminders.</p>
+      </div>
+      <div class="uc-card">
+        <span class="uc-emoji">⚙️</span>
+        <div class="uc-name">Operations</div>
+        <p class="uc-desc">Process documentation, cross-tool reporting, SOP Q&A, and automated status updates across tools.</p>
+      </div>
+      <div class="uc-card">
+        <span class="uc-emoji">📣</span>
+        <div class="uc-name">Marketing</div>
+        <p class="uc-desc">On-brand copy drafts, campaign briefs, competitor summaries, and content repurposing from one central assistant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-eye">Pricing</div>
+  <h2 class="section-title">Simple pricing for teams of every size.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-tier">Starter</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">free forever — 1 user</div>
+      <ul class="plan-list">
+        <li><span class="check">✓</span> 50 AI messages/day</li>
+        <li><span class="check">✓</span> 3 tool integrations</li>
+        <li><span class="check">✓</span> 10MB knowledge base</li>
+        <li><span class="check">✓</span> Web interface</li>
+      </ul>
+      <button class="plan-btn-outline">Start free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-tier">Team</div>
+      <div class="plan-price">$49</div>
+      <div class="plan-period">per month, up to 10 seats</div>
+      <ul class="plan-list">
+        <li><span class="check">✓</span> Unlimited messages</li>
+        <li><span class="check">✓</span> 30+ integrations</li>
+        <li><span class="check">✓</span> 5GB knowledge base</li>
+        <li><span class="check">✓</span> Agentic task execution</li>
+        <li><span class="check">✓</span> Embeddable widget</li>
+        <li><span class="check">✓</span> Priority support</li>
+      </ul>
+      <button class="plan-btn-filled">Start Team trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-tier">Enterprise</div>
+      <div class="plan-price" style="font-size:2rem">Custom</div>
+      <div class="plan-period">volume pricing</div>
+      <ul class="plan-list">
+        <li><span class="check">✓</span> Unlimited seats</li>
+        <li><span class="check">✓</span> SSO + SCIM + data residency</li>
+        <li><span class="check">✓</span> Private model deployment</li>
+        <li><span class="check">✓</span> Custom integrations</li>
+        <li><span class="check">✓</span> Dedicated CSM + SLA</li>
+      </ul>
+      <button class="plan-btn-outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <div class="logo-icon" style="width:22px;height:22px;font-size:0.7rem;">✦</div>
+        NEXUS
+      </div>
+      <p class="footer-tagline">The AI business assistant that connects to your tools, learns from your docs, and actually gets work done.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Integrations</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">Changelog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Use Cases</h4>
+      <ul>
+        <li><a href="#">Sales Teams</a></li>
+        <li><a href="#">Customer Success</a></li>
+        <li><a href="#">Operations</a></li>
+        <li><a href="#">Support</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Nexus AI Ltd. All rights reserved.</span>
+    <span class="footer-copy">SOC 2 Type II · GDPR Compliant</span>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Chatbot UI</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

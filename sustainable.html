@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERDANA — Ethical Goods Marketplace</title>
+<style>
+/* Using only system fonts — no external requests */
+:root {
+  --bg: #f2efe8;
+  --surface: #faf9f5;
+  --ink: #1f1e1a;
+  --border: #dcd9d0;
+  --muted: #7a7870;
+  --accent: #3d6b2c;
+  --accent-2: #8b5e2a;
+  --accent-3: #c8651b;
+  --sand: #e8dfc8;
+  --bark: #6b5a3e;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 40px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.nav-links a:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav-planet {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(61,107,44,0.1);
+  padding: 5px 12px;
+  border-radius: 100px;
+  border: 1px solid rgba(61,107,44,0.2);
+}
+
+.nav-btn {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+  padding: 8px 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.nav-btn:hover { background: #2e5121; }
+
+/* SUSTAINABILITY BANNER */
+.sus-banner {
+  background: var(--accent);
+  color: white;
+  padding: 10px 40px;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.sus-banner strong { font-weight: 700; }
+
+/* HERO */
+.hero {
+  padding: 80px 60px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--muted);
+  max-width: 420px;
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.btn-primary {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  padding: 12px 26px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover { background: #2e5121; }
+
+.btn-secondary {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 12px 22px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btn-secondary:hover { border-color: var(--ink); }
+
+.trust-row {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.trust-item::before {
+  content: '✓';
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Hero right — product grid */
+.hero-products {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hero-product {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  position: relative;
+  transition: box-shadow 0.15s;
+}
+
+.hero-product:hover { box-shadow: var(--shadow-md); }
+
+.product-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+.badge-green { background: rgba(61,107,44,0.12); color: var(--accent); }
+.badge-amber { background: rgba(139,94,42,0.1); color: var(--accent-2); }
+
+.product-emoji { font-size: 2rem; margin-bottom: 8px; display: block; }
+
+.product-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.product-brand {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.product-score {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-top: 4px;
+}
+
+/* IMPACT STRIP */
+.impact-strip {
+  background: var(--accent);
+  padding: 40px 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+}
+
+.impact-cell {
+  padding: 24px 28px;
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+
+.impact-cell:last-child { border-right: none; }
+
+.impact-num {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: white;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.impact-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+}
+
+/* FEATURES */
+.features {
+  padding: 80px 60px;
+}
+
+.section-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-align: center;
+  line-height: 1.15;
+  margin-bottom: 56px;
+  color: var(--ink);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  transition: box-shadow 0.2s;
+}
+
+.feat-card:hover { box-shadow: var(--shadow-md); }
+
+.feat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+  background: rgba(61,107,44,0.08);
+}
+
+.feat-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.feat-desc {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* TRANSPARENCY SECTION */
+.transparency {
+  padding: 80px 60px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.trans-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.trans-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.trans-body {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.score-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 40px;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.score-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.score-val {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: right;
+}
+
+/* Sample product card */
+.sample-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.sample-image {
+  height: 200px;
+  background: linear-gradient(135deg, #e8f0e0 0%, #d0e8c0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  position: relative;
+}
+
+.sample-image-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: white;
+  background: var(--accent);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+
+.sample-body {
+  padding: 20px;
+}
+
+.sample-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.sample-brand {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.sample-scores {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.sample-score-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 100px;
+}
+
+.sst-green { background: rgba(61,107,44,0.1); color: var(--accent); }
+.sst-brown { background: rgba(139,94,42,0.1); color: var(--accent-2); }
+
+.sample-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sample-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sample-btn {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+  padding: 8px 16px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sample-btn:hover { background: #2e5121; }
+
+/* BRANDS */
+.brands {
+  padding: 60px;
+}
+
+.brands-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.brands-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.brands-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(61,107,44,0.3);
+  padding-bottom: 1px;
+}
+
+.brands-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.brand-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+}
+
+.brand-card:hover { box-shadow: var(--shadow-md); }
+
+.brand-logo { font-size: 2rem; }
+
+.brand-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.brand-score {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(61,107,44,0.1);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.brand-cat {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.footer-logo span { color: var(--accent); }
+
+.footer-tagline {
+  font-size: 0.875rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 7px; }
+.footer-col a { font-size: 0.875rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+.footer-col a:hover { color: var(--ink); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.footer-carbon {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.carbon-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+</style>
+</head>
+<body>
+
+<div class="sus-banner">
+  🌱 Every purchase on VERDANA funds verified reforestation. <strong>1,240,000 trees planted so far.</strong>
+</div>
+
+<nav>
+  <div class="nav-logo"><span>V</span>ERDANA</div>
+  <ul class="nav-links">
+    <li><a href="#">Shop</a></li>
+    <li><a href="#">Brands</a></li>
+    <li><a href="#">Impact</a></li>
+    <li><a href="#">Learn</a></li>
+    <li><a href="#">Community</a></li>
+  </ul>
+  <div class="nav-actions">
+    <span class="nav-planet">🌍 Carbon neutral</span>
+    <button class="nav-btn">Shop ethically</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">Ethical Goods Marketplace</div>
+    <h1 class="hero-headline">Buy things that are good for you and the planet.</h1>
+    <p class="hero-sub">VERDANA curates the world's best ethical brands — independently scored on environmental impact, labour practices, and supply chain transparency.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Browse the marketplace</button>
+      <button class="btn-secondary">How scoring works →</button>
+    </div>
+    <div class="trust-row">
+      <span class="trust-item">Verified brands only</span>
+      <span class="trust-item">Free carbon-offset shipping</span>
+      <span class="trust-item">B-Corp certified</span>
+    </div>
+  </div>
+
+  <div class="hero-products">
+    <div class="hero-product">
+      <span class="product-badge badge-green">Ethical Score 94</span>
+      <span class="product-emoji">🧴</span>
+      <div class="product-name">Natural Face Serum</div>
+      <div class="product-brand">Hēlen Botanics</div>
+      <div class="product-price">£38.00</div>
+      <div class="product-score">94/100 · Organic · Zero waste</div>
+    </div>
+    <div class="hero-product">
+      <span class="product-badge badge-green">Ethical Score 91</span>
+      <span class="product-emoji">👕</span>
+      <div class="product-name">Organic Cotton Tee</div>
+      <div class="product-brand">Groundwork Co.</div>
+      <div class="product-price">£45.00</div>
+      <div class="product-score">91/100 · Fair wage · Regenerative</div>
+    </div>
+    <div class="hero-product">
+      <span class="product-badge badge-amber">Ethical Score 87</span>
+      <span class="product-emoji">☕</span>
+      <div class="product-name">Direct Trade Coffee</div>
+      <div class="product-brand">Ember Roasters</div>
+      <div class="product-price">£14.50</div>
+      <div class="product-score">87/100 · Direct trade · Compostable</div>
+    </div>
+    <div class="hero-product">
+      <span class="product-badge badge-green">Ethical Score 96</span>
+      <span class="product-emoji">🕯️</span>
+      <div class="product-name">Beeswax Candle Set</div>
+      <div class="product-brand">Hive & Hearth</div>
+      <div class="product-price">£28.00</div>
+      <div class="product-score">96/100 · Fully traceable · Local</div>
+    </div>
+  </div>
+</section>
+
+<div class="impact-strip">
+  <div class="impact-cell">
+    <div class="impact-num">1.24M</div>
+    <div class="impact-label">Trees planted</div>
+  </div>
+  <div class="impact-cell">
+    <div class="impact-num">2,800</div>
+    <div class="impact-label">Verified brands</div>
+  </div>
+  <div class="impact-cell">
+    <div class="impact-num">480K</div>
+    <div class="impact-label">Ethical purchases made</div>
+  </div>
+  <div class="impact-cell">
+    <div class="impact-num">100%</div>
+    <div class="impact-label">Carbon-offset shipping</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-eyebrow">Why VERDANA</div>
+  <h2 class="section-title">Shopping that doesn't cost the earth.</h2>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">📊</div>
+      <div class="feat-title">Independent Impact Scoring</div>
+      <p class="feat-desc">Every product on VERDANA carries a transparent 0–100 ethical score covering environmental footprint, fair labour, supply chain, and packaging — assessed by our independent panel.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🌍</div>
+      <div class="feat-title">Carbon-Offset Delivery</div>
+      <p class="feat-desc">We partner with Pachama to offset 100% of shipping emissions on every order. You'll receive a certificate with every delivery showing the trees planted on your behalf.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">✅</div>
+      <div class="feat-title">Verified Brands Only</div>
+      <p class="feat-desc">Every brand on VERDANA passes a 40-point due diligence process. No greenwashing. If a brand's practices slip below our threshold, they're removed — publicly.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔍</div>
+      <div class="feat-title">Supply Chain Transparency</div>
+      <p class="feat-desc">Scan any product's QR code to trace its journey from raw material to your door. Where was it grown? Who made it? What was their wage? You can see it all.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🤝</div>
+      <div class="feat-title">Community-Led Reviews</div>
+      <p class="feat-desc">Verified purchase reviews filtered for product quality and ethical experience. Our community flags greenwashing, and those reports trigger re-audits within 30 days.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">♻️</div>
+      <div class="feat-title">Circular Returns</div>
+      <p class="feat-desc">Returns that would normally end in landfill are donated, refurbished, or composted through our brand partner network. Zero returned items go to waste.</p>
+    </div>
+  </div>
+</section>
+
+<section class="transparency">
+  <div class="trans-inner">
+    <div>
+      <h2 class="trans-title">How our ethical scoring works</h2>
+      <p class="trans-body">VERDANA's scores aren't self-reported — they're independently assessed by a panel of sustainability auditors, labour rights specialists, and supply chain experts. Scores update annually, or when we receive a community flag.</p>
+      <p class="trans-body">Here's how a typical high-scoring product breaks down:</p>
+      <div class="score-breakdown">
+        <div class="score-row">
+          <span class="score-label">Environmental impact</span>
+          <div class="score-bar"><div class="score-fill" style="width:90%"></div></div>
+          <span class="score-val">90</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Labour practices</span>
+          <div class="score-bar"><div class="score-fill" style="width:95%"></div></div>
+          <span class="score-val">95</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Supply chain</span>
+          <div class="score-bar"><div class="score-fill" style="width:88%"></div></div>
+          <span class="score-val">88</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Packaging</span>
+          <div class="score-bar"><div class="score-fill" style="width:100%"></div></div>
+          <span class="score-val">100</span>
+        </div>
+        <div class="score-row">
+          <span class="score-label">Community impact</span>
+          <div class="score-bar"><div class="score-fill" style="width:82%"></div></div>
+          <span class="score-val">82</span>
+        </div>
+      </div>
+    </div>
+    <div class="sample-card">
+      <div class="sample-image">
+        🧴
+        <div class="sample-image-badge">VERDANA Verified</div>
+      </div>
+      <div class="sample-body">
+        <div class="sample-name">Natural Face Serum — Rose & Neroli</div>
+        <div class="sample-brand">Hēlen Botanics · Est. 2017 · Devon, UK</div>
+        <div class="sample-scores">
+          <span class="sample-score-tag sst-green">94/100 Ethical Score</span>
+          <span class="sample-score-tag sst-green">Organic Certified</span>
+          <span class="sample-score-tag sst-brown">Glass + Aluminium</span>
+          <span class="sample-score-tag sst-green">Fair Wage</span>
+          <span class="sample-score-tag sst-green">Local Ingredients</span>
+        </div>
+        <div class="sample-price-row">
+          <span class="sample-price">£38.00</span>
+          <button class="sample-btn">Add to basket</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="brands">
+  <div class="brands-header">
+    <span class="brands-title">Featured ethical brands this month</span>
+    <a href="#" class="brands-link">View all 2,800 brands →</a>
+  </div>
+  <div class="brands-grid">
+    <div class="brand-card">
+      <div class="brand-logo">🌿</div>
+      <div class="brand-name">Hēlen Botanics</div>
+      <div class="brand-score">94/100</div>
+      <div class="brand-cat">Skincare · Devon, UK</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-logo">🌾</div>
+      <div class="brand-name">Groundwork Co.</div>
+      <div class="brand-score">91/100</div>
+      <div class="brand-cat">Clothing · Oregon, US</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-logo">☕</div>
+      <div class="brand-name">Ember Roasters</div>
+      <div class="brand-score">87/100</div>
+      <div class="brand-cat">Food & Drink · Melbourne, AU</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-logo">🕯️</div>
+      <div class="brand-name">Hive & Hearth</div>
+      <div class="brand-score">96/100</div>
+      <div class="brand-cat">Home · Yorkshire, UK</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo"><span>V</span>ERDANA</div>
+      <p class="footer-tagline">The marketplace for people who want their purchases to make the world a little better. 2,800+ verified ethical brands.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New In</a></li>
+        <li><a href="#">Skincare</a></li>
+        <li><a href="#">Clothing</a></li>
+        <li><a href="#">Food & Drink</a></li>
+        <li><a href="#">Home & Living</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Impact</h4>
+      <ul>
+        <li><a href="#">Our Mission</a></li>
+        <li><a href="#">Scoring Method</a></li>
+        <li><a href="#">Reforestation</a></li>
+        <li><a href="#">Annual Report</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About VERDANA</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Sell on VERDANA</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 VERDANA Ltd. B-Corp certified. All rights reserved.</span>
+    <div class="footer-carbon">
+      <span class="carbon-dot"></span>
+      This site runs on 100% renewable energy · 0.02g CO₂/page view
+    </div>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Sustainable Design</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENTINEL — AI-Native Security Operations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-void: #08090d;
+  --bg-surface: #0f1116;
+  --bg-panel: #161920;
+  --bg-elevated: #1c2028;
+  --bg-code: #0c0d11;
+  --status-thinking: #a78bfa;
+  --status-searching: #38bdf8;
+  --status-generating: #34d399;
+  --status-error: #f87171;
+  --status-idle: #4b5563;
+  --status-complete: #22c55e;
+  --confidence-high: #22c55e;
+  --confidence-mid: #f59e0b;
+  --confidence-low: #ef4444;
+  --stream-cursor: #a78bfa;
+  --stream-highlight: rgba(167,139,250,0.08);
+  --text-primary: #e2e4e8;
+  --text-secondary: #8b8fa4;
+  --text-dim: #4b5063;
+  --text-code: #c8ccd4;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-panel: rgba(255,255,255,0.08);
+  --border-active: rgba(167,139,250,0.3);
+  --shadow-panel: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 20px rgba(167,139,250,0.08);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+/* ─── GLOBAL STATUS BAR ─── */
+.global-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 24px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  overflow-x: auto;
+}
+.gs-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.gs-sep {
+  width: 1px; height: 14px;
+  background: var(--border-subtle);
+  flex-shrink: 0;
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-thinking  { background: var(--status-thinking); box-shadow: 0 0 6px var(--status-thinking); animation: statusPulse 1.5s ease-in-out infinite; }
+.dot-searching { background: var(--status-searching); box-shadow: 0 0 6px var(--status-searching); animation: statusPulse 1s ease-in-out infinite; }
+.dot-generating{ background: var(--status-generating); box-shadow: 0 0 6px var(--status-generating); }
+.dot-idle      { background: var(--status-idle); }
+.dot-complete  { background: var(--status-complete); }
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+.gs-val { color: var(--text-primary); font-weight: 600; }
+.gs-right { margin-left: auto; display: flex; gap: 12px; align-items: center; }
+
+/* ─── NAV ─── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+.logo span { color: var(--status-thinking); }
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.model-selector:hover { border-color: var(--border-panel); }
+.model-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--status-generating); }
+.btn-nav {
+  background: var(--status-thinking);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-nav:hover { opacity: 0.85; }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 80px 48px 100px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse at top, rgba(167,139,250,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(167,139,250,0.08);
+  border: 1px solid var(--border-active);
+  color: var(--status-thinking);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 32px;
+}
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.1;
+  max-width: 760px;
+  margin: 0 auto 20px;
+  letter-spacing: -0.02em;
+}
+.hero-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--status-thinking) 0%, var(--status-searching) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  margin: 0 auto 48px;
+  line-height: 1.7;
+}
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 64px;
+}
+.btn-primary {
+  background: var(--status-thinking);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; box-shadow: 0 0 24px rgba(167,139,250,0.25); }
+.btn-outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-panel);
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-outline:hover { border-color: var(--status-thinking); color: var(--status-thinking); }
+
+/* ─── PIPELINE DEMO ─── */
+.pipeline-demo {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+}
+.pd-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.pd-dot { width: 10px; height: 10px; border-radius: 50%; }
+.pd-dot:nth-child(1) { background: #ff5f57; }
+.pd-dot:nth-child(2) { background: #febc2e; }
+.pd-dot:nth-child(3) { background: #28c840; }
+.pd-title { margin-left: auto; margin-right: auto; font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary); }
+
+/* Pipeline stages */
+.pipeline {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  gap: 0;
+}
+.pipeline-stage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.stage-done { background: rgba(34,197,94,0.08); color: var(--status-complete); }
+.stage-active { background: rgba(167,139,250,0.1); color: var(--status-thinking); border: 1px solid var(--border-active); box-shadow: var(--shadow-glow); }
+.stage-pending { color: var(--text-dim); }
+.pipeline-connector { width: 20px; height: 1px; background: var(--border-subtle); flex-shrink: 0; }
+.pipeline-connector.done { background: var(--status-complete); }
+
+.pd-body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+}
+.pd-main {
+  padding: 20px;
+  border-right: 1px solid var(--border-subtle);
+}
+.pd-sidebar {
+  padding: 20px;
+}
+
+/* Tool cards */
+.tool-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-panel);
+  border-left: 3px solid var(--status-searching);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.tool-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--status-searching);
+  margin-bottom: 6px;
+}
+.tool-card-body {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.tool-card.done { border-left-color: var(--status-complete); }
+.tool-card.done .tool-card-header { color: var(--status-complete); }
+
+/* Stream output */
+.stream-output {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--text-code);
+  background: var(--bg-code);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  border: 1px solid var(--border-subtle);
+  min-height: 120px;
+  white-space: pre-wrap;
+  margin-top: 12px;
+}
+.stream-cursor::after {
+  content: '▊';
+  color: var(--stream-cursor);
+  animation: cursorBlink 1s step-end infinite;
+  margin-left: 2px;
+}
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.token-glow { color: var(--text-primary); }
+
+/* Confidence badges */
+.confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.cb-high { background: rgba(34,197,94,0.1); color: var(--confidence-high); }
+.cb-mid  { background: rgba(245,158,11,0.1); color: var(--confidence-mid); }
+.cb-low  { background: rgba(239,68,68,0.1); color: var(--confidence-low); }
+
+.pd-sidebar-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  display: block;
+}
+.meta-display {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.meta-item { display: flex; justify-content: space-between; align-items: center; }
+.meta-value { color: var(--text-secondary); font-weight: 600; }
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  margin-bottom: 6px;
+}
+.alert-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.alert-dot.high { background: var(--status-error); }
+.alert-dot.med  { background: var(--confidence-mid); }
+.alert-dot.low  { background: var(--status-idle); }
+.alert-body {}
+.alert-title { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-primary); font-weight: 600; margin-bottom: 2px; }
+.alert-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-dim); }
+
+/* ─── FEATURES ─── */
+.features-section {
+  padding: 80px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--status-thinking);
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.section-sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 56px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.feat-card {
+  background: var(--bg-surface);
+  padding: 32px;
+  transition: background 0.3s;
+}
+.feat-card:hover { background: var(--bg-panel); }
+.feat-icon {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.feat-icon-dot { width: 8px; height: 8px; border-radius: 50%; }
+.feat-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.feat-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* ─── MULTI-PANEL SECTION ─── */
+.panel-section {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 80px 48px;
+}
+.panel-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  align-items: start;
+}
+.panel-ui {
+  background: var(--bg-void);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.pui-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+}
+.pui-tab {
+  padding: 12px 16px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  border-right: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.pui-tab.active { background: var(--bg-panel); color: var(--status-thinking); border-bottom: 2px solid var(--status-thinking); margin-bottom: -1px; }
+.pui-body {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+}
+.pui-left {
+  padding: 16px;
+  border-right: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+}
+.pui-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: all 0.2s;
+}
+.pui-nav-item.active { background: rgba(167,139,250,0.1); color: var(--status-thinking); }
+.pui-nav-item:hover:not(.active) { background: var(--bg-elevated); color: var(--text-secondary); }
+.pni-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.pui-main {
+  padding: 16px;
+}
+.mini-stream {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-code);
+  line-height: 1.7;
+  background: var(--bg-code);
+  border-radius: 6px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  min-height: 160px;
+  margin-bottom: 10px;
+}
+.mini-stream .highlight { color: var(--status-thinking); }
+.mini-stream .keyword { color: var(--status-searching); }
+.mini-stream .value { color: var(--status-generating); }
+.mini-stream .comment { color: var(--text-dim); }
+
+/* ─── CONFIDENCE SECTION ─── */
+.confidence-section {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.confidence-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.conf-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  transition: border-color 0.3s;
+}
+.conf-card:hover { border-color: var(--border-panel); }
+.conf-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.conf-card-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.conf-bar-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.conf-bar-val { color: var(--text-secondary); font-weight: 600; }
+.conf-bar {
+  height: 4px;
+  background: var(--bg-elevated);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.conf-fill { height: 100%; border-radius: 2px; }
+.conf-fill.high { background: var(--confidence-high); }
+.conf-fill.mid  { background: var(--confidence-mid); }
+.conf-fill.low  { background: var(--confidence-low); }
+.conf-detail {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── STATS ─── */
+.stats-section {
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 60px 48px;
+}
+.stats-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-num span { color: var(--status-thinking); }
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+/* ─── PRICING ─── */
+.pricing-section {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 56px;
+}
+.plan-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: all 0.3s;
+}
+.plan-card:hover { border-color: var(--border-panel); transform: translateY(-3px); }
+.plan-card.featured {
+  background: var(--bg-panel);
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-glow), inset 0 0 60px rgba(167,139,250,0.03);
+}
+.plan-tier {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  display: block;
+}
+.plan-featured-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(167,139,250,0.1);
+  color: var(--status-thinking);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+.plan-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.plan-price {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.plan-price sub {
+  font-size: 1rem;
+  vertical-align: middle;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+.plan-period {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  font-family: var(--font-mono);
+}
+.plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.plan-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+.plan-features li::before {
+  content: '→';
+  color: var(--status-thinking);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.btn-plan {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+.btn-plan-outline {
+  background: transparent;
+  border: 1px solid var(--border-panel);
+  color: var(--text-secondary);
+}
+.btn-plan-outline:hover { border-color: var(--status-thinking); color: var(--status-thinking); }
+.btn-plan-filled {
+  background: var(--status-thinking);
+  color: white;
+}
+.btn-plan-filled:hover { opacity: 0.85; box-shadow: 0 0 24px rgba(167,139,250,0.25); }
+
+/* ─── CTA ─── */
+.cta-section {
+  padding: 100px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(167,139,250,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-pre {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--status-thinking);
+  margin-bottom: 16px;
+}
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  letter-spacing: -0.02em;
+}
+.cta-sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.cta-note {
+  margin-top: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--text-primary); }
+.footer-logo span { color: var(--status-thinking); }
+.footer-copy { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); }
+.footer-links { display: flex; gap: 20px; list-style: none; }
+.footer-links a { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-dim); text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.2s; }
+.footer-links a:hover { color: var(--text-secondary); }
+
+@media (max-width: 768px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 20px 80px; }
+  .pd-body { grid-template-columns: 1fr; }
+  .pd-sidebar { border-top: 1px solid var(--border-subtle); }
+  .features-grid { grid-template-columns: 1fr; }
+  .panel-inner { grid-template-columns: 1fr; }
+  .confidence-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+  .features-section, .panel-section, .confidence-section, .pricing-section { padding: 60px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- GLOBAL STATUS BAR -->
+<div class="global-status">
+  <div class="gs-item">
+    <span class="status-dot dot-generating"></span>
+    <span>Status: <span class="gs-val">Operational</span></span>
+  </div>
+  <div class="gs-sep"></div>
+  <div class="gs-item">
+    <span class="status-dot dot-thinking"></span>
+    <span>Model: <span class="gs-val">sentinel-3-ops</span></span>
+  </div>
+  <div class="gs-sep"></div>
+  <div class="gs-item">Threats scanned today: <span class="gs-val">2,847,203</span></div>
+  <div class="gs-sep"></div>
+  <div class="gs-item">Avg latency: <span class="gs-val">42ms</span></div>
+  <div class="gs-right">
+    <div class="gs-item">
+      <span class="status-dot dot-complete"></span>
+      All systems nominal
+    </div>
+  </div>
+</div>
+
+<nav>
+  <div class="logo">SENT<span>INEL</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Platform</a></li>
+    <li><a href="#">Intelligence</a></li>
+    <li><a href="#">Integrations</a></li>
+    <li><a href="#">Docs</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="model-selector">
+      <span class="model-dot"></span>
+      sentinel-3-ops ▾
+    </div>
+    <button class="btn-nav">Request access</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="status-dot dot-thinking"></span>
+    AI-native security operations
+  </div>
+  <h1 class="hero-title">Security intelligence that thinks, <em>searches, and acts</em> — before your team wakes up</h1>
+  <p class="hero-sub">SENTINEL is an AI-native threat operations platform. Every alert, investigation, and response is powered by models that show their work — confidence levels, reasoning steps, and tool invocations, all visible.</p>
+  <div class="hero-actions">
+    <button class="btn-primary">Request early access</button>
+    <button class="btn-outline">View live demo</button>
+  </div>
+
+  <!-- Pipeline demo -->
+  <div class="pipeline-demo">
+    <div class="pd-header">
+      <div class="pd-dot"></div>
+      <div class="pd-dot"></div>
+      <div class="pd-dot"></div>
+      <span class="pd-title">SENTINEL · Threat investigation #INV-2847</span>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipeline-stage stage-done">
+        <span class="status-dot dot-complete" style="width:6px;height:6px;"></span>
+        Ingestion
+      </div>
+      <div class="pipeline-connector done"></div>
+      <div class="pipeline-stage stage-done">
+        <span class="status-dot dot-complete" style="width:6px;height:6px;"></span>
+        Triage
+      </div>
+      <div class="pipeline-connector done"></div>
+      <div class="pipeline-stage stage-active">
+        <span class="status-dot dot-thinking" style="width:6px;height:6px;"></span>
+        Analysis
+      </div>
+      <div class="pipeline-connector"></div>
+      <div class="pipeline-stage stage-pending">Attribution</div>
+      <div class="pipeline-connector"></div>
+      <div class="pipeline-stage stage-pending">Response</div>
+    </div>
+
+    <div class="pd-body">
+      <div class="pd-main">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <span style="font-family:var(--font-mono);font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);">Tool invocations</span>
+        </div>
+        <div class="tool-card done">
+          <div class="tool-card-header">✓ &nbsp; ip_reputation_lookup</div>
+          <div class="tool-card-body">Query: 185.220.101.47 → Tor exit node · Abuse score: 98/100 · Last seen: 14 min ago</div>
+        </div>
+        <div class="tool-card done">
+          <div class="tool-card-header">✓ &nbsp; log_correlation</div>
+          <div class="tool-card-body">Matched 7 events across 3 hosts · Lateral movement pattern detected · Timespan: 00:04:12</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <span class="status-dot dot-searching" style="width:6px;height:6px;"></span>
+            threat_intel_search
+          </div>
+          <div class="tool-card-body">Querying MITRE ATT&CK, VirusTotal, internal IOC feed... <span class="stream-cursor"></span></div>
+        </div>
+
+        <div class="stream-output">
+<span class="comment">// Analysis — stage 3 / 5</span>
+<span class="highlight">FINDING</span>: Coordinated credential stuffing attempt
+<span class="keyword">source_ip</span>  : <span class="value">185.220.101.47</span> (Tor exit — high risk)
+<span class="keyword">targets</span>    : <span class="value">admin@verdana.io, ops@verdana.io</span>
+<span class="keyword">attempts</span>   : <span class="value">2,847 requests / 4 min window</span>
+<span class="keyword">matched_ttps</span>: <span class="value">T1110.001 (Password Guessing)</span>
+
+Lateral movement path reconstructed — awaiting
+threat intel enrichment<span class="stream-cursor"></span>
+        </div>
+      </div>
+
+      <div class="pd-sidebar">
+        <span class="pd-sidebar-label">Run metadata</span>
+        <div class="meta-display">
+          <div class="meta-item"><span>Elapsed</span><span class="meta-value">00:01:34</span></div>
+          <div class="meta-item"><span>Tokens used</span><span class="meta-value">4,821</span></div>
+          <div class="meta-item"><span>Tools called</span><span class="meta-value">3 / 7</span></div>
+          <div class="meta-item"><span>Stage</span><span class="meta-value" style="color:var(--status-thinking);">Analysis</span></div>
+        </div>
+
+        <span class="pd-sidebar-label">Confidence</span>
+        <div style="margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);">Threat severity</span>
+            <span class="confidence-badge cb-high">HIGH · 94%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);">Attribution</span>
+            <span class="confidence-badge cb-mid">MED · 61%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:var(--font-mono);font-size:0.65rem;color:var(--text-dim);">False positive risk</span>
+            <span class="confidence-badge cb-low">LOW · 4%</span>
+          </div>
+        </div>
+
+        <span class="pd-sidebar-label">Active alerts</span>
+        <div class="alert-item">
+          <div class="alert-dot high"></div>
+          <div class="alert-body">
+            <div class="alert-title">Cred stuffing — admin portal</div>
+            <div class="alert-meta">2 min ago · CRITICAL</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot med"></div>
+          <div class="alert-body">
+            <div class="alert-title">Unusual S3 egress volume</div>
+            <div class="alert-meta">18 min ago · HIGH</div>
+          </div>
+        </div>
+        <div class="alert-item">
+          <div class="alert-dot low"></div>
+          <div class="alert-body">
+            <div class="alert-title">Port scan from 203.x.x.x</div>
+            <div class="alert-meta">1 hr ago · MEDIUM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <p class="section-label">Platform capabilities</p>
+  <h2 class="section-title">Built for AI-first security operations</h2>
+  <p class="section-sub">SENTINEL makes the AI's internal state visible at every step — so analysts always know what the model is doing and why.</p>
+
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-thinking)"></span>
+        Agentic analysis
+      </div>
+      <div class="feat-title">Multi-step threat investigation</div>
+      <p class="feat-desc">SENTINEL breaks investigations into planning, searching, analysing, and responding stages — each with its own status indicator and tool log.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-searching)"></span>
+        Streaming output
+      </div>
+      <div class="feat-title">Real-time analysis stream</div>
+      <p class="feat-desc">Every reasoning step arrives token-by-token with a live cursor. Analysts see the model's work as it happens — no waiting for a final report.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-generating)"></span>
+        Confidence UI
+      </div>
+      <div class="feat-title">Calibrated confidence scores</div>
+      <p class="feat-desc">Every finding comes with a confidence badge — High, Medium, or Low — backed by the model's reasoning. Not bare numbers. Contextualised trust signals.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-error)"></span>
+        Tool transparency
+      </div>
+      <div class="feat-title">Visible tool invocations</div>
+      <p class="feat-desc">Every API call, database lookup, and threat feed query appears as a card in the stream. Analysts can audit exactly what the AI accessed.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-complete)"></span>
+        Multi-panel UI
+      </div>
+      <div class="feat-title">Purpose-built operator interface</div>
+      <p class="feat-desc">Split-panel layout keeps configuration, streaming output, and action log visible simultaneously. Designed for SOC workflows, not generic dashboards.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">
+        <span class="feat-icon-dot" style="background:var(--status-thinking)"></span>
+        State indicators
+      </div>
+      <div class="feat-title">Always-visible AI state</div>
+      <p class="feat-desc">A persistent status bar shows the current model state — Thinking, Searching, Generating, or Complete — with colour-coded dots. Analysts never wonder if it's stuck.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MULTI-PANEL -->
+<section class="panel-section">
+  <div class="panel-inner">
+    <div>
+      <p class="section-label">Interface architecture</p>
+      <h2 class="section-title">The SOC needs a different kind of interface</h2>
+      <p style="font-size:0.95rem; color:var(--text-secondary); line-height:1.7; margin-bottom:28px;">Traditional SIEM interfaces were designed for human analysts reading static tables. SENTINEL is designed for the era where AI does the first pass and humans make the call.</p>
+      <p style="font-size:0.875rem; color:var(--text-secondary); line-height:1.7; margin-bottom:32px;">The multi-panel architecture keeps your configuration on the left, the AI's live output in the centre, and the tool-use audit log on the right. Every panel has a job — nothing is decorative.</p>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);">
+          <span class="status-dot dot-thinking"></span> Left panel: model config, query input, parameters
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);">
+          <span class="status-dot dot-searching"></span> Centre: streaming output, tool cards, analysis
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:0.75rem;color:var(--text-secondary);">
+          <span class="status-dot dot-generating"></span> Right: alerts, confidence, metadata
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-ui">
+      <div class="pui-topbar">
+        <div class="pui-tab active">Investigate</div>
+        <div class="pui-tab">Hunt</div>
+        <div class="pui-tab">Respond</div>
+        <div class="pui-tab">History</div>
+      </div>
+      <div class="pui-body">
+        <div class="pui-left">
+          <div style="font-family:var(--font-mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:8px;">Navigation</div>
+          <div class="pui-nav-item active"><span class="pni-dot"></span>Threat Intel</div>
+          <div class="pui-nav-item"><span class="pni-dot"></span>Log Analysis</div>
+          <div class="pui-nav-item"><span class="pni-dot"></span>OSINT Lookup</div>
+          <div class="pui-nav-item"><span class="pni-dot"></span>Attribution</div>
+          <div class="pui-nav-item"><span class="pni-dot"></span>Playbooks</div>
+          <div style="margin-top:16px;font-family:var(--font-mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:8px;">Model</div>
+          <div style="font-family:var(--font-mono);font-size:0.65rem;color:var(--status-thinking);background:rgba(167,139,250,0.08);border:1px solid var(--border-active);border-radius:4px;padding:6px 8px;">sentinel-3-ops</div>
+        </div>
+        <div class="pui-main">
+          <div style="font-family:var(--font-mono);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-dim);margin-bottom:8px;">Output stream</div>
+          <div class="mini-stream"><span class="comment">// Threat intel enrichment</span>
+<span class="highlight">SEARCHING</span> VirusTotal...
+<span class="keyword">hash</span>: <span class="value">d41d8cd98f00b204...</span>
+<span class="highlight">MATCH</span>: 47/72 engines flag
+<span class="keyword">family</span>: <span class="value">Cobalt Strike beacon</span>
+<span class="keyword">confidence</span>: <span class="value">HIGH (91%)</span>
+<span class="stream-cursor"></span></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span class="confidence-badge cb-high">Confirmed threat</span>
+            <span class="confidence-badge cb-mid">Attribution pending</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIDENCE -->
+<section class="confidence-section">
+  <p class="section-label">Trust signals</p>
+  <h2 class="section-title">Confidence that earns its label</h2>
+  <p class="section-sub">SENTINEL doesn't just show a percentage — it shows what drove the score, what uncertainty remains, and what would change it.</p>
+
+  <div class="confidence-grid">
+    <div class="conf-card">
+      <div class="conf-card-top">
+        <div class="conf-card-title">Threat severity assessment</div>
+        <span class="confidence-badge cb-high">High · 94%</span>
+      </div>
+      <div class="conf-bar-label">
+        <span>Evidence strength</span>
+        <span class="conf-bar-val">94%</span>
+      </div>
+      <div class="conf-bar"><div class="conf-fill high" style="width:94%"></div></div>
+      <div class="conf-detail">Strong match on 3 independent indicators: IP reputation, behaviour pattern, and hash signature. Cross-validated against 2 threat intel feeds.</div>
+    </div>
+    <div class="conf-card">
+      <div class="conf-card-top">
+        <div class="conf-card-title">Threat actor attribution</div>
+        <span class="confidence-badge cb-mid">Medium · 61%</span>
+      </div>
+      <div class="conf-bar-label">
+        <span>Attribution certainty</span>
+        <span class="conf-bar-val">61%</span>
+      </div>
+      <div class="conf-bar"><div class="conf-fill mid" style="width:61%"></div></div>
+      <div class="conf-detail">TTP overlap with APT-41 at 61% confidence. Infrastructure re-use patterns match, but tooling has evolved. Awaiting additional C2 beacon analysis.</div>
+    </div>
+    <div class="conf-card">
+      <div class="conf-card-top">
+        <div class="conf-card-title">False positive risk</div>
+        <span class="confidence-badge cb-low">Low · 4%</span>
+      </div>
+      <div class="conf-bar-label">
+        <span>FP probability</span>
+        <span class="conf-bar-val">4%</span>
+      </div>
+      <div class="conf-bar"><div class="conf-fill high" style="width:96%"></div></div>
+      <div class="conf-detail">Behavioural baseline comparison shows significant deviation from normal. Only 4% probability this is legitimate traffic or misconfigured internal tool.</div>
+    </div>
+    <div class="conf-card">
+      <div class="conf-card-top">
+        <div class="conf-card-title">Recommended action confidence</div>
+        <span class="confidence-badge cb-high">High · 88%</span>
+      </div>
+      <div class="conf-bar-label">
+        <span>Action certainty</span>
+        <span class="conf-bar-val">88%</span>
+      </div>
+      <div class="conf-bar"><div class="conf-fill high" style="width:88%"></div></div>
+      <div class="conf-detail">Playbook match: immediate IP block + credential rotation. 88% confidence this is the correct response given current evidence and business context.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-num">2.8<span>B</span></div>
+      <div class="stat-label">Events processed/day</div>
+    </div>
+    <div>
+      <div class="stat-num">4<span>min</span></div>
+      <div class="stat-label">Mean time to detect</div>
+    </div>
+    <div>
+      <div class="stat-num">97<span>%</span></div>
+      <div class="stat-label">Alert accuracy rate</div>
+    </div>
+    <div>
+      <div class="stat-num">12<span>×</span></div>
+      <div class="stat-label">Faster than manual triage</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <p class="section-label">Access tiers</p>
+  <h2 class="section-title">Scale with your threat surface</h2>
+
+  <div class="pricing-grid">
+    <div class="plan-card">
+      <span class="plan-tier">Starter</span>
+      <div class="plan-name">Observer</div>
+      <div class="plan-price"><sub>$</sub>0</div>
+      <div class="plan-period">Free · community edition</div>
+      <ul class="plan-features">
+        <li>Up to 1GB events/day</li>
+        <li>Basic threat intel lookup</li>
+        <li>Streaming output viewer</li>
+        <li>Community support</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Get started free</button>
+    </div>
+
+    <div class="plan-card featured">
+      <span class="plan-featured-pill">
+        <span class="status-dot dot-thinking" style="width:5px;height:5px;"></span>
+        Most popular
+      </span>
+      <div class="plan-name">Analyst</div>
+      <div class="plan-price"><sub>$</sub>490</div>
+      <div class="plan-period">per month · billed annually</div>
+      <ul class="plan-features">
+        <li>Up to 50GB events/day</li>
+        <li>Full agentic investigation pipeline</li>
+        <li>All tool integrations (50+)</li>
+        <li>Confidence scoring + reasoning</li>
+        <li>Custom playbooks</li>
+        <li>Priority processing queue</li>
+      </ul>
+      <button class="btn-plan btn-plan-filled">Start free trial</button>
+    </div>
+
+    <div class="plan-card">
+      <span class="plan-tier">Enterprise</span>
+      <div class="plan-name">Operations</div>
+      <div class="plan-price">Custom</div>
+      <div class="plan-period">contact for volume pricing</div>
+      <ul class="plan-features">
+        <li>Unlimited event ingestion</li>
+        <li>Dedicated model instance</li>
+        <li>On-prem / VPC deployment</li>
+        <li>SOC-2 Type II + FedRAMP</li>
+        <li>24/7 analyst support SLA</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <p class="cta-pre">// Ready to deploy</p>
+  <h2 class="cta-title">Your next breach is being planned right now.</h2>
+  <p class="cta-sub">SENTINEL is already watching. The question is whether your team is watching SENTINEL.</p>
+  <div class="cta-buttons">
+    <button class="btn-primary">Request early access</button>
+    <button class="btn-outline">Read the docs</button>
+  </div>
+  <p class="cta-note">SOC-2 Type II · FedRAMP In Process · GDPR Compliant</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">SENT<span>INEL</span></div>
+  <div class="footer-copy">© 2026 Sentinel AI Security Inc.</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Security</a></li>
+    <li><a href="#">API Docs</a></li>
+  </ul>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>AI-Native Layout</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

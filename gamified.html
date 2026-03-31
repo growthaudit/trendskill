@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUESTIFY — Level Up Your Life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f4ff;
+  --surface: #ffffff;
+  --border: #e0e7ff;
+
+  --xp-gold: #f59e0b;
+  --xp-gold-light: #fef3c7;
+  --purple: #7c3aed;
+  --purple-light: #ede9fe;
+  --blue: #2563eb;
+  --blue-light: #dbeafe;
+  --green: #16a34a;
+  --green-light: #dcfce7;
+  --red: #dc2626;
+  --red-light: #fee2e2;
+  --orange: #ea580c;
+  --orange-light: #ffedd5;
+  --teal: #0891b2;
+  --teal-light: #cffafe;
+  --pink: #db2777;
+  --pink-light: #fce7f3;
+
+  --text-primary: #1e1b4b;
+  --text-secondary: #4c1d95;
+  --text-muted: #6d7280;
+
+  --shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-glow-gold: 0 4px 20px rgba(245,158,11,0.3);
+  --shadow-glow-purple: 0 4px 20px rgba(124,58,237,0.3);
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-lg: 24px;
+  --radius-pill: 100px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Confetti dots bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(124,58,237,0.06) 1px, transparent 1px),
+    radial-gradient(circle, rgba(245,158,11,0.04) 1px, transparent 1px);
+  background-size: 40px 40px, 24px 24px;
+  background-position: 0 0, 12px 12px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 64px;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  transition: all 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--purple);
+  background: var(--purple-light);
+}
+
+.nav-xp {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-level {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--xp-gold-light);
+  border: 2px solid var(--xp-gold);
+  border-radius: var(--radius-pill);
+  padding: 5px 12px;
+}
+
+.level-badge {
+  width: 22px;
+  height: 22px;
+  background: var(--xp-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: white;
+}
+
+.level-text {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--orange);
+}
+
+.nav-streak {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--orange);
+}
+
+.nav-cta {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: white;
+  padding: 8px 22px;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow: var(--shadow-glow-purple);
+  transition: all 0.2s;
+}
+
+.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.4);
+}
+
+/* HERO */
+.hero {
+  padding: 100px 60px 60px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--purple);
+  background: var(--purple-light);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 20px;
+  border: 2px solid rgba(124,58,237,0.2);
+}
+
+.hero-headline {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(3rem, 5vw, 5rem);
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.hero-headline .accent {
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.7;
+  max-width: 440px;
+  margin-bottom: 32px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.btn-primary {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: white;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  box-shadow: var(--shadow-glow-purple);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124,58,237,0.45);
+}
+
+.btn-secondary {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--purple);
+  padding: 14px 28px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--purple);
+  background: var(--purple-light);
+}
+
+.social-proof {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatars {
+  display: flex;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+  margin-left: -8px;
+  background: var(--purple-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+.avatars .avatar:first-child { margin-left: 0; }
+
+.proof-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.proof-text strong { color: var(--text-primary); }
+
+/* HERO DASHBOARD */
+.hero-right {
+  position: relative;
+}
+
+.dashboard-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--border);
+}
+
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dash-greeting {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.dash-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.level-pill {
+  background: var(--xp-gold);
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+/* XP bar */
+.xp-section {
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.xp-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.xp-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.xp-count {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--xp-gold);
+}
+
+.xp-bar {
+  height: 12px;
+  background: var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--xp-gold), #fbbf24);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.4);
+}
+
+.xp-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 0 6px 6px 0;
+}
+
+/* Streak row */
+.streak-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.streak-day {
+  flex: 1;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.streak-day.done {
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: white;
+  box-shadow: 0 2px 8px rgba(124,58,237,0.3);
+}
+
+.streak-day.today {
+  background: var(--xp-gold);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245,158,11,0.3);
+}
+
+.streak-day.future {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+/* Quest cards */
+.quests {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quest-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.quest-item:hover {
+  border-color: var(--purple);
+  background: var(--purple-light);
+}
+
+.quest-item.completed {
+  background: var(--green-light);
+  border-color: rgba(22,163,74,0.2);
+}
+
+.quest-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.quest-icon.purple { background: var(--purple-light); }
+.quest-icon.blue { background: var(--blue-light); }
+.quest-icon.green { background: var(--green-light); }
+
+.quest-info { flex: 1; }
+
+.quest-name {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.quest-item.completed .quest-name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.quest-xp {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--xp-gold);
+  margin-top: 2px;
+}
+
+.quest-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.quest-check.done {
+  background: var(--green);
+  color: white;
+}
+
+.quest-check.todo {
+  border: 2px solid var(--border);
+  background: var(--surface);
+}
+
+/* Floating badges */
+.badge-float {
+  position: absolute;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.badge-float-1 {
+  top: -20px;
+  right: -40px;
+  animation-delay: 0s;
+}
+
+.badge-float-2 {
+  bottom: 40px;
+  right: -50px;
+  animation-delay: 1.5s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.bf-icon { font-size: 1.2rem; }
+
+.bf-text {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.bf-sub {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* STATS */
+.stats-section {
+  padding: 60px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-emoji { font-size: 1.8rem; margin-bottom: 8px; }
+
+.stat-num {
+  font-family: 'Fredoka One', cursive;
+  font-size: 2.2rem;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* FEATURES */
+.features {
+  padding: 40px 60px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--purple);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  letter-spacing: 0.01em;
+  text-align: center;
+  color: var(--text-primary);
+  margin-bottom: 48px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+  transition: all 0.2s;
+}
+
+.feat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feat-card.purple-card { border-color: rgba(124,58,237,0.3); }
+.feat-card.gold-card { border-color: rgba(245,158,11,0.3); }
+.feat-card.green-card { border-color: rgba(22,163,74,0.3); }
+.feat-card.blue-card { border-color: rgba(37,99,235,0.3); }
+.feat-card.red-card { border-color: rgba(220,38,38,0.3); }
+.feat-card.teal-card { border-color: rgba(8,145,178,0.3); }
+
+.feat-emoji { font-size: 2.2rem; margin-bottom: 12px; display: block; }
+
+.feat-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.feat-desc {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+/* BADGES SHOWCASE */
+.badges-section {
+  padding: 80px 60px;
+  background: linear-gradient(135deg, var(--purple-light) 0%, var(--blue-light) 100%);
+  border-top: 2px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.badges-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.badges-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.badges-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.badge-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+  transition: all 0.2s;
+}
+
+.badge-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+}
+
+.badge-item.locked {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.badge-emoji { font-size: 1.8rem; margin-bottom: 6px; display: block; }
+
+.badge-name {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* PRICING */
+.pricing {
+  padding: 80px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 48px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+  position: relative;
+  transition: all 0.2s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.pricing-card.featured {
+  border-color: var(--purple);
+  box-shadow: var(--shadow-glow-purple);
+}
+
+.popular-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  color: white;
+  font-family: 'Fredoka One', cursive;
+  font-size: 0.82rem;
+  padding: 4px 16px;
+  border-radius: var(--radius-pill);
+}
+
+.plan-emoji { font-size: 2rem; margin-bottom: 10px; display: block; }
+
+.plan-name {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.plan-price {
+  font-family: 'Fredoka One', cursive;
+  font-size: 3rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.plan-price .currency {
+  font-size: 1.2rem;
+  vertical-align: super;
+  margin-top: 8px;
+  display: inline-block;
+  color: var(--text-muted);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+}
+
+.plan-period {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.plan-features {
+  list-style: none;
+  margin-bottom: 24px;
+}
+
+.plan-features li {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plan-features li .check { color: var(--green); }
+
+.plan-btn {
+  width: 100%;
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  padding: 13px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.plan-btn-outline {
+  color: var(--purple);
+  background: var(--purple-light);
+  border: 2px solid rgba(124,58,237,0.3);
+}
+
+.plan-btn-outline:hover {
+  background: var(--purple);
+  color: white;
+}
+
+.plan-btn-filled {
+  color: white;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+  border: none;
+  box-shadow: var(--shadow-glow-purple);
+}
+
+.plan-btn-filled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124,58,237,0.45);
+}
+
+/* LEADERBOARD */
+.leaderboard {
+  padding: 40px 60px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.lb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.lb-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--border);
+}
+
+.lb-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.lb-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.rank-1 { background: var(--xp-gold); color: white; }
+.rank-2 { background: #9ca3af; color: white; }
+.rank-3 { background: #b45309; color: white; }
+.rank-other { background: var(--border); color: var(--text-muted); }
+
+.lb-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.lb-xp {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--xp-gold);
+}
+
+/* FOOTER */
+footer {
+  background: var(--text-primary);
+  padding: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+  background: linear-gradient(135deg, #a78bfa, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.footer-tagline {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.65;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 14px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">QUESTIFY</div>
+  <ul class="nav-links">
+    <li><a href="#">Quests</a></li>
+    <li><a href="#">Habits</a></li>
+    <li><a href="#">Guilds</a></li>
+    <li><a href="#">Leaderboard</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <div class="nav-xp">
+    <div class="nav-level">
+      <div class="level-badge">12</div>
+      <span class="level-text">Level 12</span>
+    </div>
+    <div class="nav-streak">🔥 24</div>
+    <button class="nav-cta">Play Free</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <div class="hero-tag">🎮 1.2 million players worldwide</div>
+    <h1 class="hero-headline">Turn your daily<br><span class="accent">grind into</span><br>an adventure.</h1>
+    <p class="hero-sub">QUESTIFY transforms your habits, goals, and to-dos into a real RPG. Earn XP, level up, unlock badges, and build streaks that actually stick.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Start Your Quest — Free</button>
+      <button class="btn-secondary">See how it works →</button>
+    </div>
+    <div class="social-proof">
+      <div class="avatars">
+        <div class="avatar">😊</div>
+        <div class="avatar">🧔</div>
+        <div class="avatar">👩</div>
+        <div class="avatar">🧑</div>
+      </div>
+      <span class="proof-text">Joined by <strong>1.2M+ adventurers</strong> this year</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="badge-float badge-float-1">
+      <span class="bf-icon">🏆</span>
+      <div>
+        <div class="bf-text">Achievement!</div>
+        <div class="bf-sub">Early Bird — 7 day streak</div>
+      </div>
+    </div>
+
+    <div class="dashboard-card">
+      <div class="dash-header">
+        <div>
+          <div class="dash-greeting">Welcome back,</div>
+          <div class="dash-name">Alex the Relentless ⚔️</div>
+        </div>
+        <div class="level-pill">Lv 12 Knight</div>
+      </div>
+
+      <div class="xp-section">
+        <div class="xp-header">
+          <span class="xp-label">⚡ XP Progress</span>
+          <span class="xp-count">3,240 / 5,000 XP</span>
+        </div>
+        <div class="xp-bar">
+          <div class="xp-fill" style="width:65%"></div>
+        </div>
+      </div>
+
+      <div class="streak-row">
+        <div class="streak-day done">M</div>
+        <div class="streak-day done">T</div>
+        <div class="streak-day done">W</div>
+        <div class="streak-day done">T</div>
+        <div class="streak-day today">F</div>
+        <div class="streak-day future">S</div>
+        <div class="streak-day future">S</div>
+      </div>
+
+      <div class="quests">
+        <div class="quest-item completed">
+          <div class="quest-icon green">🏃</div>
+          <div class="quest-info">
+            <div class="quest-name">Morning run — 5km</div>
+            <div class="quest-xp">+150 XP earned</div>
+          </div>
+          <div class="quest-check done">✓</div>
+        </div>
+        <div class="quest-item">
+          <div class="quest-icon purple">📚</div>
+          <div class="quest-info">
+            <div class="quest-name">Read 20 pages</div>
+            <div class="quest-xp">+80 XP available</div>
+          </div>
+          <div class="quest-check todo"></div>
+        </div>
+        <div class="quest-item">
+          <div class="quest-icon blue">💻</div>
+          <div class="quest-info">
+            <div class="quest-name">Build landing page section</div>
+            <div class="quest-xp">+200 XP available</div>
+          </div>
+          <div class="quest-check todo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="badge-float badge-float-2">
+      <span class="bf-icon">⚡</span>
+      <div>
+        <div class="bf-text">+200 XP!</div>
+        <div class="bf-sub">Quest complete</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-section">
+  <div class="stat-card">
+    <div class="stat-emoji">🎮</div>
+    <div class="stat-num">1.2M</div>
+    <div class="stat-label">Active adventurers</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-emoji">⚡</div>
+    <div class="stat-num">89M</div>
+    <div class="stat-label">XP points earned</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-emoji">🔥</div>
+    <div class="stat-num">94%</div>
+    <div class="stat-label">Habit completion rate</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-emoji">🏆</div>
+    <div class="stat-num">4.9★</div>
+    <div class="stat-label">App Store rating</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-eyebrow">Features</div>
+  <h2 class="section-title">Your life is the game. These are the mechanics.</h2>
+  <div class="features-grid">
+    <div class="feat-card purple-card">
+      <span class="feat-emoji">⚡</span>
+      <div class="feat-title">XP & Levelling System</div>
+      <p class="feat-desc">Every completed task earns XP. Stack enough and you level up, unlocking new character titles, rewards, and quest tiers. Your progress is always visible.</p>
+    </div>
+    <div class="feat-card gold-card">
+      <span class="feat-emoji">🔥</span>
+      <div class="feat-title">Streak Mechanics</div>
+      <p class="feat-desc">Daily streaks multiply your XP earnings. Miss a day and it resets — but shield potions can protect streaks you've worked hard to build.</p>
+    </div>
+    <div class="feat-card green-card">
+      <span class="feat-emoji">🏆</span>
+      <div class="feat-title">Badge Collection</div>
+      <p class="feat-desc">80+ unique achievement badges across health, focus, social, creativity, and learning. Share your rarest ones to flex in the community.</p>
+    </div>
+    <div class="feat-card blue-card">
+      <span class="feat-emoji">⚔️</span>
+      <div class="feat-title">Guild Challenges</div>
+      <p class="feat-desc">Form parties with up to 5 friends. Take on weekly boss challenges together — everyone must contribute or the guild fails. Accountability, gamified.</p>
+    </div>
+    <div class="feat-card red-card">
+      <span class="feat-emoji">🗺️</span>
+      <div class="feat-title">Quest Storylines</div>
+      <p class="feat-desc">Long-form quest arcs unlock over months. Complete 30 days of focused work and unravel a hero's journey narrative that mirrors your real growth.</p>
+    </div>
+    <div class="feat-card teal-card">
+      <span class="feat-emoji">📊</span>
+      <div class="feat-title">Skill Tree Analytics</div>
+      <p class="feat-desc">Every habit maps to a skill tree: Fitness, Focus, Creativity, Social, Health. Watch your character's abilities grow as your real-world skills develop.</p>
+    </div>
+  </div>
+</section>
+
+<section class="badges-section">
+  <div class="badges-inner">
+    <div>
+      <h2 class="badges-title">80+ badges to collect. Every one earned, never bought.</h2>
+      <p class="badges-text">QUESTIFY badges are a genuine record of what you've accomplished. You can't buy them with coins. You earn them by showing up every day.</p>
+      <button class="btn-primary">See all 80+ badges</button>
+    </div>
+    <div class="badges-grid">
+      <div class="badge-item">
+        <span class="badge-emoji">🌅</span>
+        <div class="badge-name">Early Bird</div>
+      </div>
+      <div class="badge-item">
+        <span class="badge-emoji">🏃</span>
+        <div class="badge-name">Iron Legs</div>
+      </div>
+      <div class="badge-item">
+        <span class="badge-emoji">📚</span>
+        <div class="badge-name">Bookworm</div>
+      </div>
+      <div class="badge-item">
+        <span class="badge-emoji">🔥</span>
+        <div class="badge-name">30 Day Blaze</div>
+      </div>
+      <div class="badge-item">
+        <span class="badge-emoji">🎯</span>
+        <div class="badge-name">Dead-Eye</div>
+      </div>
+      <div class="badge-item">
+        <span class="badge-emoji">🧘</span>
+        <div class="badge-name">Zen Master</div>
+      </div>
+      <div class="badge-item locked">
+        <span class="badge-emoji">👑</span>
+        <div class="badge-name">Champion</div>
+      </div>
+      <div class="badge-item locked">
+        <span class="badge-emoji">🌟</span>
+        <div class="badge-name">Legendary</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-eyebrow">Pricing</div>
+  <h2 class="section-title">Free to play. Legendary to master.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <span class="plan-emoji">🗡️</span>
+      <div class="plan-name">Free Adventurer</div>
+      <div class="plan-price"><span class="currency">$</span>0</div>
+      <div class="plan-period">forever free</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 3 active quests</li>
+        <li><span class="check">✓</span> Basic XP + levelling</li>
+        <li><span class="check">✓</span> Daily streak tracking</li>
+        <li><span class="check">✓</span> 20 achievement badges</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Start Free</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="popular-badge">⚔️ Most Popular</div>
+      <span class="plan-emoji">🛡️</span>
+      <div class="plan-name">Hero Plan</div>
+      <div class="plan-price"><span class="currency">$</span>9</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Unlimited quests</li>
+        <li><span class="check">✓</span> All 80+ badges</li>
+        <li><span class="check">✓</span> Guild challenges</li>
+        <li><span class="check">✓</span> Streak shields (3/mo)</li>
+        <li><span class="check">✓</span> Full skill tree analytics</li>
+        <li><span class="check">✓</span> Quest storylines</li>
+      </ul>
+      <button class="plan-btn plan-btn-filled">Become a Hero</button>
+    </div>
+    <div class="pricing-card">
+      <span class="plan-emoji">👑</span>
+      <div class="plan-name">Legendary</div>
+      <div class="plan-price"><span class="currency">$</span>19</div>
+      <div class="plan-period">per month</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Everything in Hero</li>
+        <li><span class="check">✓</span> Exclusive legendary badges</li>
+        <li><span class="check">✓</span> Custom quest creation</li>
+        <li><span class="check">✓</span> Priority leaderboard</li>
+        <li><span class="check">✓</span> Coaching integrations</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Go Legendary</button>
+    </div>
+  </div>
+</section>
+
+<section class="leaderboard">
+  <div class="section-eyebrow">Leaderboard</div>
+  <h2 class="section-title">This week's top adventurers</h2>
+  <div class="lb-grid">
+    <div class="lb-card">
+      <div class="lb-title">🌍 Global Top</div>
+      <div class="lb-row">
+        <div class="lb-rank rank-1">1</div>
+        <div class="lb-name">Katarina the Swift ⚡</div>
+        <div class="lb-xp">48,200 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-2">2</div>
+        <div class="lb-name">Marcus Ironheart 🔥</div>
+        <div class="lb-xp">44,800 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-3">3</div>
+        <div class="lb-name">Yuki the Relentless 🗡️</div>
+        <div class="lb-xp">41,200 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-other">4</div>
+        <div class="lb-name">Devraj the Focused 📚</div>
+        <div class="lb-xp">38,900 XP</div>
+      </div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-title">🏘️ Your Guild</div>
+      <div class="lb-row">
+        <div class="lb-rank rank-1">1</div>
+        <div class="lb-name">You (Alex) 🧑‍💻</div>
+        <div class="lb-xp">3,240 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-2">2</div>
+        <div class="lb-name">Sam the Builder 🔨</div>
+        <div class="lb-xp">2,980 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-3">3</div>
+        <div class="lb-name">Priya Nightrunner 🌙</div>
+        <div class="lb-xp">2,720 XP</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank rank-other">4</div>
+        <div class="lb-name">Tom of the Mountains</div>
+        <div class="lb-xp">1,890 XP</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">QUESTIFY</div>
+      <p class="footer-tagline">The only productivity app that makes you genuinely excited to open it. 1.2 million daily adventurers and counting.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Game</h4>
+      <ul>
+        <li><a href="#">Quests</a></li>
+        <li><a href="#">Guilds</a></li>
+        <li><a href="#">Badges</a></li>
+        <li><a href="#">Leaderboard</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Wiki</a></li>
+        <li><a href="#">Discord</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Updates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Questify, Inc. All rights reserved. Now go earn some XP.</span>
+    <span class="footer-copy">Level up your life 🎮</span>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Gamified Design</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

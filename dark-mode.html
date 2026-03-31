@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOIDBASE — Backend Infrastructure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Surfaces — true OLED black elevation system */
+  --surface-0: #000000;
+  --surface-1: #0a0a0a;
+  --surface-2: #121212;
+  --surface-3: #1a1a1a;
+  --surface-4: #222222;
+  --surface-5: #2c2c2c;
+
+  /* Accent — one per function */
+  --accent-blue: #5b8dee;
+  --accent-green: #2dd4a0;
+  --accent-amber: #f5a623;
+  --accent-red: #f05050;
+  --accent-purple: #a78bfa;
+
+  /* Text */
+  --text-primary: #f5f5f5;
+  --text-secondary: #a0a0a0;
+  --text-tertiary: #5a5a5a;
+  --text-disabled: #3a3a3a;
+
+  /* Borders */
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.1);
+  --border-emphasis: rgba(255,255,255,0.2);
+
+  /* Glows */
+  --glow-blue: 0 0 24px rgba(91,141,238,0.3), 0 0 80px rgba(91,141,238,0.08);
+  --glow-green: 0 0 24px rgba(45,212,160,0.3), 0 0 80px rgba(45,212,160,0.08);
+  --glow-amber: 0 0 24px rgba(245,166,35,0.3);
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.nav-logo span { color: var(--accent-blue); }
+
+.nav-center {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--text-primary);
+  background: var(--surface-3);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-ghost-nav {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 7px 16px;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost-nav:hover {
+  color: var(--text-primary);
+  border-color: var(--border-emphasis);
+  background: var(--surface-3);
+}
+
+.btn-cta-nav {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: var(--text-primary);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cta-nav:hover {
+  background: var(--accent-blue);
+  box-shadow: var(--glow-blue);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient glow backgrounds */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(91,141,238,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 30%;
+  width: 400px;
+  height: 300px;
+  background: radial-gradient(ellipse, rgba(45,212,160,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent-blue);
+  padding: 6px 14px;
+  border: 1px solid rgba(91,141,238,0.3);
+  border-radius: 100px;
+  background: rgba(91,141,238,0.08);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  box-shadow: var(--glow-blue);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(91,141,238,0.8); }
+  50% { opacity: 0.5; box-shadow: 0 0 16px rgba(91,141,238,0.4); }
+}
+
+.hero-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.headline-glow {
+  color: var(--accent-blue);
+  text-shadow: var(--glow-blue);
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 64px;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-primary {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000;
+  padding: 12px 28px;
+  background: var(--text-primary);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out);
+}
+
+.btn-primary:hover {
+  background: var(--accent-blue);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 12px 28px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-default);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--surface-4);
+  border-color: var(--border-emphasis);
+}
+
+/* Terminal preview */
+.terminal {
+  width: 100%;
+  max-width: 680px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border-subtle);
+}
+
+.terminal-bar {
+  background: var(--surface-3);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-red { background: #ff5f57; }
+.dot-yellow { background: #febc2e; }
+.dot-green { background: #28c840; }
+
+.terminal-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-left: 8px;
+}
+
+.terminal-body {
+  padding: 20px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.t-line { display: flex; gap: 10px; margin-bottom: 2px; }
+.t-prompt { color: var(--accent-blue); }
+.t-cmd { color: var(--text-primary); }
+.t-comment { color: var(--text-tertiary); }
+.t-output { color: var(--accent-green); padding-left: 20px; }
+.t-key { color: var(--accent-amber); }
+.t-str { color: var(--accent-purple); }
+.t-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 14px;
+  background: var(--accent-blue);
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* METRICS */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border-subtle);
+  margin: 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.metric-item {
+  background: var(--surface-1);
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.metric-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.metric-num.blue { color: var(--accent-blue); text-shadow: var(--glow-blue); }
+.metric-num.green { color: var(--accent-green); text-shadow: var(--glow-green); }
+.metric-num.amber { color: var(--accent-amber); text-shadow: var(--glow-amber); }
+.metric-num.purple { color: var(--accent-purple); }
+
+.metric-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* FEATURES */
+.features {
+  padding: 100px 60px;
+  position: relative;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%; right: 0;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--border-default), transparent);
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  line-height: 1.7;
+}
+
+.features-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 64px;
+}
+
+.features-right {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-subtle);
+}
+
+.feat-card {
+  background: var(--surface-1);
+  padding: 28px;
+  transition: background 0.2s;
+}
+
+.feat-card:hover { background: var(--surface-2); }
+
+.feat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+
+.feat-icon.blue { background: rgba(91,141,238,0.12); color: var(--accent-blue); }
+.feat-icon.green { background: rgba(45,212,160,0.12); color: var(--accent-green); }
+.feat-icon.amber { background: rgba(245,166,35,0.12); color: var(--accent-amber); }
+.feat-icon.purple { background: rgba(167,139,250,0.12); color: var(--accent-purple); }
+
+.feat-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.feat-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+}
+
+/* DARK CODE SHOWCASE */
+.code-section {
+  padding: 80px 60px;
+  background: var(--surface-1);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.code-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.code-block {
+  background: var(--surface-0);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.code-bar {
+  background: var(--surface-2);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.code-filename {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.code-lang {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  background: var(--surface-3);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.code-body {
+  padding: 20px 24px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  line-height: 1.75;
+}
+
+.kw { color: var(--accent-purple); }
+.fn { color: var(--accent-blue); }
+.str { color: var(--accent-green); }
+.num { color: var(--accent-amber); }
+.cmt { color: var(--text-tertiary); font-style: italic; }
+.punc { color: var(--text-secondary); }
+
+/* PRICING */
+.pricing {
+  padding: 100px 60px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 960px;
+  margin: 56px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: border-color 0.3s;
+  position: relative;
+}
+
+.pricing-card:hover {
+  border-color: var(--border-default);
+}
+
+.pricing-card.featured {
+  background: var(--surface-2);
+  border-color: rgba(91,141,238,0.4);
+  box-shadow: var(--glow-blue);
+}
+
+.tier-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.tier-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.tier-price sup {
+  font-size: 1.2rem;
+  font-weight: 600;
+  vertical-align: super;
+  margin-top: 8px;
+  display: inline-block;
+  color: var(--text-secondary);
+}
+
+.tier-period {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  margin-bottom: 28px;
+}
+
+.tier-features {
+  list-style: none;
+  margin-bottom: 28px;
+}
+
+.tier-features li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tier-features li .check { color: var(--accent-green); font-size: 0.7rem; }
+
+.tier-btn {
+  width: 100%;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tier-btn-outline {
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border-default);
+}
+
+.tier-btn-outline:hover {
+  background: var(--surface-3);
+  border-color: var(--border-emphasis);
+}
+
+.tier-btn-filled {
+  color: #000;
+  background: var(--accent-blue);
+  border: none;
+  box-shadow: var(--glow-blue);
+}
+
+.tier-btn-filled:hover {
+  background: #7ba5f5;
+  transform: translateY(-1px);
+}
+
+/* FOOTER */
+footer {
+  padding: 80px 60px 40px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 64px;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+
+.footer-logo span { color: var(--accent-blue); }
+
+.footer-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 280px;
+  margin-bottom: 24px;
+}
+
+.status-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent-green);
+  background: rgba(45,212,160,0.08);
+  border: 1px solid rgba(45,212,160,0.2);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 8px var(--accent-green);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.footer-col h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">VOID<span>BASE</span></div>
+  <div class="nav-center">
+    <a href="#" class="nav-link">Products</a>
+    <a href="#" class="nav-link">Docs</a>
+    <a href="#" class="nav-link">Pricing</a>
+    <a href="#" class="nav-link">Blog</a>
+    <a href="#" class="nav-link">Status</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-ghost-nav">Sign in</button>
+    <button class="btn-cta-nav">Start free</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Now in General Availability — 99.99% SLA
+  </div>
+
+  <h1 class="hero-headline">
+    Backend infrastructure<br>
+    <span class="headline-glow">without the ops.</span>
+  </h1>
+
+  <p class="hero-sub">VOIDBASE gives your team a fully managed database, auth, storage, and serverless functions — deployed globally in under 60 seconds. Ship faster without waking up at 3am.</p>
+
+  <div class="hero-actions">
+    <button class="btn-primary">Start building free</button>
+    <button class="btn-secondary">View documentation →</button>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-red"></div>
+      <div class="dot dot-yellow"></div>
+      <div class="dot dot-green"></div>
+      <span class="terminal-title">bash — ~/my-app</span>
+    </div>
+    <div class="terminal-body">
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">npx voidbase init my-app <span class="t-comment"># bootstrap in seconds</span></span></div>
+      <div class="t-line"><span class="t-output">✓ Project created</span></div>
+      <div class="t-line"><span class="t-output">✓ Database provisioned (us-east, eu-west, ap-south)</span></div>
+      <div class="t-line"><span class="t-output">✓ Auth configured (email, OAuth, magic link)</span></div>
+      <div class="t-line"><span class="t-output">✓ Edge functions deployed to 18 regions</span></div>
+      <div class="t-line" style="margin-top: 8px"><span class="t-prompt">$</span><span class="t-cmd"><span class="t-key">import</span> { <span class="t-key">db</span>, <span class="t-key">auth</span> } <span class="t-key">from</span> <span class="t-str">'voidbase'</span></span></div>
+      <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd"><span class="t-key">const</span> user = <span class="t-key">await</span> auth.<span class="t-key">getUser</span>()</span></div>
+      <div class="t-line"><span class="t-output">→ { id: 'usr_8f2a', email: 'you@startup.io', plan: 'free' }</span></div>
+      <span class="t-cursor"></span>
+    </div>
+  </div>
+</section>
+
+<div class="metrics">
+  <div class="metric-item">
+    <div class="metric-num blue">18</div>
+    <div class="metric-label">Global regions</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-num green">99.99%</div>
+    <div class="metric-label">Uptime SLA</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-num amber">&lt;40ms</div>
+    <div class="metric-label">P95 query latency</div>
+  </div>
+  <div class="metric-item">
+    <div class="metric-num purple">SOC 2</div>
+    <div class="metric-label">Type II certified</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="features-layout">
+    <div>
+      <div class="section-label">// what we build</div>
+      <h2 class="section-title">Everything your backend needs.</h2>
+      <p class="section-sub">Database, auth, file storage, serverless functions, real-time subscriptions, and a global CDN — all in one coherent platform. No stitching together 8 services.</p>
+    </div>
+    <div class="features-right">
+      <div class="feat-card">
+        <div class="feat-icon blue">⬡</div>
+        <div class="feat-title">Postgres Database</div>
+        <p class="feat-desc">Fully managed Postgres with automatic backups, point-in-time recovery, and read replicas across 18 regions. Your schema, your data.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon green">⚿</div>
+        <div class="feat-title">Auth & Sessions</div>
+        <p class="feat-desc">Email/password, magic links, OAuth (GitHub, Google, Apple), SAML/SSO, MFA, and row-level security — all configured in one JSON file.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon amber">⚡</div>
+        <div class="feat-title">Edge Functions</div>
+        <p class="feat-desc">Serverless TypeScript running at the edge with 18-region deployment, cold start under 5ms, and built-in connection pooling to your database.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon purple">◎</div>
+        <div class="feat-title">Real-time Engine</div>
+        <p class="feat-desc">WebSocket subscriptions to any table change. Build collaborative features, live dashboards, and notifications without polling or queues.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="code-section">
+  <div class="code-inner">
+    <div>
+      <div class="section-label">// developer experience</div>
+      <h2 class="section-title">The API you wish you always had.</h2>
+      <p class="section-sub" style="color: var(--text-secondary); font-size: 1rem; line-height: 1.7; max-width: 400px; margin-top: 16px;">Auto-generated TypeScript types, a query builder that thinks like you do, and a local dev environment that mirrors production exactly.</p>
+    </div>
+    <div class="code-block">
+      <div class="code-bar">
+        <span class="code-filename">queries.ts</span>
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <div class="code-body">
+        <div><span class="cmt">// Fully typed — auto-generated from your schema</span></div>
+        <div><span class="kw">const</span> { data, error } = <span class="kw">await</span> db</div>
+        <div>&nbsp;&nbsp;.from(<span class="str">'orders'</span>)</div>
+        <div>&nbsp;&nbsp;.select(<span class="str">`</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">id, created_at, status,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">customer:users ( name, email ),</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">items ( product_id, qty, unit_price )</span></div>
+        <div>&nbsp;&nbsp;<span class="str">`</span>)</div>
+        <div>&nbsp;&nbsp;.eq(<span class="str">'status'</span>, <span class="str">'pending'</span>)</div>
+        <div>&nbsp;&nbsp;.gt(<span class="str">'created_at'</span>, <span class="str">'2026-01-01'</span>)</div>
+        <div>&nbsp;&nbsp;.order(<span class="str">'created_at'</span>, { ascending: <span class="num">false</span> })</div>
+        <div>&nbsp;&nbsp;.limit(<span class="num">20</span>)</div>
+        <br>
+        <div><span class="cmt">// Real-time subscription</span></div>
+        <div>db.from(<span class="str">'orders'</span>)</div>
+        <div>&nbsp;&nbsp;.on(<span class="str">'INSERT'</span>, <span class="punc">(</span>payload<span class="punc">)</span> <span class="kw">=></span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">notifyTeam</span>(payload.new)</div>
+        <div>&nbsp;&nbsp;})</div>
+        <div>&nbsp;&nbsp;.subscribe()</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-label" style="text-align:center">// pricing</div>
+  <h2 class="section-title" style="text-align:center; margin-bottom:8px">Simple, scalable pricing.</h2>
+  <p style="text-align:center; color:var(--text-secondary); font-size:1rem; margin-bottom:0">Start free, pay only when you scale. No hidden fees, no egress surprises.</p>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="tier-name">Starter</div>
+      <div class="tier-price"><sup>$</sup>0</div>
+      <div class="tier-period">forever free</div>
+      <ul class="tier-features">
+        <li><span class="check">✓</span> 500MB database</li>
+        <li><span class="check">✓</span> 50K edge function calls/mo</li>
+        <li><span class="check">✓</span> 1GB file storage</li>
+        <li><span class="check">✓</span> Community support</li>
+      </ul>
+      <button class="tier-btn tier-btn-outline">Get started</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="tier-name">Pro</div>
+      <div class="tier-price"><sup>$</sup>49</div>
+      <div class="tier-period">per project / month</div>
+      <ul class="tier-features">
+        <li><span class="check">✓</span> 8GB database + auto-scale</li>
+        <li><span class="check">✓</span> 5M edge function calls/mo</li>
+        <li><span class="check">✓</span> 100GB file storage</li>
+        <li><span class="check">✓</span> Point-in-time recovery</li>
+        <li><span class="check">✓</span> 3 read replicas</li>
+        <li><span class="check">✓</span> Email support (24h SLA)</li>
+      </ul>
+      <button class="tier-btn tier-btn-filled">Start Pro trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="tier-name">Enterprise</div>
+      <div class="tier-price" style="font-size:2rem; letter-spacing:-0.02em">Custom</div>
+      <div class="tier-period">volume pricing</div>
+      <ul class="tier-features">
+        <li><span class="check">✓</span> Dedicated infrastructure</li>
+        <li><span class="check">✓</span> HIPAA + SOC 2 compliance</li>
+        <li><span class="check">✓</span> SAML / SSO / SCIM</li>
+        <li><span class="check">✓</span> 99.99% SLA + SLO</li>
+        <li><span class="check">✓</span> Slack support + CSM</li>
+      </ul>
+      <button class="tier-btn tier-btn-outline">Talk to sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">VOID<span>BASE</span></div>
+      <p class="footer-desc">Backend infrastructure for teams who'd rather build products than manage servers. Trusted by 60,000+ developers worldwide.</p>
+      <div class="status-bar">
+        <span class="status-dot"></span>
+        All systems operational
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#">Database</a></li>
+        <li><a href="#">Auth</a></li>
+        <li><a href="#">Storage</a></li>
+        <li><a href="#">Functions</a></li>
+        <li><a href="#">Real-time</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">CLI</a></li>
+        <li><a href="#">SDKs</a></li>
+        <li><a href="#">Status page</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Security</a></li>
+        <li><a href="#">DPA</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 VOIDBASE, INC. ALL RIGHTS RESERVED.</span>
+    <div class="footer-links">
+      <a href="#">Twitter</a>
+      <a href="#">GitHub</a>
+      <a href="#">Discord</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Dark Mode</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

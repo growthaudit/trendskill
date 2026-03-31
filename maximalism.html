@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLAURA — Fashion Forward</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700;1,900&family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f2ec;
+  --ink: #1c1208;
+  --cream: #faf6ef;
+  --blush: #f2cec2;
+  --sage: #b8c9a8;
+  --terracotta: #c85a3a;
+  --gold: #c9a040;
+  --midnight: #1a1428;
+  --lilac: #d4b8e0;
+  --chartreuse: #c8e02a;
+
+  --f-display: 'Playfair Display', serif;
+  --f-condensed: 'Bebas Neue', sans-serif;
+  --f-sans: 'Space Grotesk', sans-serif;
+  --f-serif: 'DM Serif Display', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--midnight);
+}
+
+.nav-logo {
+  font-family: var(--f-condensed);
+  font-size: 2rem;
+  letter-spacing: 0.18em;
+  color: var(--chartreuse);
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--chartreuse); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-tag {
+  font-family: var(--f-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+
+.nav-btn {
+  font-family: var(--f-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  padding: 9px 20px;
+  background: var(--chartreuse);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-btn:hover { background: #d9f23c; }
+
+/* HERO — maximalist layered */
+.hero {
+  min-height: 100vh;
+  background: var(--midnight);
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Background textures */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 90%, rgba(200,90,58,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, rgba(212,184,224,0.25) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 60px, rgba(255,255,255,0.015) 60px, rgba(255,255,255,0.015) 61px);
+  pointer-events: none;
+}
+
+/* Ghost text */
+.ghost-text {
+  position: absolute;
+  font-family: var(--f-condensed);
+  font-size: clamp(10rem, 20vw, 22rem);
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.025);
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.ghost-1 { top: -20px; left: -20px; }
+.ghost-2 { bottom: 60px; right: -60px; transform: rotate(-8deg); color: rgba(200,224,42,0.04); }
+
+.hero-left {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-season {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.season-line {
+  width: 40px;
+  height: 1px;
+  background: var(--terracotta);
+}
+
+.season-text {
+  font-family: var(--f-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.hero-headline {
+  font-family: var(--f-condensed);
+  font-size: clamp(5rem, 9vw, 10rem);
+  letter-spacing: 0.06em;
+  line-height: 0.92;
+  color: white;
+  margin-bottom: 0;
+}
+
+.hero-headline .accent-line {
+  color: var(--chartreuse);
+  display: block;
+}
+
+.hero-headline .italic-line {
+  font-family: var(--f-display);
+  font-size: clamp(2.5rem, 4vw, 5rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--blush);
+  display: block;
+  margin: 8px 0;
+}
+
+.hero-caption {
+  font-family: var(--f-sans);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.75;
+  max-width: 360px;
+  margin: 28px 0 36px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--midnight);
+  padding: 14px 32px;
+  background: var(--chartreuse);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover { background: #d9f23c; transform: translateY(-1px); }
+
+.btn-outline {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: white;
+  padding: 14px 28px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.btn-outline:hover { border-color: white; }
+
+.hero-right {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+}
+
+.hero-img-block {
+  background: var(--blush);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.hero-img-block.dark { background: #2a1f3a; }
+.hero-img-block.terracotta { background: var(--terracotta); }
+
+.img-label {
+  position: absolute;
+  bottom: 16px; left: 20px;
+  font-family: var(--f-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+}
+
+.collection-tag {
+  position: absolute;
+  top: 16px; right: 16px;
+  font-family: var(--f-condensed);
+  font-size: 3rem;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.12);
+  line-height: 1;
+}
+
+/* PATTERN STRIP */
+.pattern-strip {
+  height: 80px;
+  background: var(--terracotta);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.pattern-track {
+  display: flex;
+  gap: 0;
+  animation: patternScroll 12s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes patternScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.pattern-item {
+  font-family: var(--f-condensed);
+  font-size: 2rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.9);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.pattern-item::after {
+  content: '◆';
+  font-size: 0.8rem;
+  color: var(--chartreuse);
+}
+
+/* EDITORIAL GRID */
+.editorial {
+  padding: 80px 48px;
+  background: var(--cream);
+}
+
+.editorial-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  margin-bottom: 48px;
+}
+
+.editorial-title {
+  font-family: var(--f-display);
+  font-size: clamp(3rem, 5vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.editorial-title em {
+  font-style: italic;
+  color: var(--terracotta);
+}
+
+.editorial-filter {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  font-family: var(--f-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding: 7px 16px;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn.active, .filter-btn:hover {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+/* Magazine grid */
+.mag-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 3px;
+}
+
+.mag-cell {
+  background: var(--blush);
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  transition: all 0.3s;
+}
+
+.mag-cell.tall { grid-row: span 2; min-height: 560px; }
+.mag-cell.sage-bg { background: var(--sage); }
+.mag-cell.midnight-bg { background: var(--midnight); }
+.mag-cell.lilac-bg { background: var(--lilac); }
+.mag-cell.gold-bg { background: #d4a840; }
+
+.mag-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mag-cell:hover::before { opacity: 1; }
+
+.mag-cell-pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mag-num {
+  font-family: var(--f-condensed);
+  font-size: 7rem;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.12);
+  line-height: 1;
+  position: absolute;
+  top: 16px; right: 20px;
+}
+
+.mag-category {
+  font-family: var(--f-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 6px;
+}
+
+.mag-title {
+  font-family: var(--f-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.mag-cell.tall .mag-title {
+  font-size: clamp(2rem, 2.5vw, 3rem);
+}
+
+.mag-arrow {
+  position: absolute;
+  top: 20px; right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.mag-cell:hover .mag-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+/* PHILOSOPHY */
+.philosophy {
+  padding: 100px 48px;
+  background: var(--midnight);
+  position: relative;
+  overflow: hidden;
+}
+
+.philosophy::before {
+  content: 'FLAURA';
+  position: absolute;
+  bottom: -40px; right: -20px;
+  font-family: var(--f-condensed);
+  font-size: 16rem;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.02);
+  pointer-events: none;
+}
+
+.phil-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.phil-label {
+  font-family: var(--f-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--chartreuse);
+  margin-bottom: 16px;
+}
+
+.phil-title {
+  font-family: var(--f-display);
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: white;
+}
+
+.phil-title em {
+  font-style: italic;
+  color: var(--blush);
+}
+
+.phil-right {
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding-left: 60px;
+}
+
+.phil-quote {
+  font-family: var(--f-serif);
+  font-size: 1.6rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.phil-body {
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.phil-btn {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chartreuse);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: gap 0.2s;
+}
+
+.phil-btn:hover { gap: 16px; }
+
+/* CATEGORIES */
+.categories {
+  padding: 80px 48px;
+  background: var(--bg);
+}
+
+.cat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 40px;
+}
+
+.cat-title {
+  font-family: var(--f-condensed);
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  letter-spacing: 0.08em;
+  color: var(--ink);
+}
+
+.cat-all {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted, var(--terracotta));
+  text-decoration: none;
+  border-bottom: 1px solid var(--terracotta);
+  padding-bottom: 1px;
+}
+
+.cat-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+.cat-card {
+  position: relative;
+  overflow: hidden;
+  padding-top: 140%;
+  cursor: pointer;
+}
+
+.cat-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.cat-card:nth-child(1) .cat-inner { background: linear-gradient(to bottom, var(--blush) 0%, #e8a898 100%); }
+.cat-card:nth-child(2) .cat-inner { background: linear-gradient(to bottom, var(--sage) 0%, #8aaa78 100%); }
+.cat-card:nth-child(3) .cat-inner { background: linear-gradient(to bottom, var(--midnight) 0%, #2d1f48 100%); }
+.cat-card:nth-child(4) .cat-inner { background: linear-gradient(to bottom, #d4a840 0%, #c09030 100%); }
+.cat-card:nth-child(5) .cat-inner { background: linear-gradient(to bottom, var(--lilac) 0%, #b898d0 100%); }
+
+.cat-pattern {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  pointer-events: none;
+}
+
+.cat-label-top {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-family: var(--f-condensed);
+  font-size: 2.5rem;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.2);
+  line-height: 1;
+}
+
+.cat-name {
+  font-family: var(--f-condensed);
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+  color: white;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.cat-count {
+  font-family: var(--f-sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.06em;
+}
+
+/* CTA */
+.cta-section {
+  padding: 100px 48px;
+  background: var(--chartreuse);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: 'SS26';
+  position: absolute;
+  font-family: var(--f-condensed);
+  font-size: 20rem;
+  color: rgba(0,0,0,0.05);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.cta-label {
+  font-family: var(--f-sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.5);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-headline {
+  font-family: var(--f-display);
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  color: var(--midnight);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-headline em { font-style: italic; }
+
+.cta-btn {
+  font-family: var(--f-sans);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chartreuse);
+  padding: 16px 40px;
+  background: var(--midnight);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-btn:hover {
+  background: var(--terracotta);
+  transform: translateY(-2px);
+}
+
+/* FOOTER */
+footer {
+  background: var(--midnight);
+  padding: 60px 48px 40px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-logo {
+  font-family: var(--f-condensed);
+  font-size: 2.5rem;
+  letter-spacing: 0.2em;
+  color: var(--chartreuse);
+  margin-bottom: 12px;
+}
+
+.footer-tagline {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.65;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-family: var(--f-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: rgba(255,255,255,0.9); }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-copy {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.3);
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">FLAURA</div>
+  <ul class="nav-links">
+    <li><a href="#">New In</a></li>
+    <li><a href="#">Clothing</a></li>
+    <li><a href="#">Accessories</a></li>
+    <li><a href="#">Editorial</a></li>
+    <li><a href="#">SS26</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-tag">Spring/Summer 2026</span>
+    <button class="nav-btn">Shop Now</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="ghost-text ghost-1">FLAURA</div>
+  <div class="ghost-text ghost-2">SS26</div>
+
+  <div class="hero-left">
+    <div class="hero-season">
+      <div class="season-line"></div>
+      <span class="season-text">Spring/Summer 2026 — Drop 01</span>
+    </div>
+    <h1 class="hero-headline">
+      MORE
+      <span class="italic-line">is always</span>
+      MORE.
+      <span class="accent-line">FLAURA.</span>
+    </h1>
+    <p class="hero-caption">Fashion for people who believe restraint is overrated. Bold prints, saturated colour, and layered textures for a life lived loudly.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Shop Drop 01</button>
+      <button class="btn-outline">View Lookbook</button>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-img-block dark">
+      <div class="collection-tag">SS26</div>
+      <div class="img-label">The Floral Riot — Dress, £420</div>
+    </div>
+    <div class="hero-img-block terracotta">
+      <div class="collection-tag">01</div>
+      <div class="img-label">Layered Blazer Ensemble, £680</div>
+    </div>
+  </div>
+</section>
+
+<div class="pattern-strip">
+  <div class="pattern-track">
+    <span class="pattern-item">NEW IN</span>
+    <span class="pattern-item">SS26</span>
+    <span class="pattern-item">DROP ONE</span>
+    <span class="pattern-item">FLAURA</span>
+    <span class="pattern-item">BOLD PRINTS</span>
+    <span class="pattern-item">RICH TEXTURES</span>
+    <span class="pattern-item">NEW IN</span>
+    <span class="pattern-item">SS26</span>
+    <span class="pattern-item">DROP ONE</span>
+    <span class="pattern-item">FLAURA</span>
+    <span class="pattern-item">BOLD PRINTS</span>
+    <span class="pattern-item">RICH TEXTURES</span>
+  </div>
+</div>
+
+<section class="editorial">
+  <div class="editorial-header">
+    <h2 class="editorial-title">The <em>Drop</em></h2>
+    <div class="editorial-filter">
+      <button class="filter-btn active">All</button>
+      <button class="filter-btn">Clothing</button>
+      <button class="filter-btn">Prints</button>
+      <button class="filter-btn">Accessories</button>
+    </div>
+  </div>
+  <div class="mag-grid">
+    <div class="mag-cell tall midnight-bg">
+      <div class="mag-num">01</div>
+      <div class="mag-category">Hero Piece</div>
+      <div class="mag-title">The Maximalist Coat — Abstract Botanic Print</div>
+      <div class="mag-arrow">↗</div>
+    </div>
+    <div class="mag-cell sage-bg">
+      <div class="mag-num">02</div>
+      <div class="mag-category">Knitwear</div>
+      <div class="mag-title">Dense Knit Oversized Cardigan</div>
+      <div class="mag-arrow">↗</div>
+    </div>
+    <div class="mag-cell" style="background: var(--blush)">
+      <div class="mag-num">03</div>
+      <div class="mag-category">Dresses</div>
+      <div class="mag-title">Floral Riot Midi Wrap Dress</div>
+      <div class="mag-arrow">↗</div>
+    </div>
+    <div class="mag-cell lilac-bg">
+      <div class="mag-num">04</div>
+      <div class="mag-category">Trousers</div>
+      <div class="mag-title">Wide-Leg Tapestry Print</div>
+      <div class="mag-arrow">↗</div>
+    </div>
+    <div class="mag-cell gold-bg">
+      <div class="mag-num">05</div>
+      <div class="mag-category">Accessories</div>
+      <div class="mag-title">Sculptural Resin Bag</div>
+      <div class="mag-arrow">↗</div>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy">
+  <div class="phil-inner">
+    <div>
+      <div class="phil-label">Our Manifesto</div>
+      <h2 class="phil-title">Dress like<br>you mean<br><em>all of it.</em></h2>
+    </div>
+    <div class="phil-right">
+      <p class="phil-quote">"The simplest rule in fashion is wrong. More is more, and always will be."</p>
+      <p class="phil-body">FLAURA was born out of frustration with the all-beige, minimalism-obsessed fashion establishment. We make clothes for people who want to take up space — visually, loudly, and unapologetically. Every FLAURA piece starts with a refusal to be subtle.</p>
+      <button class="phil-btn">Read our manifesto →</button>
+    </div>
+  </div>
+</section>
+
+<section class="categories">
+  <div class="cat-header">
+    <h2 class="cat-title">SHOP BY MOOD</h2>
+    <a href="#" class="cat-all">All categories →</a>
+  </div>
+  <div class="cat-row">
+    <div class="cat-card">
+      <div class="cat-inner">
+        <div class="cat-label-top">A</div>
+        <div class="cat-name">DRESSES</div>
+        <div class="cat-count">48 pieces</div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-inner">
+        <div class="cat-label-top">B</div>
+        <div class="cat-name">KNITWEAR</div>
+        <div class="cat-count">32 pieces</div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-inner">
+        <div class="cat-label-top">C</div>
+        <div class="cat-name">OUTERWEAR</div>
+        <div class="cat-count">24 pieces</div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-inner">
+        <div class="cat-label-top">D</div>
+        <div class="cat-name">BAGS</div>
+        <div class="cat-count">18 pieces</div>
+      </div>
+    </div>
+    <div class="cat-card">
+      <div class="cat-inner">
+        <div class="cat-label-top">E</div>
+        <div class="cat-name">JEWELLERY</div>
+        <div class="cat-count">60 pieces</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-label">Spring/Summer 2026 — Now Available</div>
+  <h2 class="cta-headline">The new season<br>has no <em>rules.</em></h2>
+  <button class="cta-btn">Shop the Full Collection</button>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">FLAURA</div>
+      <p class="footer-tagline">Bold fashion for people who believe restraint is overrated. London-based, globally loud.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New In</a></li>
+        <li><a href="#">Clothing</a></li>
+        <li><a href="#">Accessories</a></li>
+        <li><a href="#">Sale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Help</h4>
+      <ul>
+        <li><a href="#">Sizing Guide</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Shipping</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Brand</h4>
+      <ul>
+        <li><a href="#">About FLAURA</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 FLAURA Ltd. All rights reserved. More is always more.</span>
+    <span class="footer-copy">London · Paris · Tokyo</span>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Maximalism</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECHO — Voice Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-ambient: #0f1117;
+  --bg-surface: #1a1c24;
+  --bg-elevated: #22252e;
+  --voice-idle: #6b7280;
+  --voice-active: #4f8cff;
+  --voice-listening: #8b5cf6;
+  --voice-processing: #f59e0b;
+  --voice-success: #10b981;
+  --voice-error: #ef4444;
+  --wave-primary: rgba(79,140,255,0.8);
+  --wave-secondary: rgba(139,92,246,0.6);
+  --wave-tertiary: rgba(79,140,255,0.3);
+  --text-primary: #e4e4e8;
+  --text-secondary: #8888a0;
+  --text-transcript: #ffffff;
+  --glow-listening: 0 0 40px rgba(79,140,255,0.25), 0 0 80px rgba(79,140,255,0.12);
+  --glow-processing: 0 0 40px rgba(245,158,11,0.2), 0 0 80px rgba(245,158,11,0.08);
+  --glow-success: 0 0 30px rgba(16,185,129,0.2);
+  --orb-size: 120px;
+  --orb-size-active: 160px;
+  --touch-target-min: 56px;
+  --radius-orb: 50%;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg-ambient);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── NAV ─── */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: linear-gradient(to bottom, rgba(15,17,23,0.95) 0%, transparent 100%);
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-transcript);
+}
+.logo span {
+  color: var(--voice-active);
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--text-transcript); }
+.btn-nav {
+  background: var(--voice-active);
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s, transform 0.2s;
+}
+.btn-nav:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 24px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background radials */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(79,140,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: 60%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.state-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-elevated);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.state-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--voice-listening);
+  animation: dotPulse 1.5s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Central orb */
+.orb-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+.orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(79,140,255,0.15);
+  animation: ringPulse 3s ease-in-out infinite;
+}
+.orb-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+.orb-ring:nth-child(2) { width: 260px; height: 260px; animation-delay: 0.5s; opacity: 0.6; }
+.orb-ring:nth-child(3) { width: 320px; height: 320px; animation-delay: 1s; opacity: 0.3; }
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.03); opacity: 0.6; }
+}
+
+.voice-orb {
+  width: var(--orb-size-active);
+  height: var(--orb-size-active);
+  border-radius: var(--radius-orb);
+  background: radial-gradient(circle at 38% 35%, #6ba8ff 0%, #4f8cff 30%, #2d1b6e 70%, #0f1117 100%);
+  box-shadow: var(--glow-listening);
+  animation: orbPulse 3s ease-in-out infinite;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.voice-orb:hover {
+  transform: scale(1.05);
+}
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* Waveform */
+.waveform {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 60px;
+  margin-bottom: 32px;
+}
+.wave-bar {
+  width: 4px;
+  border-radius: 2px;
+  background: var(--wave-primary);
+  animation: waveAnim 1.4s ease-in-out infinite;
+}
+.wave-bar:nth-child(1)  { animation-delay: 0.0s; }
+.wave-bar:nth-child(2)  { animation-delay: 0.1s; }
+.wave-bar:nth-child(3)  { animation-delay: 0.2s; }
+.wave-bar:nth-child(4)  { animation-delay: 0.3s; }
+.wave-bar:nth-child(5)  { animation-delay: 0.15s; }
+.wave-bar:nth-child(6)  { animation-delay: 0.05s; }
+.wave-bar:nth-child(7)  { animation-delay: 0.25s; }
+.wave-bar:nth-child(8)  { animation-delay: 0.35s; }
+.wave-bar:nth-child(9)  { animation-delay: 0.1s; }
+.wave-bar:nth-child(10) { animation-delay: 0.2s; }
+.wave-bar:nth-child(11) { animation-delay: 0.3s; }
+.wave-bar:nth-child(12) { animation-delay: 0.05s; }
+.wave-bar:nth-child(13) { animation-delay: 0.15s; }
+.wave-bar:nth-child(14) { animation-delay: 0.0s; }
+.wave-bar:nth-child(15) { animation-delay: 0.25s; }
+.wave-bar:nth-child(16) { animation-delay: 0.35s; }
+.wave-bar:nth-child(17) { animation-delay: 0.1s; }
+.wave-bar:nth-child(18) { animation-delay: 0.2s; }
+.wave-bar:nth-child(19) { animation-delay: 0.3s; }
+.wave-bar:nth-child(20) { animation-delay: 0.15s; }
+@keyframes waveAnim {
+  0%, 100% { height: 6px; opacity: 0.4; }
+  50% { height: 40px; opacity: 1; }
+}
+.wave-bar:nth-child(even) { background: var(--wave-secondary); }
+.wave-bar:nth-child(3n)   { background: var(--wave-tertiary); }
+
+/* Transcript */
+.transcript {
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: var(--text-transcript);
+  max-width: 560px;
+  min-height: 3rem;
+  margin-bottom: 16px;
+  font-weight: 300;
+}
+.transcript-word {
+  display: inline-block;
+  opacity: 0;
+  animation: wordFade 0.3s ease forwards;
+}
+@keyframes wordFade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.transcript-word:nth-child(1)  { animation-delay: 0.1s; }
+.transcript-word:nth-child(2)  { animation-delay: 0.2s; }
+.transcript-word:nth-child(3)  { animation-delay: 0.35s; }
+.transcript-word:nth-child(4)  { animation-delay: 0.5s; }
+.transcript-word:nth-child(5)  { animation-delay: 0.65s; }
+.transcript-word:nth-child(6)  { animation-delay: 0.8s; }
+.transcript-word:nth-child(7)  { animation-delay: 0.95s; }
+.transcript-word:nth-child(8)  { animation-delay: 1.1s; }
+.transcript-word:nth-child(9)  { animation-delay: 1.25s; }
+.transcript-word:nth-child(10) { animation-delay: 1.4s; }
+.transcript-word:nth-child(11) { animation-delay: 1.55s; }
+
+.transcript-interim {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.transcript-hint {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: wordFade 0.4s ease 2s forwards;
+}
+
+/* Action strip */
+.action-strip {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn-primary {
+  background: var(--voice-active);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: var(--touch-target-min);
+}
+.btn-primary:hover {
+  background: #6ba4ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(79,140,255,0.3);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 28px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-height: var(--touch-target-min);
+}
+.btn-ghost:hover {
+  border-color: rgba(255,255,255,0.25);
+  color: var(--text-primary);
+}
+
+/* ─── STATES SECTION ─── */
+.states-section {
+  padding: 80px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--voice-active);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 700;
+  color: var(--text-transcript);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.section-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 520px;
+  line-height: 1.65;
+  margin-bottom: 56px;
+}
+
+.states-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.state-card {
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-card);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.state-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,0.12);
+}
+.state-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+.state-icon.idle       { background: rgba(107,114,128,0.15); }
+.state-icon.listening  { background: rgba(139,92,246,0.15); }
+.state-icon.processing { background: rgba(245,158,11,0.15); }
+.state-icon.success    { background: rgba(16,185,129,0.15); }
+.state-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-transcript);
+}
+.state-card p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.state-badge-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  width: fit-content;
+}
+.badge-idle       { background: rgba(107,114,128,0.15); color: var(--voice-idle); }
+.badge-listening  { background: rgba(139,92,246,0.15); color: var(--voice-listening); }
+.badge-processing { background: rgba(245,158,11,0.15); color: var(--voice-processing); }
+.badge-success    { background: rgba(16,185,129,0.15); color: var(--voice-success); }
+.dot-sm {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+}
+.dot-idle       { background: var(--voice-idle); }
+.dot-listening  { background: var(--voice-listening); animation: dotPulse 1.5s infinite; }
+.dot-processing { background: var(--voice-processing); animation: dotPulse 1s infinite; }
+.dot-success    { background: var(--voice-success); }
+
+/* ─── DEMO INTERFACE ─── */
+.demo-section {
+  background: var(--bg-surface);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 80px 48px;
+}
+.demo-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.demo-copy {}
+.demo-interface {
+  background: var(--bg-ambient);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+.demo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: var(--bg-elevated);
+}
+.demo-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.demo-dot:nth-child(1) { background: #ff5f57; }
+.demo-dot:nth-child(2) { background: #febc2e; }
+.demo-dot:nth-child(3) { background: #28c840; }
+.demo-title-bar {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+.demo-body {
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  min-height: 340px;
+}
+.demo-orb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%, #8b5cf6 0%, #4f8cff 50%, #1a1c40 100%);
+  box-shadow: 0 0 24px rgba(139,92,246,0.4), 0 0 48px rgba(79,140,255,0.2);
+  animation: orbPulse 2.5s ease-in-out infinite;
+}
+.demo-wave {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 40px;
+}
+.demo-wave-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: var(--wave-primary);
+  animation: waveAnim 1.2s ease-in-out infinite;
+}
+.demo-wave-bar:nth-child(even) { background: var(--wave-secondary); animation-delay: 0.2s; }
+.demo-wave-bar:nth-child(3n)   { background: var(--wave-tertiary); animation-delay: 0.4s; }
+.demo-transcript-text {
+  font-size: 1rem;
+  color: var(--text-transcript);
+  text-align: center;
+  line-height: 1.55;
+  font-weight: 300;
+  max-width: 280px;
+}
+.demo-transcript-text .interim {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+.demo-bottom-sheet {
+  width: 100%;
+  background: var(--bg-elevated);
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.bottom-sheet-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--voice-success);
+  margin-bottom: 10px;
+}
+.bottom-sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.bottom-sheet-item:last-child { border-bottom: none; }
+.bsi-icon { font-size: 0.9rem; opacity: 0.8; }
+
+/* ─── USE CASES ─── */
+.usecases-section {
+  padding: 80px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.usecases-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.usecase-card {
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.usecase-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.usecase-card:nth-child(1)::before { background: linear-gradient(90deg, var(--voice-active), var(--voice-listening)); }
+.usecase-card:nth-child(2)::before { background: linear-gradient(90deg, var(--voice-listening), var(--voice-processing)); }
+.usecase-card:nth-child(3)::before { background: linear-gradient(90deg, var(--voice-processing), var(--voice-success)); }
+.usecase-card:hover { border-color: rgba(255,255,255,0.1); transform: translateY(-4px); }
+.usecase-card:hover::before { opacity: 1; }
+.uc-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+.uc-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-transcript);
+  margin-bottom: 10px;
+}
+.uc-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+.uc-voice-cmd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-elevated);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--voice-active);
+}
+.uc-voice-cmd .mic-icon { color: var(--voice-active); flex-shrink: 0; }
+
+/* ─── STATS ─── */
+.stats-section {
+  background: var(--bg-surface);
+  padding: 60px 48px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.stats-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--text-transcript);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-num span { color: var(--voice-active); }
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+
+/* ─── PRICING ─── */
+.pricing-section {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+.plan-card {
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 36px;
+  transition: transform 0.3s;
+}
+.plan-card:hover { transform: translateY(-4px); }
+.plan-card.featured {
+  background: linear-gradient(145deg, #1a2040 0%, #161a2c 100%);
+  border-color: var(--voice-active);
+  box-shadow: 0 0 40px rgba(79,140,255,0.12);
+}
+.plan-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--voice-active);
+  margin-bottom: 20px;
+  display: block;
+}
+.plan-featured-tag {
+  background: rgba(79,140,255,0.15);
+  color: var(--voice-active);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.plan-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-transcript);
+  margin-bottom: 8px;
+}
+.plan-price {
+  font-size: 2.8rem;
+  font-weight: 700;
+  font-family: 'Syne', sans-serif;
+  color: var(--text-transcript);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.plan-price sub {
+  font-size: 1rem;
+  vertical-align: middle;
+  color: var(--text-secondary);
+  font-family: 'DM Sans', sans-serif;
+}
+.plan-period {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+.plan-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.plan-features li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.plan-features li::before {
+  content: '✓';
+  color: var(--voice-active);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.btn-plan {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+.btn-plan-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-primary);
+}
+.btn-plan-outline:hover { border-color: var(--voice-active); color: var(--voice-active); }
+.btn-plan-filled {
+  background: var(--voice-active);
+  color: white;
+}
+.btn-plan-filled:hover { background: #6ba4ff; box-shadow: 0 8px 24px rgba(79,140,255,0.3); }
+
+/* ─── CTA ─── */
+.cta-section {
+  padding: 100px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px; height: 400px;
+  background: radial-gradient(ellipse, rgba(79,140,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  color: var(--text-transcript);
+  line-height: 1.2;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+.cta-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 420px;
+  margin: 0 auto 40px;
+  line-height: 1.65;
+}
+.cta-voice-hint {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 16px;
+  letter-spacing: 0.08em;
+}
+.cta-voice-hint em {
+  color: var(--voice-active);
+  font-style: normal;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg-surface);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 40px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-transcript);
+}
+.footer-logo span { color: var(--voice-active); }
+.footer-copy {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.footer-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+.footer-links a {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--text-primary); }
+
+@media (max-width: 768px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  .demo-inner { grid-template-columns: 1fr; }
+  .usecases-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .pricing-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+  .states-section, .demo-section, .usecases-section, .pricing-section { padding: 60px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">EC<span>H</span>O</div>
+  <ul class="nav-links">
+    <li><a href="#">Features</a></li>
+    <li><a href="#">How it works</a></li>
+    <li><a href="#">Pricing</a></li>
+    <li><a href="#">Developers</a></li>
+  </ul>
+  <button class="btn-nav">Start listening</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="state-badge">
+    <span class="state-dot"></span>
+    Listening · Active session
+  </div>
+
+  <div class="orb-container">
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="voice-orb"></div>
+  </div>
+
+  <div class="waveform">
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+    <div class="wave-bar"></div>
+  </div>
+
+  <p class="transcript">
+    <span class="transcript-word">"Schedule</span>
+    <span class="transcript-word">a</span>
+    <span class="transcript-word">call</span>
+    <span class="transcript-word">with</span>
+    <span class="transcript-word">the</span>
+    <span class="transcript-word">London</span>
+    <span class="transcript-word">team</span>
+    <span class="transcript-word">for</span>
+    <span class="transcript-word">Thursday</span>
+    <span class="transcript-word">at</span>
+    <span class="transcript-word transcript-interim">two..."</span>
+  </p>
+
+  <p class="transcript-hint">Tap the orb · speak naturally · ECHO handles the rest</p>
+
+  <div class="action-strip">
+    <button class="btn-primary">Try ECHO free</button>
+    <button class="btn-ghost">Watch a demo</button>
+  </div>
+</section>
+
+<!-- STATES -->
+<section class="states-section">
+  <p class="section-label">State-driven interface</p>
+  <h2 class="section-title">The UI that speaks your language</h2>
+  <p class="section-sub">ECHO's interface transforms in real-time based on what it's doing. Every state has a distinct visual language — so you always know exactly where you are.</p>
+
+  <div class="states-grid">
+    <div class="state-card">
+      <div class="state-icon idle">🌙</div>
+      <h3>Idle</h3>
+      <p>A calm, minimal presence. The orb breathes slowly at the edge of perception. Nothing competes for attention.</p>
+      <span class="state-badge-sm badge-idle"><span class="dot-sm dot-idle"></span> Standby</span>
+    </div>
+    <div class="state-card">
+      <div class="state-icon listening">🎙️</div>
+      <h3>Listening</h3>
+      <p>The orb expands. The waveform comes alive. Transcription appears word-by-word as you speak, building trust in real time.</p>
+      <span class="state-badge-sm badge-listening"><span class="dot-sm dot-listening"></span> Recording</span>
+    </div>
+    <div class="state-card">
+      <div class="state-icon processing">⚡</div>
+      <h3>Processing</h3>
+      <p>A warm amber glow signals ECHO is working. Never a generic spinner — the colour shift alone communicates progress.</p>
+      <span class="state-badge-sm badge-processing"><span class="dot-sm dot-processing"></span> Thinking</span>
+    </div>
+    <div class="state-card">
+      <div class="state-icon success">✓</div>
+      <h3>Done</h3>
+      <p>A brief green flash. Results slide up as a bottom sheet. Clean, dismissible, and never in the way.</p>
+      <span class="state-badge-sm badge-success"><span class="dot-sm dot-success"></span> Complete</span>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="demo-section">
+  <div class="demo-inner">
+    <div class="demo-copy">
+      <p class="section-label">Live interface preview</p>
+      <h2 class="section-title">Voice-first. Screen-second.</h2>
+      <p class="section-sub" style="margin-bottom:32px;">Traditional productivity apps bolt on voice as an afterthought. ECHO is built from the ground up for spoken interaction — the visual UI exists only to confirm what was heard and deliver structured results.</p>
+      <p style="font-size:0.875rem; color:var(--text-secondary); line-height:1.7;">Access notes, calendar, messages, and tasks with a single sentence. ECHO understands context, remembers your preferences, and executes multi-step workflows without you touching a screen.</p>
+    </div>
+
+    <div class="demo-interface">
+      <div class="demo-header">
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-dot"></div>
+        <div class="demo-title-bar">ECHO · Sarah's workspace</div>
+      </div>
+      <div class="demo-body">
+        <div class="demo-orb"></div>
+        <div class="demo-wave">
+          <div class="demo-wave-bar" style="height:10px"></div>
+          <div class="demo-wave-bar" style="height:28px"></div>
+          <div class="demo-wave-bar" style="height:18px"></div>
+          <div class="demo-wave-bar" style="height:34px"></div>
+          <div class="demo-wave-bar" style="height:14px"></div>
+          <div class="demo-wave-bar" style="height:30px"></div>
+          <div class="demo-wave-bar" style="height:22px"></div>
+          <div class="demo-wave-bar" style="height:36px"></div>
+          <div class="demo-wave-bar" style="height:18px"></div>
+          <div class="demo-wave-bar" style="height:26px"></div>
+          <div class="demo-wave-bar" style="height:12px"></div>
+          <div class="demo-wave-bar" style="height:32px"></div>
+        </div>
+        <p class="demo-transcript-text">"Add meeting notes from today to the Meridian project and send a summary to the team." <span class="interim">scheduling...</span></p>
+        <div class="demo-bottom-sheet">
+          <div class="bottom-sheet-label">✓ Actions taken</div>
+          <div class="bottom-sheet-item"><span class="bsi-icon">📝</span> Notes added to Meridian project</div>
+          <div class="bottom-sheet-item"><span class="bsi-icon">📧</span> Summary drafted for review</div>
+          <div class="bottom-sheet-item"><span class="bsi-icon">📅</span> Follow-up reminder set for Friday</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section class="usecases-section">
+  <p class="section-label">Built for every context</p>
+  <h2 class="section-title">Say it. ECHO handles it.</h2>
+  <p class="section-sub">From daily planning to complex multi-step workflows, ECHO understands natural language and executes with precision.</p>
+
+  <div class="usecases-grid">
+    <div class="usecase-card">
+      <div class="uc-num">01 · Daily planning</div>
+      <div class="uc-title">Morning briefing</div>
+      <p class="uc-desc">Start each day with a voice summary of your calendar, unread messages, priority tasks, and weather — all in under 30 seconds.</p>
+      <div class="uc-voice-cmd">
+        <span class="mic-icon">🎙</span>
+        "What's on my agenda today?"
+      </div>
+    </div>
+    <div class="usecase-card">
+      <div class="uc-num">02 · Meetings</div>
+      <div class="uc-title">Live note capture</div>
+      <p class="uc-desc">ECHO transcribes meetings in real time, highlights action items, and sends summaries to participants — all without touching your keyboard.</p>
+      <div class="uc-voice-cmd">
+        <span class="mic-icon">🎙</span>
+        "Start capturing notes for this meeting"
+      </div>
+    </div>
+    <div class="usecase-card">
+      <div class="uc-num">03 · Messages</div>
+      <div class="uc-title">Dictate and send</div>
+      <p class="uc-desc">Compose and send emails, Slack messages, and documents by voice. ECHO applies context from previous conversations to match your tone.</p>
+      <div class="uc-voice-cmd">
+        <span class="mic-icon">🎙</span>
+        "Reply to Marcus, I'll have it ready by 3pm"
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-inner">
+    <div>
+      <div class="stat-num">2.3<span>×</span></div>
+      <div class="stat-label">Faster task completion</div>
+    </div>
+    <div>
+      <div class="stat-num">98<span>%</span></div>
+      <div class="stat-label">Transcription accuracy</div>
+    </div>
+    <div>
+      <div class="stat-num">41<span>k</span></div>
+      <div class="stat-label">Active users</div>
+    </div>
+    <div>
+      <div class="stat-num">180<span>ms</span></div>
+      <div class="stat-label">Avg. response latency</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section">
+  <p class="section-label">Simple pricing</p>
+  <h2 class="section-title">Speak. Don't overpay.</h2>
+
+  <div class="pricing-grid">
+    <div class="plan-card">
+      <span class="plan-tag">Starter</span>
+      <div class="plan-name">Personal</div>
+      <div class="plan-price"><sub>$</sub>0</div>
+      <div class="plan-period">Free forever</div>
+      <ul class="plan-features">
+        <li>Up to 60 min/month listening</li>
+        <li>Calendar & note integration</li>
+        <li>3 connected apps</li>
+        <li>Standard transcription</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Get started free</button>
+    </div>
+
+    <div class="plan-card featured">
+      <span class="plan-tag plan-featured-tag">Most popular</span>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price"><sub>$</sub>18</div>
+      <div class="plan-period">per month · billed annually</div>
+      <ul class="plan-features">
+        <li>Unlimited listening time</li>
+        <li>Multi-step workflow execution</li>
+        <li>Unlimited app connections</li>
+        <li>Priority processing</li>
+        <li>Custom voice commands</li>
+        <li>Offline mode</li>
+      </ul>
+      <button class="btn-plan btn-plan-filled">Start free trial</button>
+    </div>
+
+    <div class="plan-card">
+      <span class="plan-tag">Teams</span>
+      <div class="plan-name">Business</div>
+      <div class="plan-price"><sub>$</sub>14</div>
+      <div class="plan-period">per seat/month · 5 seat minimum</div>
+      <ul class="plan-features">
+        <li>Everything in Professional</li>
+        <li>Shared voice command library</li>
+        <li>Admin controls & analytics</li>
+        <li>SSO & compliance export</li>
+        <li>Priority support SLA</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title">Your hands are too busy to type everything.</h2>
+  <p class="cta-sub">ECHO runs in the background — ambient, ready, and accurate. Just speak.</p>
+  <button class="btn-primary" style="min-height:56px; padding:16px 48px; font-size:1rem;">Activate ECHO</button>
+  <p class="cta-voice-hint">Or say <em>"Hey Echo, get started"</em> if you already have the app</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">EC<span>H</span>O</div>
+  <div class="footer-copy">© 2026 Echo Intelligence Inc.</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Accessibility</a></li>
+    <li><a href="#">API</a></li>
+  </ul>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>Voice Interface</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>

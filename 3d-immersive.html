@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROLIFIC — 3D Asset Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080810;
+  --surface-1: #0e0e1a;
+  --surface-2: #141428;
+  --surface-3: #1c1c38;
+  --accent: #6366f1;
+  --accent-2: #a855f7;
+  --accent-glow: #818cf8;
+  --cyan: #22d3ee;
+  --text-primary: #f0f0ff;
+  --text-secondary: #8888bb;
+  --text-dim: #44446a;
+  --border: rgba(99,102,241,0.2);
+  --glow: 0 0 30px rgba(99,102,241,0.4), 0 0 80px rgba(99,102,241,0.1);
+  --glow-cyan: 0 0 20px rgba(34,211,238,0.4);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--void);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 0 48px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(8,8,16,0.8);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover { color: var(--text-primary); background: var(--surface-2); }
+
+.nav-cta {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: white;
+  padding: 10px 22px;
+  background: var(--accent);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: var(--glow);
+  transition: all 0.2s;
+}
+
+.nav-cta:hover { background: #818cf8; transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 48px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Deep space radial */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.2) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 70%, rgba(168,85,247,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 60%, rgba(34,211,238,0.1) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* 3D perspective grid floor */
+.grid-floor {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) perspective(800px) rotateX(75deg);
+  width: 1600px;
+  height: 700px;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.12) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-glow);
+  padding: 6px 16px;
+  border: 1px solid rgba(99,102,241,0.35);
+  border-radius: 100px;
+  background: rgba(99,102,241,0.08);
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-headline {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.headline-gradient {
+  background: linear-gradient(135deg, #818cf8, #a855f7, #22d3ee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  max-width: 520px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 64px;
+}
+
+.btn-primary {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: white;
+  padding: 14px 32px;
+  background: var(--accent);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: var(--glow);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover { background: #818cf8; transform: translateY(-2px); box-shadow: 0 0 40px rgba(99,102,241,0.6); }
+
+.btn-ghost {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: 14px 28px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+/* 3D CSS Cube showcase */
+.cube-showcase {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.cube-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.cube {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 8s linear infinite;
+}
+
+.cube-2 { animation-delay: -2.5s; width: 80px; height: 80px; }
+.cube-3 { animation-delay: -5s; width: 60px; height: 60px; }
+
+@keyframes rotateCube {
+  0% { transform: rotateX(15deg) rotateY(0deg); }
+  100% { transform: rotateX(15deg) rotateY(360deg); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(99,102,241,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.cube-2 .cube-face { font-size: 1.2rem; }
+.cube-3 .cube-face { font-size: 0.9rem; }
+
+.cube-face.front { background: rgba(99,102,241,0.15); transform: translateZ(50px); }
+.cube-face.back { background: rgba(99,102,241,0.1); transform: translateZ(-50px) rotateY(180deg); }
+.cube-face.right { background: rgba(168,85,247,0.12); transform: rotateY(90deg) translateZ(50px); }
+.cube-face.left { background: rgba(168,85,247,0.1); transform: rotateY(-90deg) translateZ(50px); }
+.cube-face.top { background: rgba(34,211,238,0.1); transform: rotateX(90deg) translateZ(50px); }
+.cube-face.bottom { background: rgba(34,211,238,0.08); transform: rotateX(-90deg) translateZ(50px); }
+
+.cube-2 .cube-face.front { transform: translateZ(40px); }
+.cube-2 .cube-face.back { transform: translateZ(-40px) rotateY(180deg); }
+.cube-2 .cube-face.right { transform: rotateY(90deg) translateZ(40px); }
+.cube-2 .cube-face.left { transform: rotateY(-90deg) translateZ(40px); }
+.cube-2 .cube-face.top { transform: rotateX(90deg) translateZ(40px); }
+.cube-2 .cube-face.bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+.cube-3 .cube-face.front { transform: translateZ(30px); }
+.cube-3 .cube-face.back { transform: translateZ(-30px) rotateY(180deg); }
+.cube-3 .cube-face.right { transform: rotateY(90deg) translateZ(30px); }
+.cube-3 .cube-face.left { transform: rotateY(-90deg) translateZ(30px); }
+.cube-3 .cube-face.top { transform: rotateX(90deg) translateZ(30px); }
+.cube-3 .cube-face.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+.cube-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Glow ring */
+.glow-ring {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  border: 1px solid rgba(99,102,241,0.15);
+  box-shadow: 0 0 60px rgba(99,102,241,0.1), inset 0 0 60px rgba(99,102,241,0.05);
+  pointer-events: none;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* STATS */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.stat-cell {
+  background: var(--surface-1);
+  padding: 36px 32px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-num.indigo { color: var(--accent); text-shadow: var(--glow); }
+.stat-num.purple { color: var(--accent-2); text-shadow: 0 0 20px rgba(168,85,247,0.4); }
+.stat-num.cyan { color: var(--cyan); text-shadow: var(--glow-cyan); }
+.stat-num.white { color: var(--text-primary); }
+
+.stat-label { font-size: 0.82rem; color: var(--text-secondary); }
+
+/* FEATURES */
+.features {
+  padding: 100px 60px;
+  position: relative;
+}
+
+.features::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-align: center;
+  line-height: 1.1;
+  margin-bottom: 56px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.feat-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+}
+
+.feat-card:hover {
+  border-color: rgba(99,102,241,0.4);
+  box-shadow: var(--glow);
+  transform: translateY(-4px);
+}
+
+.feat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+.feat-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+}
+
+.feat-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* 3D VIEWER SECTION */
+.viewer-section {
+  padding: 80px 60px;
+  background: var(--surface-1);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.viewer-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(99,102,241,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.viewer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.viewer-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.viewer-title .accent { color: var(--accent); }
+
+.viewer-text {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+.viewer-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.spec-item {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.spec-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.spec-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Viewport mockup */
+.viewport {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  height: 380px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewport-bar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 44px;
+  background: var(--surface-3);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.vp-dot { width: 10px; height: 10px; border-radius: 50%; }
+.vp-dot-1 { background: #ff5f57; }
+.vp-dot-2 { background: #febc2e; }
+.vp-dot-3 { background: #28c840; }
+
+.vp-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-left: 12px;
+}
+
+.viewport-scene {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 44px;
+  perspective: 800px;
+}
+
+.scene-cube {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCube 6s linear infinite;
+}
+
+.scene-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(99,102,241,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.scene-face.sf-front { background: rgba(99,102,241,0.2); transform: translateZ(60px); }
+.scene-face.sf-back { background: rgba(99,102,241,0.12); transform: translateZ(-60px) rotateY(180deg); }
+.scene-face.sf-right { background: rgba(168,85,247,0.15); transform: rotateY(90deg) translateZ(60px); }
+.scene-face.sf-left { background: rgba(168,85,247,0.1); transform: rotateY(-90deg) translateZ(60px); }
+.scene-face.sf-top { background: rgba(34,211,238,0.12); transform: rotateX(90deg) translateZ(60px); }
+.scene-face.sf-bottom { background: rgba(34,211,238,0.08); transform: rotateX(-90deg) translateZ(60px); }
+
+.viewport-overlay {
+  position: absolute;
+  bottom: 16px; left: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.vp-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.25);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+}
+
+/* PRICING */
+.pricing {
+  padding: 100px 60px;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 56px auto 0;
+}
+
+.pricing-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  transition: all 0.3s;
+}
+
+.pricing-card:hover { border-color: rgba(99,102,241,0.3); }
+
+.pricing-card.featured {
+  border-color: rgba(99,102,241,0.5);
+  box-shadow: var(--glow);
+  background: var(--surface-2);
+}
+
+.plan-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.plan-period {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.plan-feats {
+  list-style: none;
+  margin-bottom: 28px;
+}
+
+.plan-feats li {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-feats li .check { color: var(--accent); font-size: 0.75rem; }
+
+.plan-btn {
+  width: 100%;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.plan-btn-outline {
+  color: var(--text-primary);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.plan-btn-outline:hover { background: var(--surface-2); border-color: rgba(99,102,241,0.4); }
+
+.plan-btn-filled {
+  color: white;
+  background: var(--accent);
+  border: none;
+  box-shadow: var(--glow);
+}
+
+.plan-btn-filled:hover { background: #818cf8; }
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  background: #050508;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 40px;
+}
+
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.footer-logo span { color: var(--accent); }
+
+.footer-tagline { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.65; max-width: 260px; }
+
+.footer-col h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 8px; }
+.footer-col a { font-size: 0.875rem; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text-primary); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-copy { font-size: 0.8rem; color: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PRO<span>LIFIC</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Marketplace</a></li>
+    <li><a href="#">Categories</a></li>
+    <li><a href="#">Creators</a></li>
+    <li><a href="#">Enterprise</a></li>
+    <li><a href="#">Pricing</a></li>
+  </ul>
+  <button class="nav-cta">Start creating</button>
+</nav>
+
+<section class="hero">
+  <div class="hero::before"></div>
+  <div class="grid-floor"></div>
+  <div class="glow-ring"></div>
+
+  <div class="hero-eyebrow">✦ The 3D asset marketplace for professionals</div>
+
+  <h1 class="hero-headline">
+    <span class="headline-gradient">Every 3D asset</span><br>
+    your project needs.
+  </h1>
+
+  <p class="hero-sub">PROLIFIC hosts 2.4 million production-ready 3D models, materials, HDRIs, and rigs — licensed for commercial use. Searchable, previewable, and download-ready in seconds.</p>
+
+  <div class="hero-ctas">
+    <button class="btn-primary">Browse the library</button>
+    <button class="btn-ghost">Sell your assets →</button>
+  </div>
+
+  <div class="cube-showcase">
+    <div class="cube-wrapper">
+      <div class="cube">
+        <div class="cube-face front">🏙️</div>
+        <div class="cube-face back">🌆</div>
+        <div class="cube-face right">🏢</div>
+        <div class="cube-face left">🌃</div>
+        <div class="cube-face top">⬆️</div>
+        <div class="cube-face bottom">⬇️</div>
+      </div>
+      <div class="cube-label">Architecture</div>
+    </div>
+    <div class="cube-wrapper">
+      <div class="cube cube-2">
+        <div class="cube-face front">🌿</div>
+        <div class="cube-face back">🌱</div>
+        <div class="cube-face right">🍃</div>
+        <div class="cube-face left">🌾</div>
+        <div class="cube-face top">✦</div>
+        <div class="cube-face bottom">✦</div>
+      </div>
+      <div class="cube-label">Nature</div>
+    </div>
+    <div class="cube-wrapper">
+      <div class="cube">
+        <div class="cube-face front">🚗</div>
+        <div class="cube-face back">🚙</div>
+        <div class="cube-face right">🏎️</div>
+        <div class="cube-face left">🚐</div>
+        <div class="cube-face top">⬆️</div>
+        <div class="cube-face bottom">⬇️</div>
+      </div>
+      <div class="cube-label">Vehicles</div>
+    </div>
+    <div class="cube-wrapper">
+      <div class="cube cube-3">
+        <div class="cube-face front">💎</div>
+        <div class="cube-face back">💍</div>
+        <div class="cube-face right">🔮</div>
+        <div class="cube-face left">💠</div>
+        <div class="cube-face top">✦</div>
+        <div class="cube-face bottom">✦</div>
+      </div>
+      <div class="cube-label">Materials</div>
+    </div>
+    <div class="cube-wrapper">
+      <div class="cube cube-2">
+        <div class="cube-face front">🤖</div>
+        <div class="cube-face back">🦾</div>
+        <div class="cube-face right">🧑</div>
+        <div class="cube-face left">👤</div>
+        <div class="cube-face top">✦</div>
+        <div class="cube-face bottom">✦</div>
+      </div>
+      <div class="cube-label">Characters</div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat-cell">
+    <div class="stat-num indigo">2.4M</div>
+    <div class="stat-label">Assets in library</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num purple">48K</div>
+    <div class="stat-label">Verified creators</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num cyan">180K</div>
+    <div class="stat-label">Active subscribers</div>
+  </div>
+  <div class="stat-cell">
+    <div class="stat-num white">4.9★</div>
+    <div class="stat-label">Average asset rating</div>
+  </div>
+</div>
+
+<section class="features">
+  <div class="section-label">// Platform</div>
+  <h2 class="section-title">Built for the speed of production.</h2>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">🔍</div>
+      <div class="feat-title">Semantic Search</div>
+      <p class="feat-desc">Describe what you need in plain language. "Worn leather sofa, mid-century, warm lighting" — PROLIFIC's AI surfaces exactly the right asset.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🔄</div>
+      <div class="feat-title">Format Converter</div>
+      <p class="feat-desc">Every asset auto-converts to FBX, OBJ, GLTF, USDZ, and Blender-native on download. No manual conversion, no broken rigs.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">Real-Time Preview</div>
+      <p class="feat-desc">Full 360° WebGL preview with lighting controls before you download. Inspect topology, UV maps, and material slots in-browser.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Plugin Ecosystem</div>
+      <p class="feat-desc">Native plugins for Blender, Cinema 4D, Maya, and Unreal Engine 5. Browse, preview, and import without leaving your DCC.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">🛡️</div>
+      <div class="feat-title">Commercial Licensing</div>
+      <p class="feat-desc">Every asset includes a clear commercial license. Royalty-free use in client work, games, film, and advertising. No surprises.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">👥</div>
+      <div class="feat-title">Team Collections</div>
+      <p class="feat-desc">Organise assets into shared collections for your studio. Shared download quotas, annotation tools, and usage tracking across teams.</p>
+    </div>
+  </div>
+</section>
+
+<section class="viewer-section">
+  <div class="viewer-inner">
+    <div>
+      <div class="section-label" style="text-align:left; margin-bottom:12px">// 3D Viewer</div>
+      <h2 class="viewer-title">Preview every asset<br>in full <span class="accent">3D.</span></h2>
+      <p class="viewer-text">Our WebGL viewer renders any asset in real-time directly in your browser. Swap environments, adjust lighting, and inspect every polygon before committing to a download.</p>
+      <div class="viewer-specs">
+        <div class="spec-item">
+          <div class="spec-label">Render Engine</div>
+          <div class="spec-val">WebGL 2.0 / WASM</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Max Preview Size</div>
+          <div class="spec-val">500M polygons</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">HDR Environments</div>
+          <div class="spec-val">240 included</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Load Time</div>
+          <div class="spec-val">&lt; 3 seconds</div>
+        </div>
+      </div>
+      <button class="btn-primary">Try the viewer →</button>
+    </div>
+    <div class="viewport">
+      <div class="viewport-bar">
+        <div class="vp-dot vp-dot-1"></div>
+        <div class="vp-dot vp-dot-2"></div>
+        <div class="vp-dot vp-dot-3"></div>
+        <span class="vp-title">PROLIFIC Viewer — Abstract Sculpture No.7</span>
+      </div>
+      <div class="viewport-scene">
+        <div class="scene-cube">
+          <div class="scene-face sf-front">💎</div>
+          <div class="scene-face sf-back">💎</div>
+          <div class="scene-face sf-right">◈</div>
+          <div class="scene-face sf-left">◈</div>
+          <div class="scene-face sf-top">✦</div>
+          <div class="scene-face sf-bottom">✦</div>
+        </div>
+      </div>
+      <div class="viewport-overlay">
+        <span class="vp-tag">PBR</span>
+        <span class="vp-tag">12,480 tris</span>
+        <span class="vp-tag">GLTF ready</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-label">// Pricing</div>
+  <h2 class="section-title">Scale with your studio.</h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="plan-name">Freelancer</div>
+      <div class="plan-price" style="color:var(--text-primary)">$19<span style="font-size:1rem;color:var(--text-secondary)">/mo</span></div>
+      <div class="plan-period">billed annually</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> 40 downloads/month</li>
+        <li><span class="check">✓</span> Full format conversion</li>
+        <li><span class="check">✓</span> Commercial license</li>
+        <li><span class="check">✓</span> 3D viewer access</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Start free trial</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="plan-name">Studio</div>
+      <div class="plan-price" style="color:var(--accent)">$69<span style="font-size:1rem;color:var(--text-secondary)">/mo</span></div>
+      <div class="plan-period">billed annually — 5 seats</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> Unlimited downloads</li>
+        <li><span class="check">✓</span> Team collections</li>
+        <li><span class="check">✓</span> Blender + C4D plugins</li>
+        <li><span class="check">✓</span> Priority support</li>
+        <li><span class="check">✓</span> Usage analytics</li>
+        <li><span class="check">✓</span> Extended license</li>
+      </ul>
+      <button class="plan-btn plan-btn-filled">Start Studio trial</button>
+    </div>
+    <div class="pricing-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price" style="font-size:2rem; color:var(--text-primary)">Custom</div>
+      <div class="plan-period">volume / custom licensing</div>
+      <ul class="plan-feats">
+        <li><span class="check">✓</span> Custom seat count</li>
+        <li><span class="check">✓</span> SSO + SCIM provisioning</li>
+        <li><span class="check">✓</span> Private asset hosting</li>
+        <li><span class="check">✓</span> SLA + dedicated CSM</li>
+        <li><span class="check">✓</span> Custom licensing terms</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">PRO<span>LIFIC</span></div>
+      <p class="footer-tagline">The 3D asset marketplace trusted by 180,000 professionals in film, games, architecture, and design.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Marketplace</h4>
+      <ul>
+        <li><a href="#">Browse Assets</a></li>
+        <li><a href="#">New Releases</a></li>
+        <li><a href="#">Free Assets</a></li>
+        <li><a href="#">Collections</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Creators</h4>
+      <ul>
+        <li><a href="#">Sell Assets</a></li>
+        <li><a href="#">Creator Hub</a></li>
+        <li><a href="#">Revenue Share</a></li>
+        <li><a href="#">Guidelines</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 PROLIFIC Technologies. All rights reserved.</span>
+    <span class="footer-copy">Built for creators, by creators.</span>
+  </div>
+</footer>
+
+<style>
+.skill-banner{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:rgba(8,8,14,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.1);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.skill-banner-left{display:flex;align-items:center;gap:10px}
+.skill-banner-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:4px;padding:3px 8px;font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.45);white-space:nowrap}
+.skill-banner-text{font-family:system-ui,sans-serif;font-size:0.85rem;color:rgba(255,255,255,0.55)}
+.skill-banner-text strong{color:rgba(255,255,255,0.9);font-weight:600}
+.skill-banner-cta{background:#5865f2;color:#fff;text-decoration:none;padding:9px 20px;border-radius:6px;font-family:system-ui,sans-serif;font-size:0.8rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.skill-banner-cta:hover{opacity:0.88;transform:translateY(-1px)}
+@media(max-width:600px){.skill-banner{padding:12px 16px}.skill-banner-badge{display:none}.skill-banner-text{font-size:0.78rem}}
+</style>
+<div class="skill-banner">
+  <div class="skill-banner-left">
+    <span class="skill-banner-badge">Claude Code Skill</span>
+    <span class="skill-banner-text">Showcasing the <strong>3D & Immersive</strong> design skill</span>
+  </div>
+  <a href="#" class="skill-banner-cta">Get this skill →</a>
+</div>
+</body>
+</html>
