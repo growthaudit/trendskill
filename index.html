@@ -1003,6 +1003,7 @@
   color: #4a4a4a; line-height: 1.55; margin-bottom: 10px;
 }
 .mc-social-desc strong { color: #0f0f0f; }
+.mc-social-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 .mc-tweet-btn {
   display: inline-flex; align-items: center; gap: 6px;
   background: #0f0f0f; color: #fff; text-decoration: none;
@@ -1012,6 +1013,15 @@
 }
 .mc-tweet-btn:hover { opacity: 0.82; transform: translateY(-1px); }
 .mc-tweet-icon { font-size: 0.85rem; }
+.mc-linkedin-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #0a66c2; color: #fff; text-decoration: none;
+  padding: 8px 14px; border-radius: 6px;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.mc-linkedin-btn:hover { opacity: 0.82; transform: translateY(-1px); }
+.mc-linkedin-icon { font-size: 0.85rem; }
 
 /* ── Footer ── */
 .mc-footer {
@@ -1111,9 +1121,14 @@
           </div>
           <div class="mc-social-body">
             <p class="mc-social-desc">Post about this pack and tag <strong>@bradfehler</strong> on 𝕏 or LinkedIn — then DM me. I'll send you the files directly. Your post helps others find it.</p>
-            <a class="mc-tweet-btn" href="https://twitter.com/intent/tweet?text=Just%20discovered%20%40bradfehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20This%20is%20proper%20%F0%9F%94%A5&url=https%3A%2F%2Fbradfehler.com" target="_blank" rel="noopener">
-              <span class="mc-tweet-icon">𝕏</span> Post &amp; tag @bradfehler →
-            </a>
+            <div class="mc-social-btns">
+              <a class="mc-tweet-btn" href="https://twitter.com/intent/tweet?text=Just%20discovered%20%40bradfehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20This%20is%20proper%20%F0%9F%94%A5&url=https%3A%2F%2Fbradfehler.com" target="_blank" rel="noopener">
+                <span class="mc-tweet-icon">𝕏</span> Post &amp; tag @bradfehler →
+              </a>
+              <a class="mc-linkedin-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgrowthaudit.github.io%2Ftrendskill%2F&summary=Just%20discovered%20Brad%20Fehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20Tag%20Brad%20and%20DM%20him%20to%20get%20the%20files." target="_blank" rel="noopener">
+                <span class="mc-linkedin-icon">in</span> Share on LinkedIn →
+              </a>
+            </div>
           </div>
         </div>
 
