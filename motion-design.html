@@ -716,9 +716,18 @@ footer {
 .footer-copy { font-size: 0.8rem; color: var(--text-secondary); }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 0 20px; }
   .nav-links { display: none; }
   .hero { padding: 60px 20px; min-height: auto; }
+  /* Stack hero CTAs vertically */
+  .hero-ctas { flex-direction: column; align-items: center; gap: 12px; }
+  /* Metrics row: wrap on mobile */
+  .metrics-row { flex-wrap: wrap; width: 100%; border-radius: 12px; }
+  .metric-pill { flex: 1 1 40%; border-right: none; border-bottom: 1px solid var(--border); }
+  .metric-pill:last-child { border-bottom: none; }
+  /* Hide the absolutely-positioned demo cards (right side hero visuals) on mobile */
+  .hero-demos { display: none; }
   .features { padding: 48px 20px; }
   .features-grid { grid-template-columns: 1fr; }
   .demo-section { padding: 48px 20px; }

@@ -810,9 +810,16 @@ footer {
 .footer-links a:hover { color: rgba(255,255,255,0.8); }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 16px 20px; }
   .nav-links { display: none; }
-  .hero { padding: 60px 20px 80px; min-height: auto; }
+  .hero { padding: 80px 20px 60px; min-height: auto; }
+  .hero-title { font-size: clamp(2rem, 7vw, 2.8rem); }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .hero-actions .btn-primary, .hero-actions .btn-ghost { width: 100%; text-align: center; }
+  .wizard-demo { max-width: 100%; margin: 0; }
+  .wizard-steps { flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .collapsible { width: 100%; }
   .how-section, .features-section, .collapsible-section, .social-section { padding: 60px 20px; }
   .features-inner { padding: 60px 20px; }
   .step-row { grid-template-columns: 60px 1fr; }

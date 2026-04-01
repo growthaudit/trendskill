@@ -858,18 +858,24 @@ footer {
 }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 0 20px; }
   .nav-links { display: none; }
-  .hero { padding: 80px 20px 48px; flex-direction: column; min-height: auto; }
+  .hero { padding: 80px 20px 60px; flex-direction: column; min-height: auto; }
+  .hero-headline { font-size: clamp(2rem, 8vw, 3.5rem); }
+  .hero-ctas { flex-direction: column; width: 100%; }
+  .hero-ctas .btn-primary, .hero-ctas .btn-secondary { width: 100%; text-align: center; }
+  .device { width: 100%; max-width: 360px; }
+  .controls { grid-template-columns: repeat(3, 1fr); }
   .stats-row { grid-template-columns: 1fr 1fr; padding: 32px 20px; }
-  .features { padding: 48px 20px; }
+  .features { padding: 60px 20px; }
   .features-grid { grid-template-columns: 1fr; }
-  .progress-section { padding: 48px 20px; }
+  .progress-section { padding: 60px 20px; }
   .ps-inner { grid-template-columns: 1fr; gap: 40px; }
   .meters { grid-template-columns: 1fr 1fr; }
-  .pricing { padding: 48px 20px; }
+  .pricing { padding: 60px 20px; }
   .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
-  .testimonials { padding: 32px 20px 48px; }
+  .testimonials { padding: 60px 20px; }
   .testi-grid { grid-template-columns: 1fr; }
   footer { padding: 48px 20px; }
   .footer-inner { grid-template-columns: 1fr; gap: 32px; }

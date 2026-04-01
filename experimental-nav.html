@@ -767,18 +767,22 @@ footer {
 }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 0 20px; }
-  .hero { padding: 0 20px 60px; min-height: 80vh; }
+  .hero { padding: 80px 20px 60px; min-height: 80vh; }
+  .orbit-visual { display: none; }
+  .hero-headline { font-size: clamp(3rem, 12vw, 5rem); }
+  .hero-bottom { flex-direction: column; align-items: flex-start; gap: 24px; }
   .overlay-nav { padding: 60px 20px 40px; }
   .overlay-inner { grid-template-columns: 1fr; gap: 40px; }
-  .work { padding: 40px 20px; }
+  .work { padding: 60px 20px; }
   .work-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .work-item { grid-template-columns: 60px 1fr; }
   .wi-arrow { display: none; }
   .about { grid-template-columns: 1fr; gap: 40px; padding: 60px 20px; }
   .about-right { grid-template-columns: 1fr 1fr; }
   .services { padding: 60px 20px; }
-  .services-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr; }
   footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-links { flex-wrap: wrap; gap: 16px; }
 }

@@ -751,18 +751,22 @@ footer {
 .footer-links a:hover { color: var(--text-secondary); }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 0 20px; }
   .nav-center { display: none; }
   .nav-actions .btn-ghost-nav { display: none; }
   .hero { padding: 80px 20px 60px; }
-  .terminal { max-width: 100%; }
+  .hero-headline { font-size: clamp(2rem, 8vw, 3rem); }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .hero-actions .btn-primary, .hero-actions .btn-secondary { width: 100%; text-align: center; }
+  .terminal { max-width: 100%; overflow-x: auto; }
   .metrics { grid-template-columns: 1fr 1fr; }
   .features { padding: 60px 20px; }
   .features-layout { grid-template-columns: 1fr; gap: 40px; }
   .features-right { grid-template-columns: 1fr; }
-  .code-section { padding: 48px 20px; }
+  .code-section { padding: 60px 20px; }
   .code-inner { grid-template-columns: 1fr; gap: 40px; }
-  .pricing { padding: 48px 20px; }
+  .pricing { padding: 60px 20px; }
   .pricing-grid { grid-template-columns: 1fr; max-width: 100%; }
   footer { padding: 48px 20px 32px; }
   .footer-top { grid-template-columns: 1fr; gap: 32px; }

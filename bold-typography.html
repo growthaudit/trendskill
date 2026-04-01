@@ -676,14 +676,20 @@ footer {
 }
 
 @media (max-width: 768px) {
+  html, body { overflow-x: hidden; }
   nav { padding: 0 20px; }
   .nav-links { display: none; }
+  /* Hide the "Est. 2019 — Vol. VII" subtitle in nav on mobile — too wide */
+  .nav-vol { display: none; }
   .hero { padding: 60px 20px; }
   .hero-top { grid-template-columns: 1fr; gap: 32px; }
-  .hero-headline { font-size: clamp(3.5rem, 15vw, 8rem); }
+  /* Cap headline size on mobile to avoid overflow */
+  .hero-headline { font-size: clamp(2.5rem, 10vw, 4rem); }
   .hero-bottom { flex-direction: column; gap: 24px; }
   .work { padding: 48px 20px; }
   .work-header { flex-direction: column; gap: 16px; align-items: flex-start; }
+  /* Collapse work-grid to single column */
+  .work-grid { grid-template-columns: 1fr; }
   .services { padding: 48px 20px; }
   .service-row { grid-template-columns: 48px 1fr; gap: 16px; }
   .service-tags, .service-arrow { display: none; }
