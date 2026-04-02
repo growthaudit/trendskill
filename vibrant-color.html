@@ -954,7 +954,73 @@ footer {
     <span class="skill-banner-badge">Claude Code Skill</span>
     <span class="skill-banner-text">Showcasing the <strong>Vibrant Colour</strong> design skill</span>
   </div>
-  <a href="#" class="skill-banner-cta">Get this skill →</a>
+  <button class="skill-banner-cta" onclick="document.getElementById('skm').classList.add('skm-open');document.body.style.overflow='hidden'">Get this skill →</button>
 </div>
+
+<style>
+/* ── Skill Modal ── */
+.skm-backdrop{position:fixed;inset:0;z-index:20000;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.2s ease}
+.skm-backdrop.skm-open{opacity:1;pointer-events:all}
+.skm-card{background:var(--skm-card-bg,#fff);color:var(--skm-fg,#0f0f0f);border-radius:16px;max-width:520px;width:100%;position:relative;overflow:hidden;transform:translateY(20px);transition:transform 0.25s ease;border:1px solid var(--skm-border,rgba(0,0,0,0.1))}
+.skm-backdrop.skm-open .skm-card{transform:translateY(0)}
+.skm-close{position:absolute;top:14px;right:16px;background:none;border:none;cursor:pointer;font-size:1rem;color:var(--skm-fg,#0f0f0f);opacity:0.45;z-index:1;padding:4px 8px;line-height:1}
+.skm-close:hover{opacity:0.9}
+.skm-header{background:var(--skm-accent,#5865f2);padding:28px 28px 24px;color:#fff}
+.skm-tag{font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.7;margin-bottom:8px}
+.skm-title{font-size:1.6rem;font-weight:700;line-height:1.1;margin-bottom:8px}
+.skm-subtitle{font-size:0.88rem;opacity:0.8;line-height:1.5}
+.skm-body{padding:24px 28px 28px;display:flex;flex-direction:column;gap:20px}
+.skm-section-label{font-family:system-ui,sans-serif;font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.45;margin-bottom:10px}
+.skm-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:7px}
+.skm-list li{font-size:0.87rem;line-height:1.5;padding-left:18px;position:relative;opacity:0.85}
+.skm-list li::before{content:'→';position:absolute;left:0;color:var(--skm-accent,#5865f2);font-weight:700}
+.skm-divider{height:1px;background:var(--skm-border,rgba(0,0,0,0.08))}
+.skm-unlock-desc{font-size:0.84rem;line-height:1.6;opacity:0.75;margin-bottom:14px}
+.skm-unlock-desc strong{opacity:1;color:var(--skm-fg,#0f0f0f)}
+.skm-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.skm-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:7px;font-family:system-ui,sans-serif;font-size:0.78rem;font-weight:700;text-decoration:none;transition:opacity 0.2s,transform 0.2s;white-space:nowrap}
+.skm-btn:hover{opacity:0.85;transform:translateY(-1px)}
+.skm-btn-x{background:#0f0f0f;color:#fff}
+.skm-btn-li{background:#0a66c2;color:#fff}
+.skm-drops-note{font-size:0.75rem;opacity:0.45;font-family:system-ui,sans-serif}
+@media(max-width:600px){.skm-title{font-size:1.3rem}.skm-body{padding:20px}.skm-header{padding:22px 20px 18px}}
+</style>
+
+<div class="skm-backdrop" id="skm" aria-hidden="true" style="--skm-card-bg:#ffffff;--skm-fg:#0a0a0a;--skm-accent:#FF2D55;--skm-border:rgba(0,0,0,0.08)">
+  <div class="skm-card">
+    <button class="skm-close" id="skm-close" aria-label="Close">✕</button>
+    <div class="skm-header">
+      <div class="skm-tag">Claude Code Skill</div>
+      <h2 class="skm-title">Vibrant Color</h2>
+      <p class="skm-subtitle">Saturated palettes with purpose — colour that carries meaning.</p>
+    </div>
+    <div class="skm-body">
+      <div class="skm-whats-in">
+        <div class="skm-section-label">What's inside</div>
+        <ul class="skm-list">
+          <li>HSL-based palette generation system</li><li>Semantic colour role mapping (primary, signal, background)</li><li>Gradient + duotone recipe library</li><li>Accessible contrast checker variables</li><li>Dark and light mode colour token pairs</li>
+        </ul>
+      </div>
+      <div class="skm-divider"></div>
+      <div class="skm-unlock">
+        <div class="skm-section-label">Get the full skills pack</div>
+        <p class="skm-unlock-desc">The complete skills pack — all 17 design systems — drops soon. Post about it and tag <strong>@bradfehler</strong> on 𝕏 or LinkedIn, then DM him. He'll send the files directly.</p>
+        <div class="skm-btns">
+          <a class="skm-btn skm-btn-x" href="https://twitter.com/intent/tweet?text=Just%20discovered%20%40bradfehler%27s%20Vibrant%20Color%20design%20skill%20for%20Claude%20Code.%20This%20is%20how%20AI%20output%20should%20look%20%F0%9F%94%A5&url=https%3A%2F%2Fgrowthaudit.github.io%2Ftrendskill%2F" target="_blank" rel="noopener"><span>𝕏</span> Post &amp; tag @bradfehler →</a>
+          <a class="skm-btn skm-btn-li" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgrowthaudit.github.io%2Ftrendskill%2F" target="_blank" rel="noopener"><span>in</span> Share on LinkedIn →</a>
+        </div>
+        <p class="skm-drops-note">✦ Regular drops coming — watch the repo for updates</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('skm');
+  document.getElementById('skm-close').onclick=function(){b.classList.remove('skm-open');document.body.style.overflow=''};
+  b.onclick=function(e){if(e.target===b){b.classList.remove('skm-open');document.body.style.overflow=''}};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){b.classList.remove('skm-open');document.body.style.overflow=''}});
+})();
+</script>
 </body>
 </html>
