@@ -974,54 +974,9 @@
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* Or divider */
-.mc-or {
-  display: flex; align-items: center; gap: 10px;
-}
-.mc-or-line { flex: 1; height: 1px; background: #e2e0db; }
-.mc-or-text {
-  font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
-  text-transform: uppercase; letter-spacing: 0.1em; color: #c5c2ba;
-}
-
-/* Social option */
-.mc-social-block {
-  border: 1px solid #e2e0db; border-radius: 10px; overflow: hidden;
-}
-.mc-social-hd {
-  padding: 10px 14px; background: #fafaf8; border-bottom: 1px solid #e2e0db;
-}
-.mc-social-hd-label {
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem;
-  font-weight: 700; color: #0f0f0f;
-}
-.mc-social-body {
-  padding: 10px 14px;
-}
-.mc-social-desc {
-  font-family: 'DM Sans', system-ui, sans-serif; font-size: 0.78rem;
-  color: #4a4a4a; line-height: 1.55; margin-bottom: 10px;
-}
-.mc-social-desc strong { color: #0f0f0f; }
-.mc-social-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.mc-tweet-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #0f0f0f; color: #fff; text-decoration: none;
-  padding: 8px 14px; border-radius: 6px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600;
-  transition: opacity 0.2s, transform 0.2s;
-}
-.mc-tweet-btn:hover { opacity: 0.82; transform: translateY(-1px); }
-.mc-tweet-icon { font-size: 0.85rem; }
-.mc-linkedin-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #0a66c2; color: #fff; text-decoration: none;
-  padding: 8px 14px; border-radius: 6px;
-  font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; font-weight: 600;
-  transition: opacity 0.2s, transform 0.2s;
-}
-.mc-linkedin-btn:hover { opacity: 0.82; transform: translateY(-1px); }
-.mc-linkedin-icon { font-size: 0.85rem; }
+.mc-github-block { margin-top: 8px; }
+.mc-github-btn { display: inline-flex; align-items: center; gap: 7px; padding: 10px 18px; background: #24292e; color: #fff; border-radius: 7px; font-size: 0.83rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s, transform 0.2s; }
+.mc-github-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
 /* ── Footer ── */
 .mc-footer {
@@ -1108,28 +1063,12 @@
           </div>
         </div>
 
-        <div class="mc-or">
-          <div class="mc-or-line"></div>
-          <span class="mc-or-text">or</span>
-          <div class="mc-or-line"></div>
-        </div>
-
-        <!-- Social unlock -->
-        <div class="mc-social-block">
-          <div class="mc-social-hd">
-            <div class="mc-social-hd-label">No GitHub? Share to unlock.</div>
-          </div>
-          <div class="mc-social-body">
-            <p class="mc-social-desc">Post about this pack and tag <strong>@bradfehler</strong> on 𝕏 or LinkedIn — then DM me. I'll send you the files directly. Your post helps others find it.</p>
-            <div class="mc-social-btns">
-              <a class="mc-tweet-btn" href="https://twitter.com/intent/tweet?text=Just%20discovered%20%40bradfehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20This%20is%20proper%20%F0%9F%94%A5&url=https%3A%2F%2Fbradfehler.com" target="_blank" rel="noopener">
-                <span class="mc-tweet-icon">𝕏</span> Post &amp; tag @bradfehler →
-              </a>
-              <a class="mc-linkedin-btn" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgrowthaudit.github.io%2Ftrendskill%2F&summary=Just%20discovered%20Brad%20Fehler%27s%20Design%20Trends%20skills%20pack%20for%20Claude%20Code%20%E2%80%94%2017%20complete%20design%20systems%20that%20make%20Claude%20output%20actually%20look%20designed.%20Tag%20Brad%20and%20DM%20him%20to%20get%20the%20files." target="_blank" rel="noopener">
-                <span class="mc-linkedin-icon">in</span> Share on LinkedIn →
-              </a>
-            </div>
-          </div>
+        <!-- GitHub profile -->
+        <div class="mc-github-block">
+          <a class="mc-github-btn" href="https://github.com/growthaudit" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            View GitHub Profile →
+          </a>
         </div>
 
       </div>
